@@ -81,6 +81,23 @@ interface GuideSnapshot {
   markdown: string;
 }
 
+/**
+ * 로드한 스냅샷의 배열 필드를 정상화한다 — concepts·questions가 배열이 아니면
+ * 빈 배열로 채워 하위 병합·필터 단계의 크래시를 막는다. 유효 객체가 아니면 null.
+ */
+const normalizeSnapshot = (data: unknown): Snapshot | null => {
+  if (typeof data !== "object" || data === null) return null;
+  const o = data as Partial<Snapshot>;
+  return {
+    subject: typeof o.subject === "string" ? o.subject : "",
+    unit: typeof o.unit === "string" ? o.unit : "",
+    unitOrder: typeof o.unitOrder === "number" ? o.unitOrder : 0,
+    concepts: Array.isArray(o.concepts) ? o.concepts : [],
+    questions: Array.isArray(o.questions) ? o.questions : [],
+    note: o.note,
+  };
+};
+
 const isGuideSnapshot = (g: unknown): g is GuideSnapshot =>
   typeof g === "object" &&
   g !== null &&
@@ -234,9 +251,10 @@ export const mergeConcepts = (snapshots: LoadedSnapshot[]): MergedConcept[] => {
   for (const { unit, unitOrder, data } of snapshots) {
     for (const c of data.concepts) {
       // 개념이 등장한 수업 = history의 unit들 (없으면 스냅샷 unit)
+      const history = Array.isArray(c.history) ? c.history : [];
       const appearances: [string, number][] =
-        c.history.length > 0
-          ? c.history.map(
+        history.length > 0
+          ? history.map(
               (h) => [h.unit ?? unit, h.unitOrder] as [string, number]
             )
           : [[unit, unitOrder]];
@@ -379,7 +397,7 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
           .then((data) => ({
             unit: u.name,
             unitOrder: u.order,
-            data: data as Snapshot | null,
+            data: normalizeSnapshot(data),
           }))
           .catch(() => ({
             unit: u.name,
@@ -448,6 +466,11 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
   );
   const [guideLogTail, setGuideLogTail] = useState("");
   const guidePollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  /** 현재 활성 과목 — 폴링 콜백이 과목 전환 후 stale 결과를 반영하지 못하게 가드 */
+  const activeSubjectRef = useRef<string | null>(null);
+  useEffect(() => {
+    activeSubjectRef.current = exam?.subject ?? null;
+  }, [exam]);
 
   const stopGuidePolling = useCallback(() => {
     if (guidePollRef.current) {
@@ -511,6 +534,8 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
               undefined,
               Date.now()
             );
+            // 과목이 전환됐으면 이전 과목 가이드를 새 화면에 표시하지 않는다
+            if (activeSubjectRef.current !== subject) return;
             if (isGuideSnapshot(g)) setGuide(g);
             setGuideGen("idle");
           } else {
@@ -580,7 +605,8 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
           }
         }
         // 기출(exam) 근거가 있으면 재출제 가능성이 높다
-        const examRefs = q.sources.filter((s) => s.type === "exam").length;
+        const sources = Array.isArray(q.sources) ? q.sources : [];
+        const examRefs = sources.filter((s) => s.type === "exam").length;
         const score =
           signal +
           (DIFFICULTY_WEIGHT[q.difficulty] ?? 0) +
@@ -1345,7 +1371,8 @@ function MockSection({ questions }: { questions: MockQuestion[] }) {
             <span className="rounded-md bg-black/[0.04] px-1.5 py-0.5 text-[11px] font-medium text-gray-500">
               {DIFFICULTY_LABEL[current.difficulty] ?? current.difficulty}
             </span>
-            {current.sources.some((s) => s.type === "exam") && (
+            {Array.isArray(current.sources) &&
+              current.sources.some((s) => s.type === "exam") && (
               <span className="rounded-md bg-red-50 px-1.5 py-0.5 text-[11px] font-semibold text-red-500">
                 기출 유사
               </span>

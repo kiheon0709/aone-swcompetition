@@ -98,15 +98,94 @@ const UNTIMED_KEY = "aone.home.timetableUntimed.v1";
 const ASSIGNMENTS_KEY = "aone.home.assignments.v1";
 const EXAMS_KEY = "aone.home.exams.v1";
 
-const loadList = <T,>(key: string): T[] | null => {
+/**
+ * 요소 검증 함수로 정상화된 배열을 로드한다.
+ * localStorage가 손상(잘못된 JSON·비배열·오염 요소)돼도 크래시 없이
+ * 유효 요소만 남긴다. 유효 요소가 없으면 빈 배열/그대로 반환.
+ */
+const loadValidated = <T,>(
+  key: string,
+  validate: (x: unknown) => T | null,
+): T[] | null => {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as T[]) : null;
+    if (!Array.isArray(parsed)) return null;
+    return parsed
+      .map(validate)
+      .filter((x): x is T => x !== null);
   } catch {
     return null;
   }
+};
+
+const isNonEmptyString = (x: unknown): x is string =>
+  typeof x === "string" && x.length > 0;
+
+const VALID_COLORS: readonly LectureColor[] = [
+  "blue",
+  "emerald",
+  "violet",
+  "amber",
+  "rose",
+];
+
+/** Lecture 요소 검증 — 필수 필드·유효 weekday/color 확인. 오염 시 null(드롭). */
+const validateLecture = (x: unknown): Lecture | null => {
+  if (typeof x !== "object" || x === null) return null;
+  const o = x as Record<string, unknown>;
+  if (
+    !isNonEmptyString(o.id) ||
+    !isNonEmptyString(o.subject) ||
+    !isNonEmptyString(o.start) ||
+    !isNonEmptyString(o.end)
+  )
+    return null;
+  const weekday = WEEKDAYS.includes(o.weekday as Weekday)
+    ? (o.weekday as Weekday)
+    : null;
+  if (!weekday) return null;
+  const color = VALID_COLORS.includes(o.color as LectureColor)
+    ? (o.color as LectureColor)
+    : "blue";
+  return {
+    id: o.id,
+    subject: o.subject,
+    weekday,
+    start: o.start,
+    end: o.end,
+    room: typeof o.room === "string" ? o.room : "",
+    color,
+  };
+};
+
+/** Assignment 요소 검증 — id·subject·title·due(문자열) 확인. */
+const validateAssignment = (x: unknown): Assignment | null => {
+  if (typeof x !== "object" || x === null) return null;
+  const o = x as Record<string, unknown>;
+  if (
+    !isNonEmptyString(o.id) ||
+    !isNonEmptyString(o.subject) ||
+    !isNonEmptyString(o.title) ||
+    !isNonEmptyString(o.due)
+  )
+    return null;
+  return { id: o.id, subject: o.subject, title: o.title, due: o.due };
+};
+
+/** Exam 요소 검증 — id·subject·title·date(문자열) 확인. */
+const validateExam = (x: unknown): Exam | null => {
+  if (typeof x !== "object" || x === null) return null;
+  const o = x as Record<string, unknown>;
+  if (
+    !isNonEmptyString(o.id) ||
+    !isNonEmptyString(o.subject) ||
+    !isNonEmptyString(o.title) ||
+    !isNonEmptyString(o.date)
+  )
+    return null;
+  return { id: o.id, subject: o.subject, title: o.title, date: o.date };
 };
 
 const saveList = <T,>(key: string, list: T[]): void => {
@@ -118,22 +197,24 @@ const saveList = <T,>(key: string, list: T[]): void => {
 };
 
 export const loadTimetable = (): Lecture[] =>
-  loadList<Lecture>(TIMETABLE_KEY) ?? [];
+  loadValidated<Lecture>(TIMETABLE_KEY, validateLecture) ?? [];
 export const saveTimetable = (lectures: Lecture[]): void =>
   saveList(TIMETABLE_KEY, lectures);
 
 /** 시간 미지정 과목 (온라인 강의 등) */
 export const loadUntimedSubjects = (): string[] =>
-  loadList<string>(UNTIMED_KEY) ?? [];
+  loadValidated<string>(UNTIMED_KEY, (x) => (isNonEmptyString(x) ? x : null)) ??
+  [];
 export const saveUntimedSubjects = (subjects: string[]): void =>
   saveList(UNTIMED_KEY, subjects);
 
 export const loadAssignments = (): Assignment[] =>
-  loadList<Assignment>(ASSIGNMENTS_KEY) ?? [];
+  loadValidated<Assignment>(ASSIGNMENTS_KEY, validateAssignment) ?? [];
 export const saveAssignments = (assignments: Assignment[]): void =>
   saveList(ASSIGNMENTS_KEY, assignments);
 
-export const loadExams = (): Exam[] => loadList<Exam>(EXAMS_KEY) ?? [];
+export const loadExams = (): Exam[] =>
+  loadValidated<Exam>(EXAMS_KEY, validateExam) ?? [];
 export const saveExams = (exams: Exam[]): void => saveList(EXAMS_KEY, exams);
 
 export const newId = (prefix: string): string =>

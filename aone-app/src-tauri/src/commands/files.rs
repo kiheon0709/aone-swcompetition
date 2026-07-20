@@ -225,6 +225,12 @@ pub fn read_snapshot(kind: String, subject: String, unit: Option<String>) -> Res
     use super::paths::{aone_root, in_new_layout, pipeline_dir};
     let subject = nfc(subject.trim());
     let unit_n = unit.as_deref().map(|u| nfc(u.trim()));
+    // 경로 탈출 방지 — subject·unit도 folder 검증을 거친다 (read_doc_bytes와 동일한 방어).
+    // (검증 없이 subject="../../.."로 임의 파일을 읽던 취약점 차단)
+    validate_folder(&subject)?;
+    if let Some(u) = unit_n.as_deref() {
+        validate_folder(u)?;
+    }
     let file = if in_new_layout() {
         let root = aone_root();
         match kind.as_str() {

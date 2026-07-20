@@ -151,9 +151,10 @@ async function generateQuestionsBatched(
     sources: QuestionSource[];
     sourcesExist: boolean;
   }[] = [];
-  for (const item of gen.questions) {
+  for (const item of gen.questions ?? []) {
     const target = byConcept.get(item.conceptId);
     if (!target) continue; // 목록에 없는 conceptId는 버림
+    if (!item.q?.trim() || !item.a?.trim()) continue; // 빈 문제·답은 스킵
     const n = (counter.get(item.conceptId) ?? 0) + 1;
     if (n > tier.questionsPerConcept) continue;
     counter.set(item.conceptId, n);
@@ -193,7 +194,7 @@ async function generateQuestionsBatched(
       `{"verdicts":[{"id":"...","ok":true,"reason":"..."}]}`,
     ),
   });
-  const verdictById = new Map(verdictOut.verdicts.map((v) => [v.id, v]));
+  const verdictById = new Map((verdictOut.verdicts ?? []).map((v) => [v.id, v]));
 
   for (const p of pending) {
     const verdict = verdictById.get(p.id);
@@ -266,7 +267,14 @@ async function generateQuestionsIndividually(
     }
   }
 
-  await Promise.all(jobs);
+  // allSettled: 한 문항 체인이 실패해도 나머지 성공분은 유지한다(동시성은 엔진 세마포어).
+  const settled = await Promise.allSettled(jobs);
+  for (const s of settled) {
+    if (s.status === "rejected") {
+      const msg = s.reason instanceof Error ? s.reason.message : String(s.reason);
+      console.warn(`  경고: 예상문제 생성 1건 실패 — 건너뜁니다 (${msg.slice(0, 160)}).`);
+    }
+  }
   return result;
 }
 

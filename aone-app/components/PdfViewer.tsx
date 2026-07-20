@@ -35,6 +35,8 @@ export default function PdfViewer({
   const docRef = useRef<PDFDocumentProxy | null>(null);
   const loadingTaskRef = useRef<PDFDocumentLoadingTask | null>(null);
   const renderTaskRef = useRef<RenderTask | null>(null);
+  /** 문서 세대 토큰 — url 교체 시 증가. 렌더가 자기 세대 문서인지 가드한다 */
+  const docGenRef = useRef(0);
 
   const [numPages, setNumPages] = useState(0);
   const [zoom, setZoom] = useState(1);
@@ -46,6 +48,8 @@ export default function PdfViewer({
   // 문서 로드
   useEffect(() => {
     let cancelled = false;
+    const gen = docGenRef.current + 1;
+    docGenRef.current = gen;
     setLoading(true);
     setError(null);
     setNumPages(0);
@@ -71,9 +75,12 @@ export default function PdfViewer({
       cancelled = true;
       renderTaskRef.current?.cancel();
       renderTaskRef.current = null;
-      loadingTaskRef.current?.destroy();
-      loadingTaskRef.current = null;
+      // 페이지 리소스 해제 후 로딩 태스크 파기 — 워커/문서 메모리 누수 방지 (장시간 OOM).
+      // 이 pdfjs 버전은 PDFDocumentProxy.destroy가 없고 loadingTask.destroy가 문서를 파기한다.
+      void docRef.current?.cleanup();
       docRef.current = null;
+      void loadingTaskRef.current?.destroy();
+      loadingTaskRef.current = null;
     };
     // onNumPages는 렌더마다 새 함수여도 재로드하지 않는다
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,10 +108,12 @@ export default function PdfViewer({
     const canvas = canvasRef.current;
     if (!doc || !canvas || numPages === 0 || box.w === 0) return;
     let cancelled = false;
+    const gen = docGenRef.current;
     const pageNo = Math.min(Math.max(1, page), numPages);
     (async () => {
       const p = await doc.getPage(pageNo);
-      if (cancelled) return;
+      // url 교체로 문서 세대가 바뀌었으면 stale docRef — 렌더 중단
+      if (cancelled || gen !== docGenRef.current) return;
       const base = p.getViewport({ scale: 1 });
       // 스크롤바·패딩 여유 2px
       const availW = Math.max(200, box.w - 2);

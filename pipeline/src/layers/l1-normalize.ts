@@ -132,12 +132,17 @@ export function chunkUtterances(
     const sec = timeToSeconds(u.t);
     if (sec !== null) {
       const b = Math.floor(sec / blockSeconds);
-      if (b !== bucket && current.length > 0) {
+      // 하드 상한: 벽시계 블록이 아직 안 끝났어도 문자량이 maxChars를 넘으면 분할한다.
+      // (말 빠른 교수의 긴 블록이 수만 자 한 청크가 되어 codex/LLM 호출이 실패하는 것을 방지)
+      const overCap = chars + u.text.length > maxChars && current.length > 0;
+      if ((b !== bucket || overCap) && current.length > 0) {
         chunks.push(current);
         current = [];
+        chars = 0;
       }
       bucket = b;
       current.push(u);
+      chars += u.text.length;
     } else {
       if (chars + u.text.length > maxChars && current.length > 0) {
         chunks.push(current);

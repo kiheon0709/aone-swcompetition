@@ -60,21 +60,41 @@ export const SnapshotSchema = z.object({
 
 export type Snapshot = z.infer<typeof SnapshotSchema>;
 
+/** 손상된 JSON 컬럼(question_ids_json·sources_json)이 export 전체를 막지 않게 방어 파싱. */
+function safeParseArray<T>(json: string | null | undefined): T[] {
+  if (!json) return [];
+  try {
+    const v = JSON.parse(json);
+    return Array.isArray(v) ? (v as T[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 export function buildSnapshot(db: AoneDb, key: UnitKey): Snapshot {
   const conceptRows = db.allConcepts(key.subject);
 
-  const concepts = db.scoresAtUnit(key).map((s) => {
-    const c = conceptRows.find((r) => r.id === s.concept_id)!;
-    return {
-      id: c.id,
-      name: c.name,
-      importance: s.importance,
-      examSignal: s.exam_signal,
-      history: db
-        .scoreHistory(c.id, key.subject, key.unitOrder)
-        .map((h) => ({ unit: h.unit, unitOrder: h.unit_order, examSignal: h.exam_signal })),
-    };
-  });
+  const concepts = db
+    .scoresAtUnit(key)
+    .flatMap((s) => {
+      const c = conceptRows.find((r) => r.id === s.concept_id);
+      if (!c) {
+        // 점수는 있는데 개념 행이 사라진 고아 데이터 — 크래시 대신 스킵.
+        console.warn(`  경고: 개념 행 없음(점수만 존재) — 스킵: ${s.concept_id}`);
+        return [];
+      }
+      return [
+        {
+          id: c.id,
+          name: c.name,
+          importance: s.importance,
+          examSignal: s.exam_signal,
+          history: db
+            .scoreHistory(c.id, key.subject, key.unitOrder)
+            .map((h) => ({ unit: h.unit, unitOrder: h.unit_order, examSignal: h.exam_signal })),
+        },
+      ];
+    });
 
   const activities = db.activitiesAtUnit(key).map((a) => ({
     ts: a.ts,
@@ -86,7 +106,7 @@ export function buildSnapshot(db: AoneDb, key: UnitKey): Snapshot {
 
   const proactive = db.proactiveAtUnit(key).map((p) => ({
     text: p.text,
-    questionIds: JSON.parse(p.question_ids_json) as string[],
+    questionIds: safeParseArray<string>(p.question_ids_json),
   }));
 
   const questions = db.questionsAtUnit(key).map((q) => ({
@@ -96,7 +116,7 @@ export function buildSnapshot(db: AoneDb, key: UnitKey): Snapshot {
     difficulty: q.difficulty,
     cognitiveLevel: q.cognitive_level ?? "",
     reasoning: q.reasoning,
-    sources: JSON.parse(q.sources_json) as Snapshot["questions"][number]["sources"],
+    sources: safeParseArray<Snapshot["questions"][number]["sources"][number]>(q.sources_json),
   }));
 
   const noteMarkdown = db.noteAtUnit(key);
@@ -123,11 +143,18 @@ export function exportSnapshots(
   const written: { key: UnitKey; file: string }[] = [];
   for (const key of db.unitsWithScores(filter?.subject)) {
     if (filter?.unit !== undefined && key.unit !== filter.unit) continue;
-    const snapshot = buildSnapshot(db, key); // 생성 시점에 zod 자검증
-    const file = exportFilePath("analysis", key, outDir); // 새 레이아웃=.aone/analysis.json, 폴백={outDir}/{slug}.json
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, JSON.stringify(snapshot, null, 2) + "\n", "utf8");
-    written.push({ key, file });
+    // 한 unit의 스냅샷 생성 실패가 나머지 unit export를 막지 않게 방어.
+    try {
+      const snapshot = buildSnapshot(db, key); // 생성 시점에 zod 자검증
+      const file = exportFilePath("analysis", key, outDir); // 새 레이아웃=.aone/analysis.json, 폴백={outDir}/{slug}.json
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, JSON.stringify(snapshot, null, 2) + "\n", "utf8");
+      written.push({ key, file });
+    } catch (e) {
+      console.warn(
+        `  경고: ${key.subject}/${key.unit} 스냅샷 export 실패 — 건너뜁니다 (${e instanceof Error ? e.message : String(e)}).`,
+      );
+    }
   }
   return written;
 }

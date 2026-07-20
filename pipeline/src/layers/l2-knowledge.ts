@@ -14,7 +14,13 @@ import {
 } from "../adapters/llm.js";
 import type { SlideDoc, Utterance, UnitInputs } from "./l1-normalize.js";
 import { chunkUtterances } from "./l1-normalize.js";
-import type { UnitKey } from "../folders.js";
+import { nfc, type UnitKey } from "../folders.js";
+
+/** allSettled rejection 사유를 짧은 로그 문자열로 */
+function describeErr(reason: unknown): string {
+  const msg = reason instanceof Error ? reason.message : String(reason);
+  return msg.slice(0, 160);
+}
 
 export function normalizeName(name: string): string {
   return name.toLowerCase().replace(/[\s\-_./]/g, "");
@@ -117,7 +123,7 @@ function buildExtractCalls(cfg: PipelineConfig, inputs: UnitInputs, isStub: bool
         { utterances: chunk },
         SCHEMA_HINT,
       ),
-      allowedLocators: new Set(chunk.map((u) => u.t)),
+      allowedLocators: new Set(chunk.map((u) => nfc(u.t))),
     });
   }
   // 슬라이드: 문서 단위 호출
@@ -134,7 +140,7 @@ function buildExtractCalls(cfg: PipelineConfig, inputs: UnitInputs, isStub: bool
         { slide: { tag: doc.tag, pages: doc.pages } },
         SCHEMA_HINT,
       ),
-      allowedLocators: new Set(doc.pages.map((p) => `${doc.tag} p.${p.page}`)),
+      allowedLocators: new Set(doc.pages.map((p) => nfc(`${doc.tag} p.${p.page}`))),
     });
   }
   return calls;
@@ -154,8 +160,9 @@ export async function updateKnowledge(
   const existing = db.allConcepts(inputs.key.subject);
   const cap = cfg.tierConfig.evidencePerConceptPerWeek;
 
-  // 독립 호출(청크·슬라이드 문서별)은 병렬 실행 — DB 반영은 호출 순서대로 결정적으로
-  const outs = await Promise.all(
+  // 독립 호출(청크·슬라이드 문서별)은 병렬 실행 — DB 반영은 호출 순서대로 결정적으로.
+  // allSettled: 한 호출이 실패해도 성공분은 살려서 병합한다(엔진 세마포어가 동시성 제어).
+  const settled = await Promise.allSettled(
     calls.map((call, i) =>
       engine.call({
         task: "extract_concepts",
@@ -168,7 +175,12 @@ export async function updateKnowledge(
   );
 
   for (let ci = 0; ci < calls.length; ci++) {
-    const r = applyExtractedConcepts(db, inputs.key, cap, existing, outs[ci].concepts, calls[ci].allowedLocators);
+    const s = settled[ci];
+    if (s.status === "rejected") {
+      console.warn(`  경고: 개념 추출 호출 ${ci + 1}/${calls.length} 실패 — 건너뜁니다 (${describeErr(s.reason)}).`);
+      continue;
+    }
+    const r = applyExtractedConcepts(db, inputs.key, cap, existing, s.value.concepts ?? [], calls[ci].allowedLocators);
     newConcepts += r.newConcepts;
     merged += r.merged;
     evidenceAdded += r.evidenceAdded;
@@ -215,7 +227,7 @@ export async function updateKnowledgeUnified(
   if (bundles.length === 0) bundles.push({ utterances: [], slides: [] });
   inputs.slides.forEach((doc, i) => bundles[i % bundles.length].slides.push(doc));
 
-  const outs = await Promise.all(
+  const settled = await Promise.allSettled(
     bundles.map((b, bi) => {
       const payload: ExtractKnowledgePayload = {
         utterances: b.utterances,
@@ -264,24 +276,29 @@ export async function updateKnowledgeUnified(
 
   for (let i = 0; i < bundles.length; i++) {
     const b = bundles[i];
-    const out = outs[i];
+    const s = settled[i];
+    if (s.status === "rejected") {
+      console.warn(`  경고: 지식 추출 호출 ${i + 1}/${bundles.length} 실패 — 건너뜁니다 (${describeErr(s.reason)}).`);
+      continue;
+    }
+    const out = s.value;
     const allowedEvidence = isStub
       ? null
       : new Set([
-          ...b.utterances.map((u) => u.t),
-          ...b.slides.flatMap((d) => d.pages.map((p) => `${d.tag} p.${p.page}`)),
+          ...b.utterances.map((u) => nfc(u.t)),
+          ...b.slides.flatMap((d) => d.pages.map((p) => nfc(`${d.tag} p.${p.page}`))),
         ]);
-    const r = applyExtractedConcepts(db, inputs.key, cap, existing, out.concepts, allowedEvidence);
+    const r = applyExtractedConcepts(db, inputs.key, cap, existing, out.concepts ?? [], allowedEvidence);
     newConcepts += r.newConcepts;
     merged += r.merged;
     evidenceAdded += r.evidenceAdded;
 
     // 신호 반영 (전사본 발화만 신호 출처로 인정)
-    const allowedSignal = isStub ? null : new Set(b.utterances.map((u) => u.t));
-    for (const s of out.signals) {
+    const allowedSignal = isStub ? null : new Set(b.utterances.map((u) => nfc(u.t)));
+    for (const s of out.signals ?? []) {
       const concept = existing.find((c) => isSameConcept(c.name, s.concept));
       if (!concept) continue;
-      if (allowedSignal && !allowedSignal.has(s.locator)) continue; // 지어낸 locator 차단
+      if (allowedSignal && !allowedSignal.has(nfc(s.locator))) continue; // 지어낸 locator 차단
       if (db.signalCount(concept.id, inputs.key, s.kind) >= cfg.maxSignalsPerConceptKindWeek) continue;
       const added = db.addSignal({
         concept_id: concept.id,
@@ -325,8 +342,8 @@ function applyExtractedConcepts(
   for (const c of concepts) {
     // 근거 locator 실존 검증 (실 LLM의 지어낸 출처 차단)
     const validEvidence = allowedLocators
-      ? c.evidence.filter((ev) => allowedLocators.has(ev.locator))
-      : c.evidence;
+      ? (c.evidence ?? []).filter((ev) => allowedLocators.has(nfc(ev.locator)))
+      : (c.evidence ?? []);
     if (validEvidence.length === 0) continue; // 근거 없는 개념은 등록하지 않음
 
     let row = findExistingConcept(existing, c.name);

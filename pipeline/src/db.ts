@@ -10,7 +10,7 @@
 import Database from "better-sqlite3";
 import nodeFs from "node:fs";
 import nodePath from "node:path";
-import type { UnitKey } from "./folders.js";
+import { nfc, type UnitKey } from "./folders.js";
 
 export type SourceType = "transcript" | "slide" | "exam";
 export type SignalKind = "emphasis" | "exam_hint";
@@ -235,7 +235,9 @@ export class AoneDb {
       .prepare(
         "INSERT OR IGNORE INTO evidence (concept_id, subject, unit, unit_order, source_type, locator, quote) VALUES (?, ?, ?, ?, ?, ?, ?)",
       )
-      .run(e.concept_id, e.subject, e.unit, e.unit_order, e.source_type, e.locator, e.quote);
+      // locator·quote는 NFC로 정규화해 저장한다 (macOS NFD vs LLM NFC 바이트 불일치로
+      // 근거 검증(evidenceExists·allowedLocators)이 전멸하는 것을 방지).
+      .run(e.concept_id, e.subject, e.unit, e.unit_order, e.source_type, nfc(e.locator), nfc(e.quote));
     return r.changes > 0;
   }
 
@@ -268,7 +270,8 @@ export class AoneDb {
       .prepare(
         "SELECT COUNT(*) AS n FROM evidence WHERE source_type = ? AND subject = ? AND unit = ? AND locator = ? AND quote = ?",
       )
-      .get(sourceType, subject, unit, locator, quote) as { n: number };
+      // 저장 시 NFC 정규화했으므로 비교 인자도 NFC로 맞춘다 (근거 실존 검증 일관성).
+      .get(sourceType, subject, unit, nfc(locator), nfc(quote)) as { n: number };
     return r.n > 0;
   }
 
@@ -278,7 +281,8 @@ export class AoneDb {
       .prepare(
         "INSERT OR IGNORE INTO signals (concept_id, subject, unit, unit_order, kind, source_type, locator, quote) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
       )
-      .run(s.concept_id, s.subject, s.unit, s.unit_order, s.kind, s.source_type, s.locator, s.quote);
+      // locator·quote NFC 정규화 (evidence와 동일 이유 — NFD/NFC 불일치 방지).
+      .run(s.concept_id, s.subject, s.unit, s.unit_order, s.kind, s.source_type, nfc(s.locator), nfc(s.quote));
     return r.changes > 0;
   }
 

@@ -80,6 +80,7 @@ import {
   type RejectedFile,
   loadSnapshot,
   loadDocUrl,
+  userErrorMessage,
 } from "@/lib/fs-bridge";
 import FileIcon, { fileIconTypeOf, type FileIconType } from "@/components/FileIcon";
 import PdfViewer from "@/components/PdfViewer";
@@ -95,7 +96,7 @@ import {
   ddayLabel,
   loadExams,
 } from "@/components/home/homeData";
-import { USER_NAME, USER_ORG } from "@/lib/user";
+import { getUserName, getUserOrg, saveUserProfile } from "@/lib/user";
 
 interface ConceptHistory {
   unitOrder: number;
@@ -150,6 +151,27 @@ interface Snapshot {
   questions: Question[];
   note?: { markdown: string };
 }
+
+/**
+ * 로드한 스냅샷의 배열 필드를 정상화한다.
+ * 손상된(비배열·필드 누락) 스냅샷에서도 concepts·activities·proactive·questions가
+ * 항상 배열이 되도록 보장해 하위 렌더·필터·병합의 크래시를 원천 차단한다.
+ * 유효 객체가 아니면 null.
+ */
+const normalizeSnapshot = (data: unknown): Snapshot | null => {
+  if (typeof data !== "object" || data === null) return null;
+  const o = data as Partial<Snapshot>;
+  return {
+    subject: typeof o.subject === "string" ? o.subject : "",
+    unit: typeof o.unit === "string" ? o.unit : "",
+    unitOrder: typeof o.unitOrder === "number" ? o.unitOrder : 0,
+    concepts: Array.isArray(o.concepts) ? o.concepts : [],
+    activities: Array.isArray(o.activities) ? o.activities : [],
+    proactive: Array.isArray(o.proactive) ? o.proactive : [],
+    questions: Array.isArray(o.questions) ? o.questions : [],
+    note: o.note,
+  };
+};
 
 /** 파일 항목 — 매니페스트(§7)의 파일 그대로 */
 type FileEntry = ManifestFile;
@@ -851,6 +873,10 @@ export default function Home() {
 
   // 온보딩 (최초 1회, 0 = 숨김)
   const [onboardStep, setOnboardStep] = useState(0);
+  // 사용자 프로필 — localStorage 기반 (하드코딩 제거). 온보딩에서 이름 입력받음.
+  const [userName, setUserName] = useState("사용자");
+  const [userOrg, setUserOrg] = useState("");
+  const [onboardName, setOnboardName] = useState("");
 
   // 시험 일정 (홈과 같은 localStorage 소스) — 사이드바 배지 · 시험 대비 화면 · 임박 배너
   const [exams, setExams] = useState<ExamInfo[]>([]);
@@ -868,6 +894,8 @@ export default function Home() {
     setDesktop(isTauriRuntime());
     setActiveEngineState(getActiveEngine());
     setExams(loadExams());
+    setUserName(getUserName());
+    setUserOrg(getUserOrg());
     try {
       if (!localStorage.getItem(ONBOARD_KEY)) setOnboardStep(1);
       setSidebarCollapsed(localStorage.getItem(SIDEBAR_KEY) === "1");
@@ -938,13 +966,18 @@ export default function Home() {
   }, []);
 
   const finishOnboarding = useCallback(() => {
+    // 온보딩에서 입력한 이름을 프로필로 저장 (비었으면 기본값 유지)
+    if (onboardName.trim()) {
+      saveUserProfile(onboardName);
+      setUserName(getUserName());
+    }
     try {
       localStorage.setItem(ONBOARD_KEY, "1");
     } catch {
       // 저장 실패해도 이번 세션에서는 닫는다
     }
     setOnboardStep(0);
-  }, []);
+  }, [onboardName]);
 
   // ⌘K → 검색바 포커스
   useEffect(() => {
@@ -1106,7 +1139,7 @@ export default function Home() {
     Promise.all(
       allUnits.map((u) =>
         loadSnapshot("analysis", u.subject, u.unit, reloadKey)
-          .then((data) => ({ ...u, data: data as Snapshot | null }))
+          .then((data) => ({ ...u, data: normalizeSnapshot(data) }))
           .catch(() => ({ ...u, data: null as Snapshot | null }))
       )
     ).then((results) => {
@@ -1143,8 +1176,9 @@ export default function Home() {
     let cancelled = false;
     loadSnapshot("analysis", lecture.subject, lecture.unit, reloadKey)
       .then((data) => {
-        if (data == null) throw new Error("snapshot not found");
-        return data as Snapshot;
+        const normalized = normalizeSnapshot(data);
+        if (normalized == null) throw new Error("snapshot not found");
+        return normalized;
       })
       .then((data: Snapshot) => {
         if (!cancelled) setSnapshot(data);
@@ -1326,7 +1360,11 @@ export default function Home() {
    */
   const startAnalysis = useCallback(
     async (subject: string, unit: string, auto = false) => {
-      if (analysisBusyRef.current) return;
+      if (analysisBusyRef.current) {
+        // 이미 다른 분석이 돌고 있음 — 수동 트리거엔 이유를 알린다 (자동은 대기열로)
+        if (!auto) showToast("다른 분석이 진행 중이에요 — 끝나면 이어서 처리할게요");
+        return;
+      }
       analysisBusyRef.current = true;
       clearFailureOf(subject, unit);
       const before = questionCountRef.current;
@@ -1341,7 +1379,23 @@ export default function Home() {
         runStartRef.current = Date.now();
         stepCursorRef.current = 0;
         stopPolling();
+        const analysisDeadline = Date.now() + 10 * 60 * 1000; // 최대 10분
         pollRef.current = setInterval(async () => {
+          // 백엔드가 done/failed를 끝내 주지 않아도 busy가 영구 true가 되지 않게 한다
+          if (Date.now() > analysisDeadline) {
+            stopPolling();
+            analysisBusyRef.current = false;
+            setRunState("failed");
+            registerFailure(subject, unit, "분석이 시간 내에 끝나지 않았어요 (10분 초과)");
+            addNotification(
+              "failed",
+              `${unit} 분석이 시간 내에 끝나지 않았어요`,
+              folderKeyOf(subject, unit)
+            );
+            if (auto) showWatchBanner(null);
+            startNextPending();
+            return;
+          }
           try {
             const s = await analysisStatus();
             if (s.status === "done") {
@@ -1351,12 +1405,9 @@ export default function Home() {
               setReloadKey((k) => k + 1); // 스냅샷 재로드
               // 결과로 안내 — 새로 만들어진 예상문제 수를 세어 알린다
               try {
-                const data = (await loadSnapshot(
-                  "analysis",
-                  subject,
-                  unit,
-                  Date.now(),
-                )) as Snapshot | null;
+                const data = normalizeSnapshot(
+                  await loadSnapshot("analysis", subject, unit, Date.now()),
+                );
                 const made = data ? data.questions.length : 0;
                 setNewQuestionCount(made > before ? made - before : made);
                 showToast(
@@ -1440,7 +1491,7 @@ export default function Home() {
     try {
       await stopAnalysis(kind);
     } catch (e) {
-      showToast(e instanceof Error ? e.message : String(e));
+      showToast(userErrorMessage(e));
       return;
     }
     // 중지는 실패가 아니다 — 폴링을 먼저 끊고 상태를 idle로 되돌린다
@@ -1972,7 +2023,7 @@ export default function Home() {
         const rejectMsg = rejectionMessageOf(rejected);
         showToast(rejectMsg ?? `${label}에 ${good.length}개 파일 추가됨`);
       } catch (e) {
-        showToast(e instanceof Error ? e.message : String(e));
+        showToast(userErrorMessage(e));
       }
     },
     [desktop, showToast]
@@ -2003,7 +2054,7 @@ export default function Home() {
         if (subject) selectUnit(subject, name);
         else selectSubject(name);
       } catch (e) {
-        showToast(e instanceof Error ? e.message : String(e));
+        showToast(userErrorMessage(e));
       }
     })();
   };
@@ -2059,7 +2110,7 @@ export default function Home() {
       }
       showToast("이름을 바꿨어요 — 분석 결과는 다음 분석 때 새 이름으로 정리돼요");
     } catch (e) {
-      showToast(e instanceof Error ? e.message : String(e));
+      showToast(userErrorMessage(e));
     }
   };
 
@@ -2085,7 +2136,7 @@ export default function Home() {
       }
       showToast("휴지통으로 옮겼어요");
     } catch (e) {
-      showToast(e instanceof Error ? e.message : String(e));
+      showToast(userErrorMessage(e));
     }
   };
 
@@ -2164,7 +2215,7 @@ export default function Home() {
               const rejectMsg = rejectionMessageOf(rejected);
               showToast(rejectMsg ?? `${label}에 ${copied.length}개 파일 추가됨`);
             } catch (e) {
-              showToast(e instanceof Error ? e.message : String(e));
+              showToast(userErrorMessage(e));
             }
           })();
         },
@@ -2916,7 +2967,7 @@ export default function Home() {
       showToast(`${pendingDelete.title} 파일을 삭제했습니다`);
       setPendingDelete(null);
     } catch (e) {
-      showToast(e instanceof Error ? e.message : String(e));
+      showToast(userErrorMessage(e));
     } finally {
       setDeleting(false);
     }
@@ -3888,11 +3939,13 @@ export default function Home() {
                   className="text-[13px] font-bold leading-tight text-gray-900"
                   data-testid="profile-name"
                 >
-                  {USER_NAME}
+                  {userName}
                 </p>
-                <p className="text-[10px] font-medium tracking-wide text-gray-400">
-                  {USER_ORG}
-                </p>
+                {userOrg && (
+                  <p className="text-[10px] font-medium tracking-wide text-gray-400">
+                    {userOrg}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -5647,13 +5700,24 @@ export default function Home() {
                   <span className="text-2xl font-bold italic text-white">A</span>
                 </span>
                 <h2 className="text-lg font-bold tracking-tight text-gray-900">
-                  {USER_NAME}님, Aone에 오신 걸 환영해요
+                  Aone에 오신 걸 환영해요
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500">
                   강의 자료를 넣어두기만 하면 에이전트가 알아서 정리하고 예상문제를
                   만들어드립니다.
                 </p>
-                <p className="mt-4 rounded-xl bg-black/[0.03] px-3 py-2.5 text-xs text-gray-500">
+                <input
+                  type="text"
+                  value={onboardName}
+                  onChange={(e) => setOnboardName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") setOnboardStep((s) => s + 1);
+                  }}
+                  placeholder="이름을 알려주세요 (예: 홍길동)"
+                  autoFocus
+                  className="mt-4 w-full rounded-xl border border-black/[0.08] bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-primary/60 focus:outline-none"
+                />
+                <p className="mt-3 rounded-xl bg-black/[0.03] px-3 py-2.5 text-xs text-gray-500">
                   저장소 위치 ·{" "}
                   <span className="font-mono text-gray-700">~/Aone</span>
                 </p>

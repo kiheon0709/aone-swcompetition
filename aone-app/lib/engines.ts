@@ -232,8 +232,27 @@ export const recognizeTimetableImage = async (
 ): Promise<TimetableRecognition> => {
   if (!isTauriRuntime()) throw new Error("데스크톱 앱에서만 사용할 수 있습니다.");
   const raw = await invoke<unknown>("recognize_timetable", { imagePath, engine });
-  // 백엔드가 JSON 문자열/객체 어느 쪽을 반환해도 수용
-  const data: unknown = typeof raw === "string" ? JSON.parse(raw) : raw;
+  // 백엔드가 JSON 문자열/객체 어느 쪽을 반환해도 수용.
+  // LLM이 ```json 코드펜스·설명을 섞어 반환하면 파싱 전에 걷어낸다.
+  let data: unknown;
+  if (typeof raw === "string") {
+    const stripped = raw
+      .replace(/^\s*```(?:json)?\s*/i, "")
+      .replace(/\s*```\s*$/i, "")
+      .trim();
+    const start = stripped.indexOf("{");
+    const end = stripped.lastIndexOf("}");
+    const jsonText =
+      start !== -1 && end > start ? stripped.slice(start, end + 1) : stripped;
+    try {
+      data = JSON.parse(jsonText);
+    } catch (e) {
+      console.error("[recognizeTimetable] JSON 파싱 실패:", e, raw);
+      throw new Error("시간표 인식 결과를 해석할 수 없습니다.");
+    }
+  } else {
+    data = raw;
+  }
   if (typeof data !== "object" || data === null) {
     throw new Error("시간표 인식 결과를 해석할 수 없습니다.");
   }

@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { PDFDocumentLoadingTask, PDFDocumentProxy } from "pdfjs-dist";
+import type {
+  PDFDocumentLoadingTask,
+  PDFDocumentProxy,
+  RenderTask,
+} from "pdfjs-dist";
 
 import { signalMetaOf, type SignalLevel } from "@/lib/signal";
 
@@ -36,6 +40,8 @@ export default function PdfThumbStrip({
 }: PdfThumbStripProps) {
   const docRef = useRef<PDFDocumentProxy | null>(null);
   const loadingTaskRef = useRef<PDFDocumentLoadingTask | null>(null);
+  /** 진행 중인 썸네일 렌더 태스크 — 언마운트·url 교체 시 cancel */
+  const renderTaskRef = useRef<RenderTask | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const canvasRefs = useRef<Map<number, HTMLCanvasElement>>(new Map());
   /** 이미 렌더된 페이지 — 스크롤을 되돌아와도 다시 그리지 않는다 */
@@ -64,9 +70,13 @@ export default function PdfThumbStrip({
     });
     return () => {
       cancelled = true;
-      loadingTaskRef.current?.destroy();
-      loadingTaskRef.current = null;
+      renderTaskRef.current?.cancel();
+      renderTaskRef.current = null;
+      // 썸네일 전용 문서 리소스 해제 후 로딩 태스크 파기 — 워커 메모리 누수 방지
+      void docRef.current?.cleanup();
       docRef.current = null;
+      void loadingTaskRef.current?.destroy();
+      loadingTaskRef.current = null;
     };
   }, [url]);
 
@@ -115,12 +125,14 @@ export default function PdfThumbStrip({
           canvas.style.height = `${Math.floor(viewport.height)}px`;
           const ctx = canvas.getContext("2d");
           if (!ctx) continue;
-          await pdfPage.render({
+          const task = pdfPage.render({
             canvas,
             canvasContext: ctx,
             viewport,
             transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : undefined,
-          }).promise;
+          });
+          renderTaskRef.current = task;
+          await task.promise;
         } catch {
           renderedRef.current.delete(p); // 실패 시 재시도 허용
         }

@@ -92,14 +92,16 @@ async function cmdRun(opts: Map<string, string>): Promise<void> {
 
   const units = resolveTargetUnits(opts, goldsetDir);
 
-  const concurrency = parseInt(opts.get("concurrency") ?? "4", 10);
+  // --concurrency 미지정 시 undefined를 넘겨 엔진별 기본값(codex=1, gemini=2, claude=4)을 쓰게 한다.
+  // (예전엔 여기서 무조건 4로 고정해 codex의 낮은 기본값이 무시됐다 → codex 동시 세션 실패 원인)
+  const concurrency = opts.has("concurrency") ? parseInt(opts.get("concurrency")!, 10) : undefined;
   const model = resolveModel(opts, engineName);
   const cfg = makeConfig({ tier, engine: engineName, goldsetDir, dbPath, outDir: DEFAULT_OUT, extractedDir });
   const engine = createEngine(engineName, { concurrency, model });
   const db = new AoneDb(dbPath);
 
   console.log(
-    `Aone pipeline run — [${units.map((u) => folderKeyOf(u)).join(", ")}], engine=${engineName}, tier=${tier}, concurrency=${concurrency}` +
+    `Aone pipeline run — [${units.map((u) => folderKeyOf(u)).join(", ")}], engine=${engineName}, tier=${tier}, concurrency=${concurrency ?? "엔진기본"}` +
       (model ? `, model=${model}` : ""),
   );
   console.log(`goldset: ${goldsetDir}`);
@@ -245,7 +247,8 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
   const tag = nfc(rawTag);
   const engineName = (opts.get("engine") ?? "stub") as EngineName;
   const model = resolveModel(opts, engineName);
-  const concurrency = parseInt(opts.get("concurrency") ?? "2", 10);
+  // --concurrency 미지정 시 엔진별 기본값(codex=1 등)을 쓰게 undefined 전달.
+  const concurrency = opts.has("concurrency") ? parseInt(opts.get("concurrency")!, 10) : undefined;
 
   // B안: --attach-pdf (또는 env AONE_ATTACH_PDF=1) + vision 지원 엔진이면 원본 PDF를 첨부.
   // claude-cli·gemini-api만 PDF를 직접 본다. codex·stub은 텍스트만.
@@ -264,7 +267,7 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
     `summarize-slides — ${folderKeyOf(key)} doc=${tag}: ${pages.length}페이지 → ${chunks.length}회 호출 (engine=${engineName}${model ? `, model=${model}` : ""}${pdfPath ? ", PDF첨부(그림·도식)" : ""})`,
   );
 
-  const results = await Promise.all(
+  const settled = await Promise.allSettled(
     chunks.map((chunk) => {
       const payload: ComposeSlideSummariesPayload = { subject: key.subject, unit: key.unit, tag, pages: chunk };
       const prompt = buildPrompt(
@@ -302,9 +305,18 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
   const validIds = new Map(
     pages.map((p) => [`${tag}_p${String(p.page).padStart(2, "0")}`.normalize("NFC"), p.page]),
   );
+  // allSettled: 일부 청크가 실패해도 성공한 청크의 슬라이드는 살린다.
+  const results = settled.flatMap((s, i) => {
+    if (s.status === "rejected") {
+      const msg = s.reason instanceof Error ? s.reason.message : String(s.reason);
+      console.warn(`  경고: 슬라이드 요약 청크 ${i + 1}/${chunks.length} 실패 — 건너뜁니다 (${msg.slice(0, 160)}).`);
+      return [];
+    }
+    return [s.value];
+  });
   const entries: AppSlideEntry[] = [];
   for (const r of results) {
-    for (const s of r.slides) {
+    for (const s of r.slides ?? []) {
       const page = validIds.get(s.slide_id.normalize("NFC"));
       if (page === undefined) {
         console.warn(`  경고: 입력에 없는 slide_id 무시 — ${s.slide_id}`);

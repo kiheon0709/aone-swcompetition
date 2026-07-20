@@ -118,10 +118,13 @@ pub async fn run_slide_summarize(
             doc.as_str(),
             "--engine",
             cli_engine,
-            "--concurrency",
-            "2",
-        ])
-        .current_dir(pipeline_dir())
+        ]);
+    // codex는 동시 세션을 못 물어 동시성이 높으면 실패하므로 플래그를 안 붙여 CLI 기본값(1)을 쓴다.
+    // 그 외 엔진은 기존대로 2.
+    if cli_engine != "codex-cli" {
+        cmd.args(["--concurrency", "2"]);
+    }
+    cmd.current_dir(pipeline_dir())
         .env("PATH", spawn_path_env())
         .env("CLAUDE_BIN", claude_bin());
     inject_root_env(&mut cmd);

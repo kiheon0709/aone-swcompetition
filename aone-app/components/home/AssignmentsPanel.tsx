@@ -71,17 +71,28 @@ export default function AssignmentsPanel({
             className="w-full rounded-lg border border-black/[0.08] bg-white px-2.5 py-1.5 text-xs text-gray-900 placeholder-gray-400 focus:border-primary/60 focus:outline-none"
           />
           <div className="flex gap-2">
-            <select
-              value={effectiveSubject}
-              onChange={(e) => setSubject(e.target.value)}
-              className="min-w-0 flex-1 rounded-lg border border-black/[0.08] bg-white px-2 py-1.5 text-xs text-gray-900 focus:border-primary/60 focus:outline-none"
-            >
-              {subjects.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
+            {subjects.length > 0 ? (
+              <select
+                value={effectiveSubject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="min-w-0 flex-1 rounded-lg border border-black/[0.08] bg-white px-2 py-1.5 text-xs text-gray-900 focus:border-primary/60 focus:outline-none"
+              >
+                {subjects.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              // 과목이 아직 없는 신규 사용자 — 과목명을 직접 입력해 과제를 만들 수 있게 한다
+              <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="과목명 (예: 데이터통신)"
+                className="min-w-0 flex-1 rounded-lg border border-black/[0.08] bg-white px-2 py-1.5 text-xs text-gray-900 placeholder-gray-400 focus:border-primary/60 focus:outline-none"
+              />
+            )}
             <input
               type="date"
               value={due}

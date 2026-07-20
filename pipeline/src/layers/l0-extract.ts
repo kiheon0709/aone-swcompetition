@@ -127,11 +127,19 @@ export async function extractUnitPdfs(
       result.skipped.push(f);
       continue;
     }
-    const pages = extOf(f) === "pptx" ? await extractPptxSlides(src) : await extractPdfPages(src);
-    fs.mkdirSync(outDir, { recursive: true });
-    fs.writeFileSync(dst, pages.join("\n\f\n"), "utf8");
-    fs.utimesSync(dst, srcMtime, srcMtime); // 캐시 mtime = 원본 mtime → 다음 실행 시 스킵 판정
-    result.extracted.push(f);
+    // 파일별 try/catch: 암호걸린·잘린·손상 문서 하나가 전체 추출을 막지 않게
+    // 실패 파일은 경고 후 건너뛰고 나머지를 계속 처리한다.
+    try {
+      const pages = extOf(f) === "pptx" ? await extractPptxSlides(src) : await extractPdfPages(src);
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(dst, pages.join("\n\f\n"), "utf8");
+      fs.utimesSync(dst, srcMtime, srcMtime); // 캐시 mtime = 원본 mtime → 다음 실행 시 스킵 판정
+      result.extracted.push(f);
+    } catch (e) {
+      console.warn(
+        `  경고: '${f}' 추출 실패로 건너뜁니다 (${e instanceof Error ? e.message : String(e)}). 나머지 자료로 분석을 계속합니다.`,
+      );
+    }
   }
   return result;
 }

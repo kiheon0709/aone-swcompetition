@@ -120,7 +120,11 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            {exams.map((e) => (
+            {exams.map((e) => {
+            const questions = Array.isArray(e.example_questions)
+              ? e.example_questions
+              : [];
+            return (
               <article
                 key={e.id}
                 className="glass-card rounded-2xl p-5"
@@ -132,7 +136,7 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
                       {e.year}년 중간
                     </h4>
                     <span className="text-xs font-medium text-gray-400">
-                      {e.semester} · 문항 {e.example_questions.length}개
+                      {e.semester} · 문항 {questions.length}개
                     </span>
                   </div>
                   <span className="flex shrink-0 items-center gap-1 rounded-full bg-black/[0.04] px-2.5 py-1 text-[11px] font-semibold text-gray-500">
@@ -151,7 +155,7 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
                 </p>
 
                 <ul className="space-y-2">
-                  {e.example_questions.map((q, i) => {
+                  {questions.map((q, i) => {
                     const tags = conceptTagsOf(q, concepts);
                     return (
                       <li
@@ -184,7 +188,8 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
                   })}
                 </ul>
               </article>
-            ))}
+            );
+            })}
           </div>
         )}
       </section>

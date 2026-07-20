@@ -17,7 +17,7 @@ import {
 import type { UnitInputs } from "./l1-normalize.js";
 import { chunkUtterances } from "./l1-normalize.js";
 import { isSameConcept } from "./l2-knowledge.js";
-import type { UnitKey } from "../folders.js";
+import { nfc, type UnitKey } from "../folders.js";
 
 export interface SignalResult {
   emphasisAdded: number;
@@ -42,8 +42,9 @@ export async function extractSignals(
   let examHintAdded = 0;
 
   const nonEmpty = chunks.filter((c) => c.length > 0);
-  // 청크별 호출은 독립 — 병렬 실행, DB 반영은 청크 순서대로
-  const outs = await Promise.all(
+  // 청크별 호출은 독립 — 병렬 실행, DB 반영은 청크 순서대로.
+  // allSettled: 한 청크 호출이 실패해도 나머지 성공분은 반영한다.
+  const settled = await Promise.allSettled(
     nonEmpty.map((chunk, ci) => {
       const payload: ExtractSignalsPayload = { utterances: chunk, conceptNames };
       return engine.call({
@@ -69,12 +70,18 @@ export async function extractSignals(
 
   for (let ci = 0; ci < nonEmpty.length; ci++) {
     const chunk = nonEmpty[ci];
-    const out = outs[ci];
-    const allowed = isStub ? null : new Set(chunk.map((u) => u.t));
-    for (const s of out.signals) {
+    const res = settled[ci];
+    if (res.status === "rejected") {
+      const msg = res.reason instanceof Error ? res.reason.message : String(res.reason);
+      console.warn(`  경고: 평가신호 추출 청크 ${ci + 1}/${nonEmpty.length} 실패 — 건너뜁니다 (${msg.slice(0, 160)}).`);
+      continue;
+    }
+    const out = res.value;
+    const allowed = isStub ? null : new Set(chunk.map((u) => nfc(u.t)));
+    for (const s of out.signals ?? []) {
       const concept = concepts.find((c) => isSameConcept(c.name, s.concept));
       if (!concept) continue;
-      if (allowed && !allowed.has(s.locator)) continue; // 지어낸 locator 차단
+      if (allowed && !allowed.has(nfc(s.locator))) continue; // 지어낸 locator 차단
       if (db.signalCount(concept.id, inputs.key, s.kind) >= cfg.maxSignalsPerConceptKindWeek) continue;
       const added = db.addSignal({
         concept_id: concept.id,
@@ -135,7 +142,7 @@ export async function ingestPastExams(
     ),
   });
 
-  for (const m of out.matches) {
+  for (const m of out.matches ?? []) {
     const concept = concepts.find((c) => isSameConcept(c.name, m.concept));
     const item = inputs.pastExams.find((i) => i.id === m.itemId);
     if (!concept || !item) continue;

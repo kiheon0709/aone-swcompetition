@@ -6,6 +6,31 @@ import { invoke } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
 import { isTauriRuntime } from "./engines";
 
+/**
+ * Rust/네이티브 raw 에러를 사용자용 한국어 메시지로 매핑한다.
+ * 원문("No such file...", "permission denied" 등)은 console에만 남기고,
+ * 사용자에게는 상황별 안내 문구를 반환한다. 매핑 불가 시 일반 안내.
+ */
+export const userErrorMessage = (
+  e: unknown,
+  fallback = "요청을 처리하지 못했어요. 잠시 후 다시 시도해주세요.",
+): string => {
+  const raw = e instanceof Error ? e.message : String(e ?? "");
+  console.error("[error]", raw);
+  const m = raw.toLowerCase();
+  if (m.includes("no such file") || m.includes("not found") || m.includes("존재하지"))
+    return "파일이나 폴더를 찾을 수 없어요. 이동하거나 삭제되지 않았는지 확인해주세요.";
+  if (m.includes("permission") || m.includes("denied") || m.includes("권한"))
+    return "접근 권한이 없어요. 폴더 권한을 확인하거나 앱을 다시 실행해주세요.";
+  if (m.includes("already exists") || m.includes("이미"))
+    return "같은 이름이 이미 있어요. 다른 이름으로 시도해주세요.";
+  if (m.includes("network") || m.includes("timeout") || m.includes("connection") || m.includes("fetch"))
+    return "네트워크 연결이 불안정해요. 잠시 후 다시 시도해주세요.";
+  if (m.includes("cancel") || m.includes("취소")) return "취소했어요.";
+  if (m.includes("데스크톱 앱")) return raw; // 이미 사용자 친화 문구
+  return fallback;
+};
+
 /** Rust `aone:file-added` 이벤트 payload. subject 직속 파일이면 unit="". */
 export interface FileAddedPayload {
   subject: string;
@@ -178,7 +203,14 @@ export const loadSnapshot = async (
 ): Promise<unknown | null> => {
   if (isTauriRuntime()) {
     const raw = await invoke<string | null>("read_snapshot", { kind, subject, unit: unit ?? null });
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      // 손상된 스냅샷 JSON — 크래시 대신 null 반환 (브라우저 분기와 일관)
+      console.error("[loadSnapshot] JSON 파싱 실패:", e);
+      return null;
+    }
   }
   // 브라우저/Vercel: public 경로 (slug 파일)
   const slug = unit ? `${subject}__${unit}` : subject;

@@ -17,6 +17,7 @@ import {
   type EngineChoice,
   type EngineStatus,
 } from "@/lib/engines";
+import { userErrorMessage } from "@/lib/fs-bridge";
 
 interface UsageRun {
   ts: string;
@@ -118,7 +119,15 @@ export default function EnginesPage() {
       await connectCodex();
       setCodexUi("connecting");
       stopPolling();
+      // 로그인을 끝내 완료하지 않아도 무한 폴링하지 않도록 상한(40회 ≈ 2분)을 둔다
+      let attempts = 0;
       pollRef.current = setInterval(async () => {
+        attempts += 1;
+        if (attempts > 40) {
+          stopPolling();
+          setCodexUi("not_logged_in");
+          return;
+        }
         try {
           const state: CodexLoginState = await codexStatus();
           if (state === "logged_in") {
@@ -133,7 +142,7 @@ export default function EnginesPage() {
         }
       }, 3000);
     } catch (e) {
-      alert(e instanceof Error ? e.message : String(e));
+      alert(userErrorMessage(e));
     }
   };
 
@@ -168,7 +177,7 @@ export default function EnginesPage() {
       if (status) setEngines(status);
       setGeminiKey("");
     } catch (e) {
-      alert(e instanceof Error ? e.message : String(e));
+      alert(userErrorMessage(e));
     } finally {
       setGeminiSaving(false);
     }
@@ -178,9 +187,9 @@ export default function EnginesPage() {
 
   // 활성 엔진으로 실제 분석한 횟수 — usage.json의 engine 필드를 활성 엔진과 매칭
   // (엔진 id "gemini" ↔ 파이프라인 "gemini-api", "claude" ↔ "claude-cli", "codex" ↔ "codex-cli")
-  const engineRunCount =
-    usage?.runs.filter((r) => (r.engine ?? "").startsWith(activeEngine)).length ??
-    0;
+  const engineRunCount = Array.isArray(usage?.runs)
+    ? usage.runs.filter((r) => (r.engine ?? "").startsWith(activeEngine)).length
+    : 0;
 
   const geminiBadge = () => {
     if (!desktop) return <Badge tone="off">데스크톱 전용</Badge>;

@@ -89,7 +89,10 @@ export function createEngine(
     case "claude-cli":
       return new ClaudeCliEngine(opts.concurrency ?? 4, opts.model, opts.extraCliArgs, opts.retryDelayMs);
     case "codex-cli":
-      return new CodexCliEngine(opts.concurrency ?? 4, opts.model, opts.retryDelayMs);
+      // codex(GPT 구독)는 동시 세션을 여러 개 물지 못해, 동시성이 높으면(4) execFile로
+      // 동시에 부른 세션들이 출력 파일을 만들지 못하고 전량 실패한다("대용량 실패"의 실제 원인).
+      // 따라서 기본 동시성을 1로 둔다 (호출은 세마포어가 직렬화). Claude·Gemini는 영향 없음.
+      return new CodexCliEngine(opts.concurrency ?? 1, opts.model, opts.retryDelayMs);
     case "gemini-api":
       // Gemini 무료 티어는 분당 요청 한도가 좁아 처음부터 동시성 2로 시작 (429 예방).
       // (CLI 구독 엔진은 한도가 넓어 4 유지)
@@ -850,8 +853,13 @@ class ClaudeCliEngine extends RetryingCliEngine {
 // usage: codex exec는 토큰 사용량을 주지 않으므로 호출 횟수만 집계.
 // ─────────────────────────────────────────────────────────────
 
-/** codex exec 명령 인자 조립 (유닛 검증용으로 분리) */
-export function buildCodexExecArgs(outFile: string, prompt: string, model?: string): string[] {
+/** codex exec 명령 인자 조립 (유닛 검증용으로 분리).
+ *
+ * 프롬프트는 argv 위치 인자가 아니라 stdin으로 전달한다 — 위치 인자로 큰 프롬프트를
+ * 주면서 stdin(execFile의 non-TTY 파이프)이 열려 있으면 codex가 stdin 입력을 계속
+ * 기다리다 타임아웃돼 출력 파일을 만들지 못한다("대용량 실패"의 실제 원인).
+ * 위치 인자를 "-"로 두면 codex가 stdin에서 프롬프트를 읽는다. (프롬프트는 caller가 stdin으로 씀) */
+export function buildCodexExecArgs(outFile: string, model?: string): string[] {
   return [
     "exec",
     "--skip-git-repo-check",
@@ -862,7 +870,7 @@ export function buildCodexExecArgs(outFile: string, prompt: string, model?: stri
     "-o",
     outFile,
     ...(model ? ["--model", model] : []),
-    prompt,
+    "-", // 프롬프트를 stdin에서 읽는다
   ];
 }
 
@@ -878,9 +886,9 @@ class CodexCliEngine extends RetryingCliEngine {
   protected callOnce<T>(req: LlmRequest<T>): Promise<T> {
     const outFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "aone-codex-")), "last-message.txt");
     return new Promise<T>((resolve, reject) => {
-      execFile(
+      const child = execFile(
         process.env.CODEX_BIN ?? "codex",
-        buildCodexExecArgs(outFile, req.prompt, this.model),
+        buildCodexExecArgs(outFile, this.model),
         // CODEX_HOME 등은 process.env를 그대로 전달
         { encoding: "utf8", timeout: 600_000, maxBuffer: 32 * 1024 * 1024, env: process.env }, // 10분 — 긴 조립 대응
         (err, _stdout, stderr) => {
@@ -903,6 +911,9 @@ class CodexCliEngine extends RetryingCliEngine {
           }
         },
       );
+      // 프롬프트는 stdin으로 (위치 인자 "-"가 stdin을 프롬프트로 읽게 한다).
+      child.stdin!.write(req.prompt);
+      child.stdin!.end();
     });
   }
 }

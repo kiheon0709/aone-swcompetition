@@ -25,7 +25,7 @@ import {
   recognizeTimetableImage,
 } from "@/lib/engines";
 import { createSubjectFolders } from "@/lib/fs-bridge";
-import { USER_NAME } from "@/lib/user";
+import { getUserName } from "@/lib/user";
 import {
   loadAssignments,
   loadExams,
@@ -76,6 +76,7 @@ interface Props {
 /** 홈 화면 — 인사말 + 주간 시간표(데모 OCR) + 시험/과제 패널 (무스크롤 1화면) */
 export default function HomeView({ handleRef, subjects, refreshManifest }: Props) {
   const [ready, setReady] = useState(false);
+  const [userName, setUserName] = useState("사용자");
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const [untimed, setUntimed] = useState<string[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -93,6 +94,7 @@ export default function HomeView({ handleRef, subjects, refreshManifest }: Props
     setUntimed(loadUntimedSubjects());
     setAssignments(loadAssignments());
     setExams(loadExams());
+    setUserName(getUserName());
     setReady(true);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -292,7 +294,7 @@ export default function HomeView({ handleRef, subjects, refreshManifest }: Props
           className="text-xl font-bold tracking-tight text-gray-900"
           data-testid="home-greeting"
         >
-          {greetingOf(now.getHours())}, {USER_NAME}님
+          {greetingOf(now.getHours())}, {userName}님
         </h1>
         <p className="text-[13px] font-medium text-gray-400">
           {dateLine} · 이번 주 일정을 한눈에 확인하세요

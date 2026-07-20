@@ -40,11 +40,22 @@ export type DocsSnapshot = z.infer<typeof DocsSnapshotSchema>;
 
 const SOURCE_TYPES: SourceType[] = ["transcript", "slide", "exam"];
 
+/** 손상된 sources_json이 문서 export를 막지 않게 방어 파싱. */
+function safeParseSources(json: string | null | undefined): { type: SourceType; unit: string; unitOrder: number }[] {
+  if (!json) return [];
+  try {
+    const v = JSON.parse(json);
+    return Array.isArray(v) ? (v as { type: SourceType; unit: string; unitOrder: number }[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 export function buildDocsSnapshot(db: AoneDb, key: UnitKey): DocsSnapshot {
   const nameOf = new Map(db.allConcepts(key.subject).map((c) => [c.id, c.name]));
   const questions = db.questionsAtUnit(key).map((q) => ({
     id: q.id,
-    sources: JSON.parse(q.sources_json) as { type: SourceType; unit: string; unitOrder: number }[],
+    sources: safeParseSources(q.sources_json),
   }));
 
   const bySource = {} as DocsSnapshot["bySource"];
@@ -99,11 +110,18 @@ export function exportDocsSnapshots(
   const written: { key: UnitKey; file: string }[] = [];
   for (const key of db.unitsWithScores(filter?.subject)) {
     if (filter?.unit !== undefined && key.unit !== filter.unit) continue;
-    const snapshot = buildDocsSnapshot(db, key); // 생성 시점에 zod 자검증
-    const file = exportFilePath("docs", key, outDir); // 새 레이아웃=.aone/docs.json, 폴백={outDir}/docs_{slug}.json
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, JSON.stringify(snapshot, null, 2) + "\n", "utf8");
-    written.push({ key, file });
+    // 한 unit의 문서 스냅샷 실패가 나머지 export를 막지 않게 방어.
+    try {
+      const snapshot = buildDocsSnapshot(db, key); // 생성 시점에 zod 자검증
+      const file = exportFilePath("docs", key, outDir); // 새 레이아웃=.aone/docs.json, 폴백={outDir}/docs_{slug}.json
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, JSON.stringify(snapshot, null, 2) + "\n", "utf8");
+      written.push({ key, file });
+    } catch (e) {
+      console.warn(
+        `  경고: ${key.subject}/${key.unit} 문서 스냅샷 export 실패 — 건너뜁니다 (${e instanceof Error ? e.message : String(e)}).`,
+      );
+    }
   }
   return written;
 }

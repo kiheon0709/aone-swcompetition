@@ -170,6 +170,16 @@ fn dev_snapshot_out_dir() -> PathBuf {
 ///   위치 인자를 못 쓰므로 subject/unit을 큰따옴표로 감싸 인라인 삽입한다.
 ///   cmd 인용을 깨는 문자(`" % < > | & ^` 및 개행)는 사전에 거부해 인젝션을 막는다.
 ///   (폴더명엔 이런 문자가 오지 않는다.)
+/// 엔진별 --concurrency 플래그. codex는 동시 세션을 못 물어 동시성이 높으면 전량 실패하므로
+/// 플래그를 아예 안 붙여 CLI 기본값(1)을 쓰게 한다. 그 외 엔진은 기존대로 2.
+fn concurrency_flag(cli_engine: &str) -> &'static str {
+    if cli_engine == "codex-cli" {
+        ""
+    } else {
+        "--concurrency 2"
+    }
+}
+
 #[cfg(unix)]
 fn build_analysis_cmd(
     subject: &str,
@@ -177,15 +187,16 @@ fn build_analysis_cmd(
     cli_engine: &str,
     out_dir: Option<&std::path::Path>,
 ) -> Result<Command, String> {
+    let conc = concurrency_flag(cli_engine);
     let script = match out_dir {
         None => format!(
-            "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} --concurrency 2 \
+            "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} {conc} \
              && npx tsx src/cli.ts export --subject \"$1\" --unit \"$2\""
         ),
         Some(out) => {
             let out = out.to_string_lossy();
             format!(
-                "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} --concurrency 2 \
+                "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} {conc} \
                  && npx tsx src/cli.ts export --subject \"$1\" --unit \"$2\" --out '{out}'"
             )
         }
@@ -211,8 +222,9 @@ fn build_analysis_cmd(
     }
     // npx는 Windows에서 npx.cmd 래퍼이므로 cmd /C를 거쳐야 안전하게 실행된다.
     let npx = npx_bin();
+    let conc = concurrency_flag(cli_engine);
     let run = format!(
-        "\"{npx}\" tsx src/cli.ts run --subject \"{subject}\" --unit \"{unit}\" --engine {cli_engine} --concurrency 2"
+        "\"{npx}\" tsx src/cli.ts run --subject \"{subject}\" --unit \"{unit}\" --engine {cli_engine} {conc}"
     );
     let export = match out_dir {
         None => format!(
