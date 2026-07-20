@@ -1,0 +1,90 @@
+{
+  "subjects": [
+    {
+      "name": "데이터통신",
+      "units": [
+        {
+          "name": "1주차",
+          "order": 0,
+          "files": [
+            {
+              "name": "(실습) week1_WireShark.pptx.pdf",
+              "size": 706915
+            },
+            {
+              "name": "(이론) week1_1-0-데이터통신-overview-공개.pdf",
+              "size": 1112945
+            },
+            {
+              "name": "transcript.txt",
+              "size": 40012
+            }
+          ]
+        },
+        {
+          "name": "2주차",
+          "order": 1,
+          "files": [
+            {
+              "name": "(실습) 20260310-실습2주차-파일 통신.pptx.pdf",
+              "size": 799059
+            },
+            {
+              "name": "(이론) 1-1-데이터통신-layer-packet-signal-공개.pdf",
+              "size": 1343885
+            },
+            {
+              "name": "(이론)1-2-명령어실습.pdf",
+              "size": 1986404
+            },
+            {
+              "name": "(이론)1-3-lab-introduction-docker.pdf",
+              "size": 1858241
+            },
+            {
+              "name": "transcript.txt",
+              "size": 52355
+            }
+          ]
+        },
+        {
+          "name": "3주차",
+          "order": 2,
+          "files": [
+            {
+              "name": "(실습) 20260317-실습3주차.pdf",
+              "size": 891341
+            },
+            {
+              "name": "(이론) 2-데이터통신-1비트만들기-사인함수.pdf",
+              "size": 1912170
+            },
+            {
+              "name": "(이론) 3-데이터통신-1-아날로그-소리-변환.pdf",
+              "size": 760621
+            },
+            {
+              "name": "transcript.txt",
+              "size": 78375
+            }
+          ]
+        },
+        {
+          "name": "족보",
+          "order": 3,
+          "files": [
+            {
+              "name": "past_exam_2025_raw.txt",
+              "size": 84
+            },
+            {
+              "name": "past_exams.json",
+              "size": 7324
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "rootFiles": []
+}

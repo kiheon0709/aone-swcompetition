@@ -1,0 +1,977 @@
+{
+  "week": 4,
+  "concepts": [
+    {
+      "id": "c-기술",
+      "name": "기술",
+      "importance": 100,
+      "examSignal": 100,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 20
+        },
+        {
+          "week": 2,
+          "examSignal": 20
+        },
+        {
+          "week": 3,
+          "examSignal": 82
+        },
+        {
+          "week": 4,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-통신",
+      "name": "통신",
+      "importance": 100,
+      "examSignal": 100,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 50
+        },
+        {
+          "week": 2,
+          "examSignal": 50
+        },
+        {
+          "week": 3,
+          "examSignal": 100
+        },
+        {
+          "week": 4,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-소리",
+      "name": "소리",
+      "importance": 88,
+      "examSignal": 100,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 98
+        },
+        {
+          "week": 4,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-비트",
+      "name": "비트",
+      "importance": 82,
+      "examSignal": 100,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 100
+        },
+        {
+          "week": 4,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-네트워크",
+      "name": "네트워크",
+      "importance": 74,
+      "examSignal": 100,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 10
+        },
+        {
+          "week": 2,
+          "examSignal": 34
+        },
+        {
+          "week": 3,
+          "examSignal": 100
+        },
+        {
+          "week": 4,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-신호",
+      "name": "신호",
+      "importance": 78,
+      "examSignal": 88,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 78
+        },
+        {
+          "week": 4,
+          "examSignal": 88
+        }
+      ]
+    },
+    {
+      "id": "c-ip",
+      "name": "ip",
+      "importance": 83,
+      "examSignal": 62,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 0
+        },
+        {
+          "week": 2,
+          "examSignal": 10
+        },
+        {
+          "week": 3,
+          "examSignal": 62
+        },
+        {
+          "week": 4,
+          "examSignal": 62
+        }
+      ]
+    },
+    {
+      "id": "c-디지털",
+      "name": "디지털",
+      "importance": 69,
+      "examSignal": 62,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 52
+        },
+        {
+          "week": 4,
+          "examSignal": 62
+        }
+      ]
+    },
+    {
+      "id": "c-주소",
+      "name": "주소",
+      "importance": 60,
+      "examSignal": 62,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 10
+        },
+        {
+          "week": 3,
+          "examSignal": 62
+        },
+        {
+          "week": 4,
+          "examSignal": 62
+        }
+      ]
+    },
+    {
+      "id": "c-아날로그",
+      "name": "아날로그",
+      "importance": 64,
+      "examSignal": 52,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 52
+        },
+        {
+          "week": 4,
+          "examSignal": 52
+        }
+      ]
+    },
+    {
+      "id": "c-컴퓨터",
+      "name": "컴퓨터",
+      "importance": 56,
+      "examSignal": 46,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 46
+        },
+        {
+          "week": 4,
+          "examSignal": 46
+        }
+      ]
+    },
+    {
+      "id": "c-서버",
+      "name": "서버",
+      "importance": 66,
+      "examSignal": 40,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 10
+        },
+        {
+          "week": 2,
+          "examSignal": 40
+        },
+        {
+          "week": 3,
+          "examSignal": 40
+        },
+        {
+          "week": 4,
+          "examSignal": 40
+        }
+      ]
+    },
+    {
+      "id": "c-주파수",
+      "name": "주파수",
+      "importance": 60,
+      "examSignal": 36,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 36
+        },
+        {
+          "week": 4,
+          "examSignal": 36
+        }
+      ]
+    },
+    {
+      "id": "c-도커",
+      "name": "도커",
+      "importance": 51,
+      "examSignal": 36,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 10
+        },
+        {
+          "week": 3,
+          "examSignal": 36
+        },
+        {
+          "week": 4,
+          "examSignal": 36
+        }
+      ]
+    },
+    {
+      "id": "c-리눅스",
+      "name": "리눅스",
+      "importance": 38,
+      "examSignal": 30,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 30
+        },
+        {
+          "week": 3,
+          "examSignal": 30
+        },
+        {
+          "week": 4,
+          "examSignal": 30
+        }
+      ]
+    },
+    {
+      "id": "c-수가",
+      "name": "수가",
+      "importance": 51,
+      "examSignal": 24,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 14
+        },
+        {
+          "week": 4,
+          "examSignal": 24
+        }
+      ]
+    },
+    {
+      "id": "c-gpu",
+      "name": "gpu",
+      "importance": 33,
+      "examSignal": 20,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 20
+        },
+        {
+          "week": 2,
+          "examSignal": 20
+        },
+        {
+          "week": 3,
+          "examSignal": 20
+        },
+        {
+          "week": 4,
+          "examSignal": 20
+        }
+      ]
+    },
+    {
+      "id": "c-코드",
+      "name": "코드",
+      "importance": 33,
+      "examSignal": 20,
+      "history": [
+        {
+          "week": 4,
+          "examSignal": 20
+        }
+      ]
+    },
+    {
+      "id": "c-ai",
+      "name": "ai",
+      "importance": 28,
+      "examSignal": 10,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 0
+        },
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 10
+        },
+        {
+          "week": 4,
+          "examSignal": 10
+        }
+      ]
+    },
+    {
+      "id": "c-패킷",
+      "name": "패킷",
+      "importance": 46,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 0
+        },
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-tcp",
+      "name": "tcp",
+      "importance": 40,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 0
+        },
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신",
+      "name": "데이터통신",
+      "importance": 40,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 0
+        },
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-컨테이너",
+      "name": "컨테이너",
+      "importance": 40,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-docker",
+      "name": "docker",
+      "importance": 34,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-실습",
+      "name": "실습",
+      "importance": 23,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-실행",
+      "name": "실행",
+      "importance": 23,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-파일",
+      "name": "파일",
+      "importance": 23,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-python",
+      "name": "python",
+      "importance": 17,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-sw",
+      "name": "sw",
+      "importance": 17,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 0
+        },
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-wireshark",
+      "name": "wireshark",
+      "importance": 17,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 1,
+          "examSignal": 0
+        },
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-수신자",
+      "name": "수신자",
+      "importance": 17,
+      "examSignal": 0,
+      "history": [
+        {
+          "week": 2,
+          "examSignal": 0
+        },
+        {
+          "week": 3,
+          "examSignal": 0
+        },
+        {
+          "week": 4,
+          "examSignal": 0
+        }
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "ts": "2026-07-14T04:10:40.671Z",
+      "week": 4,
+      "layer": "orchestrator",
+      "text": "이벤트 수신: week4 자료 투입 (engine=stub, tier=standard)"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.671Z",
+      "week": 4,
+      "layer": "orchestrator",
+      "text": "태스크 DAG 구성 — L1.normalize → L2.knowledge → L3.signals → L3.scores → L4.questions → L4.proactive"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.672Z",
+      "week": 4,
+      "layer": "L1",
+      "text": "week4 자료 정규화 — 전사 발화 630건, 슬라이드 2종 57페이지"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.678Z",
+      "week": 4,
+      "layer": "L2",
+      "text": "개념 갱신 — 신규 2개, 기존 병합 10개, 근거 34건 연결 (누적 개념 31개)"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.679Z",
+      "week": 4,
+      "layer": "L3",
+      "text": "평가신호 추출 — 강조 11건, 시험 언급 0건"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.682Z",
+      "week": 4,
+      "layer": "L3",
+      "text": "주차 점수 산출 — 개념 31개 importance/examSignal 갱신 (결정적 가중 함수)"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.683Z",
+      "week": 4,
+      "layer": "L4",
+      "text": "예상문제 생성 — 10문항 생성, 검증 통과 10건, 반려 0건 (tier=standard)"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.683Z",
+      "week": 4,
+      "layer": "L4",
+      "text": "능동 제안 4건 발동 — 기술, 소리, 신호, 디지털"
+    },
+    {
+      "ts": "2026-07-14T04:10:40.683Z",
+      "week": 4,
+      "layer": "orchestrator",
+      "text": "week4 처리 완료 — 누적 개념 31개, 이번 주 신호 11건, 검증 통과 문항 10건"
+    }
+  ],
+  "proactive": [
+    {
+      "text": "'기술' 시험신호가 82→100로 상승했습니다. 기출 2회 매칭, 시험 언급 0회, 강조 5회 감지 — 예상문제 2개를 준비했어요. 지금 풀어보시겠어요?",
+      "questionIds": [
+        "w4-c-기술-q1",
+        "w4-c-기술-q2"
+      ]
+    },
+    {
+      "text": "'소리' 시험신호가 98→100로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 3회 감지 — 예상문제 2개를 준비했어요. 지금 풀어보시겠어요?",
+      "questionIds": [
+        "w4-c-소리-q1",
+        "w4-c-소리-q2"
+      ]
+    },
+    {
+      "text": "'신호' 시험신호가 78→88로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 1회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'디지털' 시험신호가 52→62로 상승했습니다. 기출 2회 매칭, 시험 언급 0회, 강조 1회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    }
+  ],
+  "questions": [
+    {
+      "id": "w4-c-기술-q1",
+      "q": "기술의 개념을 정의하고, 강의에서 다룬 맥락에서 그 역할을 설명하시오.",
+      "a": "강의 근거(2025-Q6)에 따르면: WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함",
+      "difficulty": "easy",
+      "reasoning": "examSignal 100/100, importance 100/100 — 기출 매칭 2회, 시험 언급 0회, 강조 5회. 근거 3건(2025-Q6, 03:53, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q6",
+          "quote": "WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "03:53",
+          "quote": "그래서 전화 거는 신호 자체가 소리를 디지털로 이제 바꿔가지고 전송하는 기술이에요."
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "이게 디지털 아날로그 신호를 변화시키는 기술 자체가 변종이죠."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-기술-q2",
+      "q": "기술에 대한 설명으로 옳지 않은 것을 고르시오. (강의·슬라이드 근거 기반)",
+      "a": "강의 근거(03:53)에 따르면: 그래서 전화 거는 신호 자체가 소리를 디지털로 이제 바꿔가지고 전송하는 기술이에요.",
+      "difficulty": "medium",
+      "reasoning": "examSignal 100/100, importance 100/100 — 기출 매칭 2회, 시험 언급 0회, 강조 5회. 근거 3건(2025-Q6, 03:53, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q6",
+          "quote": "WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "03:53",
+          "quote": "그래서 전화 거는 신호 자체가 소리를 디지털로 이제 바꿔가지고 전송하는 기술이에요."
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "이게 디지털 아날로그 신호를 변화시키는 기술 자체가 변종이죠."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-네트워크-q1",
+      "q": "네트워크의 개념을 정의하고, 강의에서 다룬 맥락에서 그 역할을 설명하시오.",
+      "a": "강의 근거(2025-Q1)에 따르면: -tn은 전송계층, -rn은 네트워크 계층",
+      "difficulty": "easy",
+      "reasoning": "examSignal 100/100, importance 74/100 — 기출 매칭 3회, 시험 언급 1회, 강조 2회. 근거 3건(2025-Q1, 16:56, 15:55) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q1",
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층"
+        },
+        {
+          "type": "transcript",
+          "week": 1,
+          "locator": "16:56",
+          "quote": "예전 같으면 이 네트워크 전문으로 떴지만 요즘은 운영하는 쪽 예전 같으면 데웍스 이렇게 했지만 지금은 AI 엔지니어링 이런 쪽으로 많이 씁니다."
+        },
+        {
+          "type": "transcript",
+          "week": 1,
+          "locator": "15:55",
+          "quote": "얘네들이 다 AI가 이제 써야 되는 서버 네트워크들입니다."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-네트워크-q2",
+      "q": "네트워크에 대한 설명으로 옳지 않은 것을 고르시오. (강의·슬라이드 근거 기반)",
+      "a": "강의 근거(16:56)에 따르면: 예전 같으면 이 네트워크 전문으로 떴지만 요즘은 운영하는 쪽 예전 같으면 데웍스 이렇게 했지만 지금은 AI 엔지니어링 이런 쪽으로 많이 씁니다.",
+      "difficulty": "medium",
+      "reasoning": "examSignal 100/100, importance 74/100 — 기출 매칭 3회, 시험 언급 1회, 강조 2회. 근거 3건(2025-Q1, 16:56, 15:55) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q1",
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층"
+        },
+        {
+          "type": "transcript",
+          "week": 1,
+          "locator": "16:56",
+          "quote": "예전 같으면 이 네트워크 전문으로 떴지만 요즘은 운영하는 쪽 예전 같으면 데웍스 이렇게 했지만 지금은 AI 엔지니어링 이런 쪽으로 많이 씁니다."
+        },
+        {
+          "type": "transcript",
+          "week": 1,
+          "locator": "15:55",
+          "quote": "얘네들이 다 AI가 이제 써야 되는 서버 네트워크들입니다."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-비트-q1",
+      "q": "비트의 개념을 정의하고, 강의에서 다룬 맥락에서 그 역할을 설명하시오.",
+      "a": "강의 근거(2025-Q2)에 따르면: 시간당 전송된 비트 수 = 대역폭",
+      "difficulty": "easy",
+      "reasoning": "examSignal 100/100, importance 82/100 — 기출 매칭 4회, 시험 언급 0회, 강조 0회. 근거 3건(2025-Q2, 05:13, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q2",
+          "quote": "시간당 전송된 비트 수 = 대역폭"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "05:13",
+          "quote": "그래서 8천 개의 샘플을 안내하고 지금 이 소리를 열심히 이렇게 사진을 찍어서 사진 한 개의 샘플 가지고 8비트 이거는 이제 목소리고 호박이면 16비트 되게 풍부하게 소리를 표현해야 됩니다."
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "그래서 비트 환경을 어떻게 만들까 지난주에 우리가 모스코 설명을 좀 했었죠."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-비트-q2",
+      "q": "비트에 대한 설명으로 옳지 않은 것을 고르시오. (강의·슬라이드 근거 기반)",
+      "a": "강의 근거(05:13)에 따르면: 그래서 8천 개의 샘플을 안내하고 지금 이 소리를 열심히 이렇게 사진을 찍어서 사진 한 개의 샘플 가지고 8비트 이거는 이제 목소리고 호박이면 16비트 되게 풍부하게 소리를 표현해야 됩니다.",
+      "difficulty": "medium",
+      "reasoning": "examSignal 100/100, importance 82/100 — 기출 매칭 4회, 시험 언급 0회, 강조 0회. 근거 3건(2025-Q2, 05:13, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q2",
+          "quote": "시간당 전송된 비트 수 = 대역폭"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "05:13",
+          "quote": "그래서 8천 개의 샘플을 안내하고 지금 이 소리를 열심히 이렇게 사진을 찍어서 사진 한 개의 샘플 가지고 8비트 이거는 이제 목소리고 호박이면 16비트 되게 풍부하게 소리를 표현해야 됩니다."
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "그래서 비트 환경을 어떻게 만들까 지난주에 우리가 모스코 설명을 좀 했었죠."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-소리-q1",
+      "q": "소리의 개념을 정의하고, 강의에서 다룬 맥락에서 그 역할을 설명하시오.",
+      "a": "강의 근거(2025-Q7)에 따르면: 실습: THRESHOLD보다 커야 소리로 인식",
+      "difficulty": "easy",
+      "reasoning": "examSignal 100/100, importance 88/100 — 기출 매칭 3회, 시험 언급 0회, 강조 3회. 근거 3건(2025-Q7, 02:05, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q7",
+          "quote": "실습: THRESHOLD보다 커야 소리로 인식"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "02:05",
+          "quote": "그래서 우리 소리 디지털 이 이야기 잠깐 했었는데 소리 주파수 여기 말고 첫 번째니까 두 번째 여러분들 핸드폰에도 번호 누르는 거 있죠?"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "디지털 알고 어떻게 변하는 대서 지난주에 이야기한 것처럼 소리라는 매체를 의미로 쓰는 거는 와이파이나 블루 투시 이동 통신 있는 거죠."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-소리-q2",
+      "q": "소리에 대한 설명으로 옳지 않은 것을 고르시오. (강의·슬라이드 근거 기반)",
+      "a": "강의 근거(02:05)에 따르면: 그래서 우리 소리 디지털 이 이야기 잠깐 했었는데 소리 주파수 여기 말고 첫 번째니까 두 번째 여러분들 핸드폰에도 번호 누르는 거 있죠?",
+      "difficulty": "medium",
+      "reasoning": "examSignal 100/100, importance 88/100 — 기출 매칭 3회, 시험 언급 0회, 강조 3회. 근거 3건(2025-Q7, 02:05, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q7",
+          "quote": "실습: THRESHOLD보다 커야 소리로 인식"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "02:05",
+          "quote": "그래서 우리 소리 디지털 이 이야기 잠깐 했었는데 소리 주파수 여기 말고 첫 번째니까 두 번째 여러분들 핸드폰에도 번호 누르는 거 있죠?"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "디지털 알고 어떻게 변하는 대서 지난주에 이야기한 것처럼 소리라는 매체를 의미로 쓰는 거는 와이파이나 블루 투시 이동 통신 있는 거죠."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-통신-q1",
+      "q": "통신의 개념을 정의하고, 강의에서 다룬 맥락에서 그 역할을 설명하시오.",
+      "a": "강의 근거(2025-Q4)에 따르면: 음성 데이터 통신의 활용 사례에 대한 설명으로 옳지 않은 것 고르기, 스타벅스 사이렌 오더나 고무줄놀이 노래할 때 쓰는 거 고르기",
+      "difficulty": "easy",
+      "reasoning": "examSignal 100/100, importance 100/100 — 기출 매칭 2회, 시험 언급 0회, 강조 13회. 근거 3건(2025-Q4, 00:35, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q4",
+          "quote": "음성 데이터 통신의 활용 사례에 대한 설명으로 옳지 않은 것 고르기, 스타벅스 사이렌 오더나 고무줄놀이 노래할 때 쓰는 거 고르기"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "그걸 조금 더 구체적으로 그다음에 이제 뒷부분에 실제 여러분들이 AI 통신할 때 지난주에 여러 가지 변조 목조 이런 이야기까지 잠깐 있었는데 그 이야기가 관련이 됩니다."
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "디지털 알고 어떻게 변하는 대서 지난주에 이야기한 것처럼 소리라는 매체를 의미로 쓰는 거는 와이파이나 블루 투시 이동 통신 있는 거죠."
+        }
+      ]
+    },
+    {
+      "id": "w4-c-통신-q2",
+      "q": "통신에 대한 설명으로 옳지 않은 것을 고르시오. (강의·슬라이드 근거 기반)",
+      "a": "강의 근거(00:35)에 따르면: 그걸 조금 더 구체적으로 그다음에 이제 뒷부분에 실제 여러분들이 AI 통신할 때 지난주에 여러 가지 변조 목조 이런 이야기까지 잠깐 있었는데 그 이야기가 관련이 됩니다.",
+      "difficulty": "medium",
+      "reasoning": "examSignal 100/100, importance 100/100 — 기출 매칭 2회, 시험 언급 0회, 강조 13회. 근거 3건(2025-Q4, 00:35, 00:35) 기반 출제.",
+      "sources": [
+        {
+          "type": "exam",
+          "week": 3,
+          "locator": "2025-Q4",
+          "quote": "음성 데이터 통신의 활용 사례에 대한 설명으로 옳지 않은 것 고르기, 스타벅스 사이렌 오더나 고무줄놀이 노래할 때 쓰는 거 고르기"
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "그걸 조금 더 구체적으로 그다음에 이제 뒷부분에 실제 여러분들이 AI 통신할 때 지난주에 여러 가지 변조 목조 이런 이야기까지 잠깐 있었는데 그 이야기가 관련이 됩니다."
+        },
+        {
+          "type": "transcript",
+          "week": 4,
+          "locator": "00:35",
+          "quote": "디지털 알고 어떻게 변하는 대서 지난주에 이야기한 것처럼 소리라는 매체를 의미로 쓰는 거는 와이파이나 블루 투시 이동 통신 있는 거죠."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1446 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { marked } from "marked";
+import {
+  AlertTriangle,
+  CalendarPlus,
+  Check,
+  ChevronDown,
+  Download,
+  FileText,
+  GraduationCap,
+  ListChecks,
+  RotateCcw,
+  Sparkles,
+  Timer,
+  X,
+} from "lucide-react";
+import { dday, ddayLabel, formatDateK } from "@/components/home/homeData";
+import {
+  composeGuideStatus,
+  getActiveEngine,
+  isTauriRuntime,
+  runComposeGuide,
+} from "@/lib/engines";
+import { loadSnapshot, saveTextFile } from "@/lib/fs-bridge";
+import { slugOf, type ManifestSubject } from "@/lib/manifest";
+
+// ── 스냅샷 타입 (page.tsx와 동일 형태 — 이 화면에서 필요한 필드만) ──
+interface ConceptHistory {
+  unitOrder: number;
+  /** 등장 수업(unit) 이름 — 구버전 데이터엔 없을 수 있어 옵션 */
+  unit?: string;
+  examSignal: number;
+}
+
+interface Concept {
+  id: string;
+  name: string;
+  importance: number;
+  examSignal: number;
+  history: ConceptHistory[];
+}
+
+interface QuestionSource {
+  type: string;
+  unit: string;
+  locator: string;
+  quote: string;
+}
+
+interface Question {
+  id: string;
+  q: string;
+  a: string;
+  difficulty: string;
+  reasoning: string;
+  sources: QuestionSource[];
+}
+
+interface Snapshot {
+  subject: string;
+  unit: string;
+  unitOrder: number;
+  concepts: Concept[];
+  questions: Question[];
+  note?: { markdown: string };
+}
+
+/** compose-guide 산출물 스냅샷 (pipeline GuideSnapshotSchema와 동일) */
+interface GuideSnapshot {
+  subject: string;
+  /** "전체" 또는 "3주차, 4주차" 식 범위 문자열 */
+  scope: string;
+  units: string[];
+  generatedAt: string;
+  /** 개념 수 */
+  concepts: number;
+  /** 기출 문항 수 */
+  pastExams: number;
+  markdown: string;
+}
+
+const isGuideSnapshot = (g: unknown): g is GuideSnapshot =>
+  typeof g === "object" &&
+  g !== null &&
+  typeof (g as GuideSnapshot).markdown === "string" &&
+  (g as GuideSnapshot).markdown.length > 0;
+
+/** 시험 과목의 unit 하나에 대해 로드한 스냅샷 */
+interface LoadedSnapshot {
+  unit: string;
+  unitOrder: number;
+  data: Snapshot;
+}
+
+/** 병합 개념 — 이름 하나에 최고 시험신호 + 등장 수업 */
+export interface MergedConcept {
+  name: string;
+  examSignal: number;
+  importance: number;
+  /** 이 개념이 등장한 수업(unit) 이름 (unit_order 오름차순) */
+  units: string[];
+  /** 시험신호가 가장 높았던 수업 — 클릭 시 여기로 이동 */
+  topUnit: string;
+}
+
+/** 모의고사 문항 — 어느 수업에서 왔는지 붙여둔다 */
+interface MockQuestion extends Question {
+  unit: string;
+  unitOrder: number;
+  /** 선별 점수 (시험신호 × 난이도) */
+  score: number;
+}
+
+export interface ExamInfo {
+  id: string;
+  subject: string;
+  title: string;
+  date: string;
+}
+
+const MOCK_KEY = "aone.mockexam.v1";
+const MOCK_SIZE = 15;
+
+// ── 시험 범위 (선택된 unit 이름 목록) — 시험 id별 localStorage 저장 ──
+const SCOPE_KEY_PREFIX = "aone.examScope.v1.";
+
+/** 저장된 범위 로드 — 없거나 깨졌으면 null(전체) */
+const loadScope = (examId: string): string[] | null => {
+  try {
+    const raw = localStorage.getItem(SCOPE_KEY_PREFIX + examId);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return null;
+    return parsed
+      .filter((x): x is string => typeof x === "string")
+      .map((x) => x.normalize("NFC"));
+  } catch {
+    return null;
+  }
+};
+
+/** 범위 저장 — null(전체)이면 키 제거 */
+const saveScope = (examId: string, units: string[] | null): void => {
+  try {
+    if (units === null) localStorage.removeItem(SCOPE_KEY_PREFIX + examId);
+    else localStorage.setItem(SCOPE_KEY_PREFIX + examId, JSON.stringify(units));
+  } catch {
+    // localStorage 사용 불가 시 세션 한정으로 유지
+  }
+};
+
+/** 난이도 가중치 — 어려운 문제일수록 시험 대비 가치가 크다 */
+const DIFFICULTY_WEIGHT: Record<string, number> = {
+  hard: 30,
+  medium: 15,
+  easy: 0,
+};
+
+const DIFFICULTY_LABEL: Record<string, string> = {
+  hard: "어려움",
+  medium: "보통",
+  easy: "쉬움",
+};
+
+type Segment = "review" | "note" | "mock";
+
+const SEGMENTS: { id: Segment; label: string }[] = [
+  { id: "review", label: "우선 복습" },
+  { id: "note", label: "학습노트" },
+  { id: "mock", label: "모의고사" },
+];
+
+/** 자기채점 결과 — 문항 id → 맞음/틀림 */
+type Grade = "correct" | "wrong";
+
+interface MockState {
+  /** 채점 결과 (제출 전에도 누적 저장) */
+  grades: Record<string, Grade>;
+  /** 제출 완료 여부 */
+  submitted: boolean;
+  /** 소요 시간 (초) */
+  elapsed: number;
+}
+
+const emptyMockState = (): MockState => ({
+  grades: {},
+  submitted: false,
+  elapsed: 0,
+});
+
+const loadMockState = (): MockState => {
+  try {
+    const raw = localStorage.getItem(MOCK_KEY);
+    if (!raw) return emptyMockState();
+    const parsed = JSON.parse(raw) as Partial<MockState>;
+    return {
+      grades:
+        parsed.grades && typeof parsed.grades === "object" ? parsed.grades : {},
+      submitted: Boolean(parsed.submitted),
+      elapsed: typeof parsed.elapsed === "number" ? parsed.elapsed : 0,
+    };
+  } catch {
+    return emptyMockState();
+  }
+};
+
+const saveMockState = (state: MockState): void => {
+  try {
+    localStorage.setItem(MOCK_KEY, JSON.stringify(state));
+  } catch {
+    // localStorage 사용 불가 시 세션 한정으로 유지
+  }
+};
+
+const fmtElapsed = (sec: number): string =>
+  `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`;
+
+/**
+ * 학기 전체 개념 병합 — 같은 이름은 최대 examSignal을 채택하고
+ * 등장 수업(unit)을 모두 모은다. (스냅샷의 concepts는 누적본이라 history를 함께 본다)
+ */
+export const mergeConcepts = (snapshots: LoadedSnapshot[]): MergedConcept[] => {
+  interface Acc {
+    name: string;
+    examSignal: number;
+    importance: number;
+    /** unit 이름 → unit_order (등장 수업 정렬용) */
+    units: Map<string, number>;
+    topUnit: string;
+  }
+  const byName = new Map<string, Acc>();
+  for (const { unit, unitOrder, data } of snapshots) {
+    for (const c of data.concepts) {
+      // 개념이 등장한 수업 = history의 unit들 (없으면 스냅샷 unit)
+      const appearances: [string, number][] =
+        c.history.length > 0
+          ? c.history.map(
+              (h) => [h.unit ?? unit, h.unitOrder] as [string, number]
+            )
+          : [[unit, unitOrder]];
+      const lastUnit = appearances[appearances.length - 1][0];
+      const prev = byName.get(c.name);
+      if (!prev) {
+        byName.set(c.name, {
+          name: c.name,
+          examSignal: c.examSignal,
+          importance: c.importance,
+          units: new Map(appearances),
+          topUnit: lastUnit,
+        });
+        continue;
+      }
+      if (c.examSignal > prev.examSignal) {
+        prev.examSignal = c.examSignal;
+        prev.topUnit = lastUnit;
+      }
+      prev.importance = Math.max(prev.importance, c.importance);
+      for (const [u, o] of appearances) {
+        if (!prev.units.has(u)) prev.units.set(u, o);
+      }
+    }
+  }
+  return [...byName.values()]
+    .map((a) => ({
+      name: a.name,
+      examSignal: a.examSignal,
+      importance: a.importance,
+      topUnit: a.topUnit,
+      units: [...a.units.entries()]
+        .sort((x, y) => x[1] - y[1])
+        .map(([u]) => u),
+    }))
+    .sort(
+      (a, b) => b.examSignal - a.examSignal || b.importance - a.importance
+    );
+};
+
+/** 개념 하나의 근거 요약 — "5개 수업에서 반복 · 시험 신호 최고: 3주차" */
+const evidenceOf = (c: MergedConcept): string => {
+  const parts: string[] = [];
+  if (c.units.length > 1) parts.push(`${c.units.length}개 수업에서 반복`);
+  parts.push(`시험 신호 최고: ${c.topUnit}`);
+  return parts.join(" · ");
+};
+
+interface Props {
+  /** 홈에서 읽어온 시험 목록 (임박순 정렬 전) */
+  exams: ExamInfo[];
+  /** 매니페스트 subjects — 시험 과목의 unit 목록을 찾는다 (null = 로딩 중) */
+  subjects: ManifestSubject[] | null;
+  /** 홈 화면으로 이동 (시험 일정 추가 유도) */
+  onGoHome: () => void;
+  /** 해당 수업(subject/unit) 화면으로 이동 */
+  onGoUnit: (subject: string, unit: string) => void;
+}
+
+/**
+ * 시험 대비 화면 — 학기 데이터가 쌓인 뒤의 결말.
+ * 우선 복습 개념 TOP 10 · 전 범위 학습노트(내보내기) · 전 범위 모의고사.
+ */
+export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props) {
+  const [segment, setSegment] = useState<Segment>("review");
+  const [snapshots, setSnapshots] = useState<LoadedSnapshot[] | null>(null);
+  /** 시험 범위 — 선택된 unit 이름 집합. null = 전체 */
+  const [scope, setScope] = useState<Set<string> | null>(null);
+  /** 사용자가 고른 시험 id — null이면 가장 임박한 시험 자동 선택 */
+  const [activeExamId, setActiveExamId] = useState<string | null>(null);
+
+  /** 다가오는 시험 전체 (지난 시험 제외, 임박순) — 선택기 목록 */
+  const upcoming = useMemo(
+    () =>
+      exams
+        .filter((e) => dday(e.date) >= 0)
+        .sort((a, b) => a.date.localeCompare(b.date)),
+    [exams]
+  );
+
+  /** 선택된 시험 — activeExamId 우선, 없으면 가장 임박한 것 */
+  const exam = useMemo(() => {
+    if (activeExamId) {
+      const found = upcoming.find((e) => e.id === activeExamId);
+      if (found) return found;
+    }
+    return upcoming[0] ?? null;
+  }, [upcoming, activeExamId]);
+
+  /** 시험 과목의 unit 목록 (매니페스트 순서 = order 오름차순) */
+  const units = useMemo(() => {
+    if (!exam || !subjects) return [];
+    return subjects.find((s) => s.name === exam.subject)?.units ?? [];
+  }, [exam, subjects]);
+
+  // 시험이 바뀌면 저장된 범위 복원
+  useEffect(() => {
+    setScope(exam ? (() => {
+      const stored = loadScope(exam.id);
+      return stored ? new Set(stored) : null;
+    })() : null);
+  }, [exam]);
+
+  /** unit 하나 토글 — 마지막 1개는 해제 불가. 전체가 되면 null로 환원 */
+  const toggleUnit = useCallback(
+    (name: string) => {
+      if (!exam) return;
+      const all = units.map((u) => u.name);
+      const cur = new Set(scope ?? all);
+      if (cur.has(name)) {
+        if (cur.size <= 1) return;
+        cur.delete(name);
+      } else {
+        cur.add(name);
+      }
+      const isAll = all.every((n) => cur.has(n));
+      setScope(isAll ? null : cur);
+      saveScope(exam.id, isAll ? null : [...cur]);
+    },
+    [exam, units, scope]
+  );
+
+  /** "전체" 토글 — 전체 선택으로 되돌린다 */
+  const selectAllUnits = useCallback(() => {
+    if (!exam) return;
+    setScope(null);
+    saveScope(exam.id, null);
+  }, [exam]);
+
+  // 시험 과목의 모든 unit 스냅샷을 매니페스트에서 찾아 unit_order 순으로 로드
+  useEffect(() => {
+    setSnapshots(null);
+    if (!exam || subjects === null) return;
+    const subject = exam.subject;
+    const units = subjects.find((s) => s.name === subject)?.units ?? [];
+    let cancelled = false;
+    Promise.all(
+      units.map((u) =>
+        loadSnapshot("analysis", subject, u.name)
+          .then((data) => ({
+            unit: u.name,
+            unitOrder: u.order,
+            data: data as Snapshot | null,
+          }))
+          .catch(() => ({
+            unit: u.name,
+            unitOrder: u.order,
+            data: null as Snapshot | null,
+          }))
+      )
+    ).then((results) => {
+      if (cancelled) return;
+      setSnapshots(
+        results
+          .filter((r): r is LoadedSnapshot => r.data !== null)
+          .sort((a, b) => a.unitOrder - b.unitOrder)
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [exam, subjects]);
+
+  /** 선택된 범위 unit 목록 (매니페스트 순서) — 전체 선택이면 null */
+  const scopeSel = useMemo(() => {
+    if (scope === null || units.length === 0) return null;
+    const sel = units.filter((u) => scope.has(u.name));
+    if (sel.length === 0 || sel.length === units.length) return null;
+    return sel;
+  }, [scope, units]);
+
+  /** 범위가 전체가 아닐 때 헤더 요약 — "범위: 3주차–7주차 (5개 수업)" */
+  const scopeSummary = useMemo(() => {
+    if (!scopeSel) return null;
+    const range =
+      scopeSel.length === 1
+        ? scopeSel[0].name
+        : `${scopeSel[0].name}–${scopeSel[scopeSel.length - 1].name}`;
+    return `범위: ${range} (${scopeSel.length}개 수업)`;
+  }, [scopeSel]);
+
+  /** 문구용 범위 표기 — "학기 전체" 또는 "선택 범위(3주차~7주차)" */
+  const scopeLabel = useMemo(() => {
+    if (!scopeSel) return "학기 전체";
+    const range =
+      scopeSel.length === 1
+        ? scopeSel[0].name
+        : `${scopeSel[0].name}~${scopeSel[scopeSel.length - 1].name}`;
+    return `선택 범위(${range})`;
+  }, [scopeSel]);
+
+  /** 내보내기 파일명용 범위 태그 — "학기전체" 또는 "3주차-7주차" */
+  const scopeFileTag = useMemo(() => {
+    if (!scopeSel) return "학기전체";
+    return scopeSel.length === 1
+      ? scopeSel[0].name
+      : `${scopeSel[0].name}-${scopeSel[scopeSel.length - 1].name}`;
+  }, [scopeSel]);
+
+  // ── 시험 범위 학습 가이드 (compose-guide 산출물) ──────────
+  const [desktop, setDesktop] = useState(false);
+  useEffect(() => {
+    setDesktop(isTauriRuntime());
+  }, []);
+
+  const [guide, setGuide] = useState<GuideSnapshot | null>(null);
+  const [guideGen, setGuideGen] = useState<"idle" | "running" | "failed">(
+    "idle"
+  );
+  const [guideLogTail, setGuideLogTail] = useState("");
+  const guidePollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const stopGuidePolling = useCallback(() => {
+    if (guidePollRef.current) {
+      clearInterval(guidePollRef.current);
+      guidePollRef.current = null;
+    }
+  }, []);
+
+  // 언마운트 시 폴링 중지
+  useEffect(() => stopGuidePolling, [stopGuidePolling]);
+
+  // 시험(과목)이 바뀌면 저장된 가이드 스냅샷 로드 + 진행 상태 초기화
+  useEffect(() => {
+    setGuide(null);
+    stopGuidePolling();
+    setGuideGen("idle");
+    setGuideLogTail("");
+    if (!exam) return;
+    let cancelled = false;
+    loadSnapshot("guide", exam.subject)
+      .then((g) => {
+        if (!cancelled && isGuideSnapshot(g)) setGuide(g);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [exam, stopGuidePolling]);
+
+  /** 현재 선택 범위로 가이드 생성 시작 → 2초 폴링 → done이면 스냅샷 리로드 */
+  const startGuide = useCallback(async () => {
+    if (!exam || !desktop || guideGen === "running") return;
+    const subject = exam.subject;
+    setGuideGen("running");
+    setGuideLogTail("");
+    try {
+      await runComposeGuide(
+        subject,
+        scopeSel?.map((u) => u.name),
+        getActiveEngine()
+      );
+    } catch (e) {
+      setGuideGen("failed");
+      setGuideLogTail(e instanceof Error ? e.message : String(e));
+      return;
+    }
+    stopGuidePolling();
+    guidePollRef.current = setInterval(() => {
+      void (async () => {
+        try {
+          const s = await composeGuideStatus();
+          if (s.status === "running") {
+            setGuideLogTail(s.logTail);
+            return;
+          }
+          stopGuidePolling();
+          if (s.status === "done") {
+            const g = await loadSnapshot(
+              "guide",
+              subject,
+              undefined,
+              Date.now()
+            );
+            if (isGuideSnapshot(g)) setGuide(g);
+            setGuideGen("idle");
+          } else {
+            setGuideLogTail(s.logTail);
+            setGuideGen("failed");
+          }
+        } catch {
+          stopGuidePolling();
+          setGuideGen("failed");
+        }
+      })();
+    }, 2000);
+  }, [exam, desktop, guideGen, scopeSel, stopGuidePolling]);
+
+  const guideHtml = useMemo(() => {
+    if (!guide) return "";
+    return marked.parse(guide.markdown, { async: false }) as string;
+  }, [guide]);
+
+  /** 범위 필터를 통과한 스냅샷 — 우선 복습·학습노트·모의고사가 전부 여기서 병합된다 */
+  const scoped = useMemo(() => {
+    if (!snapshots) return null;
+    if (scope === null) return snapshots;
+    return snapshots.filter((s) => scope.has(s.unit));
+  }, [snapshots, scope]);
+
+  const merged = useMemo(
+    () => (scoped ? mergeConcepts(scoped) : []),
+    [scoped]
+  );
+
+  const top10 = useMemo(() => merged.slice(0, 10), [merged]);
+
+  /** 범위 학습노트 — 수업별 note.markdown을 unit 헤더로 이어붙인다 */
+  const fullMarkdown = useMemo(() => {
+    if (!scoped) return "";
+    const parts: string[] = [];
+    for (const { unit, data } of scoped) {
+      const md = data.note?.markdown?.trim();
+      if (!md) continue;
+      parts.push(`# ${unit}\n\n${md}`);
+    }
+    return parts.join("\n\n---\n\n");
+  }, [scoped]);
+
+  const fullNoteHtml = useMemo(() => {
+    if (!fullMarkdown) return "";
+    return marked.parse(fullMarkdown, { async: false }) as string;
+  }, [fullMarkdown]);
+
+  /** 범위 모의고사 문항 — 시험신호(개념 매칭) + 난이도로 상위 15문항 */
+  const mockQuestions = useMemo<MockQuestion[]>(() => {
+    if (!scoped) return [];
+    const signalOf = new Map(merged.map((c) => [c.name, c.examSignal]));
+    const seen = new Set<string>();
+    const pool: MockQuestion[] = [];
+    for (const { unit, unitOrder, data } of scoped) {
+      for (const q of data.questions) {
+        if (seen.has(q.id)) continue;
+        seen.add(q.id);
+        // 문항 id는 "w3-c-개념id-q1" 꼴 — 개념 이름으로 직접 맞추기 어려우니
+        // 근거(sources)에 걸린 개념 신호 대신 문항이 인용한 개념 신호의 최대치를 쓴다.
+        let signal = 0;
+        for (const [name, s] of signalOf) {
+          if (q.q.includes(name) || q.reasoning.includes(name)) {
+            signal = Math.max(signal, s);
+          }
+        }
+        // 기출(exam) 근거가 있으면 재출제 가능성이 높다
+        const examRefs = q.sources.filter((s) => s.type === "exam").length;
+        const score =
+          signal +
+          (DIFFICULTY_WEIGHT[q.difficulty] ?? 0) +
+          examRefs * 20;
+        pool.push({ ...q, unit, unitOrder, score });
+      }
+    }
+    return pool
+      .sort((a, b) => b.score - a.score || a.unitOrder - b.unitOrder)
+      .slice(0, MOCK_SIZE);
+  }, [scoped, merged]);
+
+  const ddayValue = exam ? dday(exam.date) : null;
+  const imminent = ddayValue !== null && ddayValue <= 14;
+
+  const [exporting, setExporting] = useState(false);
+  const [exportMsg, setExportMsg] = useState<string | null>(null);
+
+  const handleExport = useCallback(async () => {
+    // 가이드가 있으면 가이드 본문을, 없으면 수업별 노트 모아보기를 내보낸다
+    const md = guide?.markdown ?? fullMarkdown;
+    if (!md) return;
+    setExporting(true);
+    setExportMsg(null);
+    const name = `${exam?.subject ?? "전체"}_${scopeFileTag}_학습노트.md`;
+    try {
+      const saved = await saveTextFile(name, md);
+      setExportMsg(saved ? `저장했어요 — ${saved}` : null);
+    } catch {
+      // 브라우저(dev) 폴백 — Blob 다운로드
+      const blob = new Blob([md], {
+        type: "text/markdown;charset=utf-8",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(url);
+      setExportMsg(`내려받았어요 — ${name}`);
+    } finally {
+      setExporting(false);
+    }
+  }, [guide, fullMarkdown, exam, scopeFileTag]);
+
+  const loading = snapshots === null;
+
+  // ── 시험 일정이 없을 때 ──────────────────────────────────
+  if (!exam) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center p-8 text-center">
+        <span className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+          <GraduationCap className="h-6 w-6 text-primary" aria-hidden />
+        </span>
+        <h1 className="text-lg font-bold tracking-tight text-gray-900">
+          시험 일정을 추가하면 대비를 시작합니다
+        </h1>
+        <p className="mt-2 max-w-sm text-sm leading-relaxed text-gray-500">
+          홈에서 시험을 등록하면 시험 범위 학습노트를 조립하고 우선 복습 개념과
+          모의고사를 만들어드려요.
+        </p>
+        <button
+          onClick={onGoHome}
+          data-testid="examprep-go-home"
+          className="press-scale mt-5 flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover"
+        >
+          <CalendarPlus className="h-4 w-4" aria-hidden />
+          홈에서 시험 일정 추가하기
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      data-testid="exam-prep"
+    >
+      {/* ── 헤더 — 과목 · 시험명 · D-day ── */}
+      <div className="border-b border-black/[0.05] px-8 pb-5 pt-7">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="min-w-0">
+            <p className="mb-0.5 text-xs font-semibold uppercase tracking-wider text-gray-400">
+              시험 대비
+            </p>
+            <h1 className="flex items-center gap-2 text-[26px] font-bold tracking-tight text-gray-900">
+              <GraduationCap className="h-6 w-6 text-primary" aria-hidden />
+              {exam.subject} {exam.title}
+            </h1>
+            <p className="mt-0.5 text-sm font-medium text-gray-400">
+              {formatDateK(exam.date)} · 분석된 수업 {snapshots?.length ?? 0}개
+              {scopeSummary && (
+                <span
+                  className="text-primary"
+                  data-testid="examprep-scope-summary"
+                >
+                  {" "}
+                  · {scopeSummary}
+                </span>
+              )}
+            </p>
+          </div>
+          <div className="shrink-0 text-right">
+            <p
+              className={`text-[44px] font-bold leading-none tracking-tight ${
+                imminent ? "text-red-500" : "text-gray-900"
+              }`}
+              data-testid="examprep-dday"
+            >
+              {ddayLabel(ddayValue ?? 0)}
+            </p>
+            <p className="mt-1 text-xs font-medium text-gray-400">
+              {ddayValue === 0 ? "오늘이 시험일이에요" : `${ddayValue}일 남았어요`}
+            </p>
+          </div>
+        </div>
+
+        {/* 시험 선택기 — 다가오는 시험이 2개 이상이면 드롭다운 노출 */}
+        {upcoming.length > 1 && (
+          <div className="mt-4 flex items-center gap-2" data-testid="examprep-picker">
+            <span className="text-xs font-semibold text-gray-400">시험 선택</span>
+            <div className="relative">
+              <select
+                value={exam.id}
+                onChange={(e) => setActiveExamId(e.target.value)}
+                aria-label="시험 선택"
+                className="press-scale appearance-none rounded-xl bg-black/[0.04] py-2 pl-3.5 pr-9 text-[13px] font-semibold text-gray-900 transition-colors duration-200 hover:bg-black/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              >
+                {upcoming.map((e) => (
+                  <option key={e.id} value={e.id}>
+                    {e.subject} · {e.title} · {ddayLabel(dday(e.date))}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+                aria-hidden
+              />
+            </div>
+          </div>
+        )}
+
+        {/* 이 과목에 분석된 자료가 없을 때 안내 */}
+        {!loading && snapshots?.length === 0 && (
+          <div
+            className="mt-4 flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-3.5 text-sm font-medium text-amber-700"
+            data-testid="examprep-no-analysis"
+          >
+            <AlertTriangle className="h-4 w-4 shrink-0" aria-hidden />
+            이 과목은 아직 분석된 자료가 없어요. 수업 자료를 업로드하고 분석하면
+            학습 가이드를 만들어 드려요.
+          </div>
+        )}
+
+        {/* 시험 임박 능동 제안 배너 (D-14 이내) */}
+        {imminent && !loading && (
+          <div
+            className="glass-card mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl border border-primary/20 bg-primary/[0.06] px-5 py-3.5"
+            data-testid="examprep-banner"
+          >
+            <span
+              className="inline-block h-2 w-2 shrink-0 animate-pulse rounded-full bg-primary shadow-glow"
+              aria-hidden
+            />
+            <span className="text-sm font-medium text-gray-900">
+              에이전트가 {scopeLabel} 학습노트를 조립했고, 우선 복습할 개념{" "}
+              {top10.length}개를 골라뒀어요.
+            </span>
+          </div>
+        )}
+
+        {/* 시험 범위 — 과목 unit 체크박스 칩 (기본 전체 선택) */}
+        {units.length > 0 && (
+          <div
+            className="mt-5 flex flex-wrap items-center gap-1.5"
+            data-testid="examprep-scope"
+          >
+            <span className="mr-1 text-xs font-semibold text-gray-400">
+              시험 범위
+            </span>
+            <button
+              onClick={selectAllUnits}
+              aria-pressed={scope === null}
+              data-testid="examprep-scope-all"
+              className={`press-scale flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                scope === null
+                  ? "bg-primary/10 text-primary"
+                  : "bg-black/[0.04] text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              전체
+            </button>
+            {units.map((u) => {
+              const on = scope === null || scope.has(u.name);
+              return (
+                <button
+                  key={u.name}
+                  onClick={() => toggleUnit(u.name)}
+                  aria-pressed={on}
+                  data-testid={`examprep-scope-${u.name}`}
+                  className={`press-scale flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                    on
+                      ? "bg-primary/10 text-primary"
+                      : "bg-black/[0.04] text-gray-400 hover:text-gray-600"
+                  }`}
+                >
+                  {on && <Check className="h-3 w-3" aria-hidden />}
+                  {u.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 세그먼트 탭 */}
+        <div
+          className="mt-5 inline-flex rounded-xl bg-black/[0.04] p-1"
+          role="tablist"
+        >
+          {SEGMENTS.map((s) => (
+            <button
+              key={s.id}
+              role="tab"
+              aria-selected={segment === s.id}
+              onClick={() => setSegment(s.id)}
+              data-testid={`examprep-seg-${s.id}`}
+              className={`press-scale rounded-lg px-4 py-1.5 text-[13px] font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                segment === s.id
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-500 hover:text-gray-900"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── 본문 ── */}
+      <div className="min-h-0 flex-1 overflow-y-auto p-8">
+        {loading ? (
+          <p className="text-sm text-gray-400">{scopeLabel} 자료를 조립하는 중…</p>
+        ) : segment === "review" ? (
+          <ReviewSection
+            concepts={top10}
+            scopeLabel={scopeLabel}
+            onGoUnit={(unit) => onGoUnit(exam.subject, unit)}
+          />
+        ) : segment === "note" ? (
+          <NoteSection
+            guide={guide}
+            guideHtml={guideHtml}
+            guideGen={guideGen}
+            guideLogTail={guideLogTail}
+            canCompose={desktop}
+            onCompose={() => void startGuide()}
+            html={fullNoteHtml}
+            conceptCount={merged.length}
+            unitCount={scoped?.length ?? 0}
+            scopeLabel={scopeLabel}
+            onExport={handleExport}
+            exporting={exporting}
+            exportMsg={exportMsg}
+          />
+        ) : (
+          <MockSection questions={mockQuestions} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── 우선 복습 개념 TOP 10 ────────────────────────────────────
+function ReviewSection({
+  concepts,
+  scopeLabel,
+  onGoUnit,
+}: {
+  concepts: MergedConcept[];
+  scopeLabel: string;
+  onGoUnit: (unit: string) => void;
+}) {
+  if (concepts.length === 0) {
+    return <p className="text-sm text-gray-400">아직 분석된 개념이 없습니다.</p>;
+  }
+  return (
+    <section className="mx-auto w-full max-w-[840px]">
+      <h2 className="mb-1 text-sm font-semibold tracking-tight text-gray-900">
+        우선 복습 개념 TOP {concepts.length}
+      </h2>
+      <p className="mb-4 text-xs text-gray-400">
+        {scopeLabel} 개념을 시험 신호 순으로 정렬했어요. 클릭하면 그 개념이 나온
+        수업으로 이동합니다.
+      </p>
+      <ol className="space-y-2.5" data-testid="examprep-top10">
+        {concepts.map((c, i) => (
+          <li key={c.name}>
+            <button
+              onClick={() => onGoUnit(c.topUnit)}
+              className="glass-card glass-card-hover flex w-full items-start gap-4 rounded-2xl p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">
+                {i + 1}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm font-semibold text-gray-900">
+                    {c.name}
+                  </span>
+                  {c.examSignal >= 70 && (
+                    <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-500">
+                      <AlertTriangle className="h-3 w-3" aria-hidden />
+                      시험에 나올 가능성 높음
+                    </span>
+                  )}
+                </span>
+                <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  {c.units.map((u) => (
+                    <span
+                      key={u}
+                      className="rounded-md bg-black/[0.04] px-1.5 py-0.5 text-[11px] font-medium text-gray-500"
+                    >
+                      {u}
+                    </span>
+                  ))}
+                  <span className="text-[11px] text-gray-400">
+                    · {evidenceOf(c)}
+                  </span>
+                </span>
+              </span>
+              <span className="shrink-0 text-right">
+                <span className="block text-sm font-bold text-primary">
+                  {c.examSignal}
+                </span>
+                <span className="block text-[10px] font-medium text-gray-400">
+                  시험 신호
+                </span>
+              </span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+// ── 학습노트 탭 — 시험 범위 학습 가이드(compose-guide) 우선, 없으면 수업별 모아보기 ──
+
+/** 가이드 헤더의 범위 표기 — "학기 전체" 또는 "3주차~7주차" */
+const guideScopeText = (g: GuideSnapshot): string => {
+  if (g.scope === "전체") return "학기 전체";
+  if (g.units.length > 1) return `${g.units[0]}~${g.units[g.units.length - 1]}`;
+  return g.units[0] ?? g.scope;
+};
+
+/** ISO generatedAt → "7/20 14:32" (해석 불가면 원문) */
+const fmtGeneratedAt = (iso: string): string => {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+};
+
+function NoteSection({
+  guide,
+  guideHtml,
+  guideGen,
+  guideLogTail,
+  canCompose,
+  onCompose,
+  html,
+  conceptCount,
+  unitCount,
+  scopeLabel,
+  onExport,
+  exporting,
+  exportMsg,
+}: {
+  guide: GuideSnapshot | null;
+  guideHtml: string;
+  guideGen: "idle" | "running" | "failed";
+  guideLogTail: string;
+  /** Tauri 데스크톱에서만 생성 가능 — 브라우저는 열람 전용 */
+  canCompose: boolean;
+  onCompose: () => void;
+  html: string;
+  conceptCount: number;
+  unitCount: number;
+  scopeLabel: string;
+  onExport: () => void;
+  exporting: boolean;
+  exportMsg: string | null;
+}) {
+  const logLine = guideLogTail.trim().split("\n").filter(Boolean).pop() ?? "";
+
+  const exportButton = (
+    <button
+      onClick={onExport}
+      disabled={exporting}
+      data-testid="examprep-export"
+      className="press-scale flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50"
+    >
+      <Download className="h-4 w-4" aria-hidden />
+      {exporting ? "저장 중…" : "내보내기"}
+    </button>
+  );
+
+  const exportNotice = exportMsg && (
+    <p className="mb-4 flex items-center gap-1.5 rounded-xl bg-primary/10 px-4 py-2.5 text-xs font-medium text-primary">
+      <Check className="h-3.5 w-3.5" aria-hidden />
+      {exportMsg}
+    </p>
+  );
+
+  const failNotice = guideGen === "failed" && (
+    <p
+      className="mb-4 rounded-xl bg-red-50 px-4 py-2.5 text-xs font-medium text-red-500"
+      data-testid="examprep-guide-error"
+    >
+      학습 가이드 생성에 실패했어요. 잠시 후 다시 시도해주세요.
+      {logLine && ` — ${logLine}`}
+    </p>
+  );
+
+  // ── 가이드 뷰 — compose-guide 산출물 마크다운 ──
+  if (guide) {
+    return (
+      <section
+        className="mx-auto w-full max-w-[820px]"
+        data-testid="examprep-note"
+      >
+        <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
+          <div className="min-w-0">
+            <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-900">
+              <FileText className="h-4 w-4 text-primary" aria-hidden />
+              {guideScopeText(guide)} · 개념 {guide.concepts}개 · 기출{" "}
+              {guide.pastExams}문항
+            </p>
+            <p className="mt-0.5 text-xs text-gray-400">
+              시험 범위 학습 가이드 · {fmtGeneratedAt(guide.generatedAt)} 생성
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            {canCompose && (
+              <button
+                onClick={onCompose}
+                disabled={guideGen === "running"}
+                data-testid="examprep-guide-rebuild"
+                className="press-scale flex items-center gap-1.5 rounded-xl bg-black/[0.04] px-4 py-2 text-sm font-semibold text-gray-700 transition-colors duration-200 hover:bg-black/[0.08] disabled:opacity-50"
+              >
+                {guideGen === "running" ? (
+                  <>
+                    <span className="spinner-dark" aria-hidden />
+                    만드는 중…
+                  </>
+                ) : (
+                  <>
+                    <RotateCcw className="h-4 w-4" aria-hidden />
+                    다시 만들기
+                  </>
+                )}
+              </button>
+            )}
+            {exportButton}
+          </div>
+        </div>
+        {guideGen === "running" && logLine && (
+          <p className="mb-4 truncate rounded-xl bg-black/[0.03] px-4 py-2.5 font-mono text-[11px] text-gray-500">
+            {logLine}
+          </p>
+        )}
+        {failNotice}
+        {exportNotice}
+        <div className="glass-card rounded-2xl p-8">
+          <div
+            className="note-md note-md-wide"
+            dangerouslySetInnerHTML={{ __html: guideHtml }}
+          />
+        </div>
+      </section>
+    );
+  }
+
+  // ── 가이드 없음 — 생성 CTA + 수업별 노트 모아보기(참고용) ──
+  return (
+    <section
+      className="mx-auto w-full max-w-[820px]"
+      data-testid="examprep-note"
+    >
+      {canCompose && (
+        <div
+          className="glass-card mb-4 rounded-2xl border border-primary/20 bg-primary/[0.06] px-5 py-4"
+          data-testid="examprep-guide-cta"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-gray-900">
+                시험 범위 학습 가이드가 아직 없어요
+              </p>
+              <p className="mt-0.5 text-xs text-gray-500">
+                {scopeLabel}의 개념·기출을 즉석에서 가이드 하나로 조립해드려요.
+              </p>
+            </div>
+            <button
+              onClick={onCompose}
+              disabled={guideGen === "running"}
+              data-testid="examprep-guide-compose"
+              className="press-scale flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50"
+            >
+              {guideGen === "running" ? (
+                <>
+                  <span className="spinner" aria-hidden />
+                  만드는 중…
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" aria-hidden />
+                  시험 범위 학습 가이드 만들기
+                </>
+              )}
+            </button>
+          </div>
+          {guideGen === "running" && logLine && (
+            <p className="mt-3 truncate font-mono text-[11px] text-gray-500">
+              {logLine}
+            </p>
+          )}
+          {guideGen === "failed" && (
+            <p
+              className="mt-3 text-xs font-medium text-red-500"
+              data-testid="examprep-guide-error"
+            >
+              학습 가이드 생성에 실패했어요. 잠시 후 다시 시도해주세요.
+              {logLine && ` — ${logLine}`}
+            </p>
+          )}
+        </div>
+      )}
+
+      {!html ? (
+        <p className="text-sm text-gray-400">학습노트가 아직 없습니다.</p>
+      ) : (
+        <>
+          <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
+            <div className="min-w-0">
+              <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-900">
+                <FileText className="h-4 w-4 text-primary" aria-hidden />
+                수업별 노트 모아보기 · {scopeLabel}
+              </p>
+              <p className="mt-0.5 text-xs text-gray-400">
+                수업 {unitCount}개의 학습노트를 이어붙인 참고용 뷰예요 · 개념{" "}
+                {conceptCount}개
+              </p>
+            </div>
+            {exportButton}
+          </div>
+          {exportNotice}
+          <div className="glass-card rounded-2xl p-8">
+            <div
+              className="note-md note-md-wide"
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
+// ── 전 범위 모의고사 ─────────────────────────────────────────
+function MockSection({ questions }: { questions: MockQuestion[] }) {
+  const [state, setState] = useState<MockState>(emptyMockState);
+  const [ready, setReady] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const startRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    setState(loadMockState());
+    setReady(true);
+  }, []);
+
+  // 타이머 — 제출 전에만 흐른다
+  useEffect(() => {
+    if (!ready || state.submitted) return;
+    startRef.current = Date.now() - state.elapsed * 1000;
+    const t = setInterval(() => {
+      setState((s) => {
+        if (s.submitted || startRef.current === null) return s;
+        return {
+          ...s,
+          elapsed: Math.floor((Date.now() - startRef.current) / 1000),
+        };
+      });
+    }, 1000);
+    return () => clearInterval(t);
+    // elapsed는 의도적으로 의존성에서 제외 (타이머 자신이 갱신)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, state.submitted]);
+
+  const persist = useCallback((next: MockState) => {
+    setState(next);
+    saveMockState(next);
+  }, []);
+
+  const current = questions[index] ?? null;
+  const graded = Object.keys(state.grades).length;
+  const correct = Object.values(state.grades).filter(
+    (g) => g === "correct"
+  ).length;
+
+  const grade = (g: Grade) => {
+    if (!current) return;
+    const next: MockState = {
+      ...state,
+      grades: { ...state.grades, [current.id]: g },
+    };
+    persist(next);
+    setRevealed(false);
+    if (index < questions.length - 1) setIndex((i) => i + 1);
+  };
+
+  const submit = () => {
+    persist({ ...state, submitted: true });
+  };
+
+  const reset = () => {
+    startRef.current = Date.now();
+    persist(emptyMockState());
+    setIndex(0);
+    setRevealed(false);
+  };
+
+  if (questions.length === 0) {
+    return <p className="text-sm text-gray-400">모의고사 문항이 없습니다.</p>;
+  }
+
+  // ── 결과 화면 (제출 후) ──
+  if (state.submitted) {
+    const score = Math.round((correct / questions.length) * 100);
+    return (
+      <section
+        className="mx-auto w-full max-w-[820px]"
+        data-testid="examprep-mock-result"
+      >
+        <div className="glass-card mb-5 rounded-2xl p-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            전 범위 모의고사 결과
+          </p>
+          <p className="mt-2 text-[52px] font-bold leading-none tracking-tight text-gray-900">
+            {score}
+            <span className="text-2xl text-gray-400">점</span>
+          </p>
+          <p className="mt-2 text-sm text-gray-500">
+            {questions.length}문항 중 {correct}문항 정답 · 소요{" "}
+            {fmtElapsed(state.elapsed)}
+          </p>
+          <button
+            onClick={reset}
+            data-testid="examprep-mock-reset"
+            className="press-scale mt-5 inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover"
+          >
+            <RotateCcw className="h-4 w-4" aria-hidden />
+            다시 풀기
+          </button>
+        </div>
+
+        {/* 정오표 */}
+        <h2 className="mb-3 text-sm font-semibold tracking-tight text-gray-900">
+          정오표
+        </h2>
+        <ol className="space-y-2.5">
+          {questions.map((q, i) => {
+            const g = state.grades[q.id];
+            return (
+              <li key={q.id} className="glass-card rounded-2xl p-5">
+                <div className="mb-2 flex flex-wrap items-center gap-2">
+                  <span
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
+                      g === "correct"
+                        ? "bg-emerald-50 text-emerald-600"
+                        : g === "wrong"
+                          ? "bg-red-50 text-red-500"
+                          : "bg-black/[0.04] text-gray-400"
+                    }`}
+                  >
+                    {g === "correct" ? (
+                      <Check className="h-3.5 w-3.5" aria-hidden />
+                    ) : g === "wrong" ? (
+                      <X className="h-3.5 w-3.5" aria-hidden />
+                    ) : (
+                      i + 1
+                    )}
+                  </span>
+                  <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[11px] font-semibold text-primary">
+                    {q.unit}
+                  </span>
+                  <span className="rounded-md bg-black/[0.04] px-1.5 py-0.5 text-[11px] font-medium text-gray-500">
+                    {DIFFICULTY_LABEL[q.difficulty] ?? q.difficulty}
+                  </span>
+                  {!g && (
+                    <span className="text-[11px] font-medium text-gray-400">
+                      미채점
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm font-semibold leading-relaxed text-gray-900">
+                  {q.q}
+                </p>
+                <p className="mt-2 whitespace-pre-wrap rounded-xl bg-black/[0.03] px-4 py-3 text-[13px] leading-relaxed text-gray-600">
+                  {q.a}
+                </p>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    );
+  }
+
+  // ── 풀이 화면 ──
+  return (
+    <section
+      className="mx-auto w-full max-w-[820px]"
+      data-testid="examprep-mock"
+    >
+      {/* 진행 · 타이머 */}
+      <div className="glass-card mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl px-5 py-3.5">
+        <span className="flex items-center gap-1.5 text-sm font-semibold text-gray-900">
+          <ListChecks className="h-4 w-4 text-primary" aria-hidden />
+          {index + 1} / {questions.length}
+        </span>
+        <span className="flex items-center gap-1.5 rounded-md bg-black/[0.04] px-2 py-0.5 font-mono text-xs text-gray-500">
+          <Timer className="h-3.5 w-3.5" aria-hidden />
+          {fmtElapsed(state.elapsed)}
+        </span>
+        <span className="text-xs font-medium text-gray-400">
+          채점 {graded} · 정답 {correct}
+        </span>
+        <button
+          onClick={submit}
+          data-testid="examprep-mock-submit"
+          className="press-scale ml-auto rounded-xl bg-primary px-4 py-1.5 text-[13px] font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover"
+        >
+          제출하기
+        </button>
+      </div>
+
+      {/* 진행 바 */}
+      <div className="mb-5 h-1.5 w-full overflow-hidden rounded-full bg-black/[0.06]">
+        <div
+          className="h-full rounded-full bg-primary transition-[width] duration-300"
+          style={{ width: `${(graded / questions.length) * 100}%` }}
+        />
+      </div>
+
+      {current && (
+        <div className="glass-card rounded-2xl p-8">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[11px] font-semibold text-primary">
+              {current.unit}
+            </span>
+            <span className="rounded-md bg-black/[0.04] px-1.5 py-0.5 text-[11px] font-medium text-gray-500">
+              {DIFFICULTY_LABEL[current.difficulty] ?? current.difficulty}
+            </span>
+            {current.sources.some((s) => s.type === "exam") && (
+              <span className="rounded-md bg-red-50 px-1.5 py-0.5 text-[11px] font-semibold text-red-500">
+                기출 유사
+              </span>
+            )}
+          </div>
+          <p className="text-[15px] font-semibold leading-relaxed text-gray-900">
+            {current.q}
+          </p>
+
+          {revealed ? (
+            <>
+              <p className="mt-5 whitespace-pre-wrap rounded-xl bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-gray-700">
+                {current.a}
+              </p>
+              <p className="mt-4 text-xs font-medium text-gray-400">
+                스스로 채점하세요 — 맞았나요?
+              </p>
+              <div className="mt-2 flex gap-2">
+                <button
+                  onClick={() => grade("correct")}
+                  data-testid="examprep-mock-correct"
+                  className="press-scale flex items-center gap-1.5 rounded-xl bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-600 transition-colors duration-200 hover:bg-emerald-100"
+                >
+                  <Check className="h-4 w-4" aria-hidden />
+                  맞음
+                </button>
+                <button
+                  onClick={() => grade("wrong")}
+                  data-testid="examprep-mock-wrong"
+                  className="press-scale flex items-center gap-1.5 rounded-xl bg-red-50 px-4 py-2 text-sm font-semibold text-red-500 transition-colors duration-200 hover:bg-red-100"
+                >
+                  <X className="h-4 w-4" aria-hidden />
+                  틀림
+                </button>
+              </div>
+            </>
+          ) : (
+            <button
+              onClick={() => setRevealed(true)}
+              data-testid="examprep-mock-reveal"
+              className="press-scale mt-5 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover"
+            >
+              정답 확인
+            </button>
+          )}
+
+          {/* 문항 이동 */}
+          <div className="mt-6 flex items-center justify-between border-t border-black/[0.05] pt-4">
+            <button
+              onClick={() => {
+                setRevealed(false);
+                setIndex((i) => Math.max(0, i - 1));
+              }}
+              disabled={index === 0}
+              className="press-scale rounded-lg px-3 py-1.5 text-[13px] font-medium text-gray-500 transition-colors duration-200 hover:bg-black/[0.04] disabled:opacity-40"
+            >
+              이전
+            </button>
+            <div className="flex flex-wrap items-center gap-1">
+              {questions.map((q, i) => {
+                const g = state.grades[q.id];
+                return (
+                  <button
+                    key={q.id}
+                    onClick={() => {
+                      setRevealed(false);
+                      setIndex(i);
+                    }}
+                    aria-label={`${i + 1}번 문항`}
+                    className={`h-2 w-2 rounded-full transition-colors duration-200 ${
+                      i === index
+                        ? "bg-primary ring-2 ring-primary/25"
+                        : g === "correct"
+                          ? "bg-emerald-400"
+                          : g === "wrong"
+                            ? "bg-red-400"
+                            : "bg-black/10"
+                    }`}
+                  />
+                );
+              })}
+            </div>
+            <button
+              onClick={() => {
+                setRevealed(false);
+                setIndex((i) => Math.min(questions.length - 1, i + 1));
+              }}
+              disabled={index === questions.length - 1}
+              className="press-scale rounded-lg px-3 py-1.5 text-[13px] font-medium text-gray-500 transition-colors duration-200 hover:bg-black/[0.04] disabled:opacity-40"
+            >
+              다음
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

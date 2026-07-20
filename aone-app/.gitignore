@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# misc
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+# tauri
+/src-tauri/target
+
+# 업로드 PDF 미러 — goldset이 원본, rescan_files가 재생성한다
+/public/uploads/

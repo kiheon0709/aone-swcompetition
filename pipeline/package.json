@@ -1,0 +1,25 @@
+{
+  "name": "aone-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Aone 학습 에이전트 파이프라인 — 주차별 강의 자료 투입 → 개념/평가신호/예상문제 누적 생성",
+  "scripts": {
+    "run:stub": "tsx src/cli.ts run --weeks 1-7 --engine stub",
+    "export": "tsx src/cli.ts export --out out",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "officeparser": "^7.3.0",
+    "pdfjs-dist": "^6.1.200",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^20.17.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

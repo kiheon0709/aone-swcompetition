@@ -1,0 +1,555 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 사이드바 폭 — page.tsx가 접힘 상태에 따라 228px/56px로 갱신 */
+  --sidebar-w: 228px;
+  --background: #f4f6f8;
+  --foreground: #1a1a1a;
+  --primary: #0a84ff;
+  --primary-hover: #007aff;
+  --text-secondary: #6b7280;
+
+  /* Light theme blobs — subtle & pastel */
+  --blob-1: #e0e7ff;
+  --blob-2: #f3e8ff;
+  --blob-3: #dbeafe;
+  --blob-4: #fce7f3;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family:
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Apple SD Gothic Neo",
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Liquid background ---------- */
+.liquid-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: linear-gradient(160deg, #f7f9fb 0%, #f2f4f8 55%, #eef1f6 100%);
+  overflow: hidden;
+}
+
+.liquid-blob {
+  position: absolute;
+  filter: blur(80px);
+  opacity: 0.6;
+  border-radius: 50%;
+  animation: float 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.liquid-blob:nth-child(1) {
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: var(--blob-1);
+  animation-delay: 0s;
+}
+
+.liquid-blob:nth-child(2) {
+  top: 20%;
+  right: -10%;
+  width: 40vw;
+  height: 40vw;
+  background: var(--blob-2);
+  animation-delay: -5s;
+  animation-duration: 28s;
+  opacity: 0.4;
+}
+
+.liquid-blob:nth-child(3) {
+  bottom: -20%;
+  left: 10%;
+  width: 45vw;
+  height: 45vw;
+  background: var(--blob-3);
+  animation-delay: -10s;
+  animation-duration: 32s;
+  opacity: 0.4;
+}
+
+.liquid-blob:nth-child(4) {
+  bottom: 0%;
+  right: 20%;
+  width: 30vw;
+  height: 30vw;
+  background: var(--blob-4);
+  animation-delay: -15s;
+  animation-duration: 22s;
+  opacity: 0.3;
+}
+
+/* ---------- macOS 네이티브 vibrancy (Tauri 창 전용) ----------
+   창 자체가 반투명(underWindowBackground)이므로 웹 배경을 걷어내
+   바탕화면 블러가 사이드바·여백을 통해 비쳐 보이게 한다.
+   브라우저/Vercel에서는 .tauri-vibrancy가 붙지 않아 기존 모습 유지. */
+body.tauri-vibrancy {
+  background: transparent;
+}
+
+body.tauri-vibrancy .liquid-bg-container {
+  background: linear-gradient(
+    160deg,
+    rgba(247, 249, 251, 0.2) 0%,
+    rgba(242, 244, 248, 0.12) 55%,
+    rgba(238, 241, 246, 0.16) 100%
+  );
+}
+
+body.tauri-vibrancy .liquid-blob {
+  opacity: 0.12;
+}
+
+body.tauri-vibrancy .glass-panel {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 오버레이 타이틀바: 신호등 버튼이 사이드바 위에 뜨므로 브랜드를 아래로 */
+body.tauri-vibrancy .sidebar-brand {
+  padding-top: 2.75rem;
+}
+
+/* ---------- 연결형 레이아웃 (Google Meet 스타일) ----------
+   사이드바: 브라우저에선 일반 글래스, Tauri에선 거의 투명 —
+   창 vibrancy(sidebar 재질)가 데스크톱을 블러해 그대로 비친다.
+   본문: 불투명에 가까운 컬러 그라데이션 서피스. */
+.sidebar-connected {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.tauri-vibrancy .sidebar-connected {
+  /* 틴트 거의 0 — macOS sidebar 재질(vibrancy)이 그대로 드러남 (Finder와 동일) */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* vibrancy 위에서는 회색 텍스트가 씻겨 보임 → 애플 labelColor급 대비로 승격
+   (아이콘은 stroke=currentColor라 텍스트 색을 따라감) */
+body.tauri-vibrancy .sidebar-connected [class*="text-gray-5"],
+body.tauri-vibrancy .sidebar-connected [class*="text-gray-6"],
+body.tauri-vibrancy .sidebar-connected [class*="text-gray-7"],
+body.tauri-vibrancy .sidebar-connected [class*="text-gray-8"] {
+  color: rgba(28, 28, 30, 0.85) !important;
+}
+
+/* 섹션 라벨(내 과목 등)은 보조 위계 유지 — secondaryLabel급 */
+body.tauri-vibrancy .sidebar-connected [class*="text-gray-4"] {
+  color: rgba(60, 60, 67, 0.68) !important;
+}
+
+/* 사이드바 트리 항목: 한 단계 크게·굵게 (모든 모드 공통) */
+.sidebar-connected nav [class*="text-sm"] {
+  font-size: 0.95rem; /* 14px → 15.2px */
+}
+
+.sidebar-connected nav [class*="text-sm"]:not([class*="font-"]) {
+  font-weight: 500; /* 명시적 굵기(활성 항목 등)가 있는 건 그대로 둠 */
+}
+
+.main-surface {
+  background: transparent; /* 브라우저: 기존 liquid 배경 그대로 */
+}
+
+body.tauri-vibrancy .main-surface {
+  background: linear-gradient(
+    150deg,
+    rgba(240, 246, 255, 0.92) 0%,
+    rgba(236, 240, 250, 0.88) 45%,
+    rgba(243, 238, 250, 0.9) 100%
+  );
+}
+
+/* 연결형에선 전체 배경 그라데이션이 본문 뒤에서만 —
+   사이드바 영역은 비워 데스크톱 블러가 그대로 보이게 */
+body.tauri-vibrancy .liquid-bg-container {
+  left: var(--sidebar-w);
+}
+
+/* 창 상단 가장자리 드래그 스트립 — 타이틀바를 대신하는 잡기 영역.
+   Tauri 창에서만 표시. 상단 22px 전체가 드래그 핸들이 된다. */
+.tauri-drag-strip {
+  display: none;
+}
+
+body.tauri-vibrancy .tauri-drag-strip {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  z-index: 40;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+
+  33% {
+    transform: translate(50px, -50px) scale(1.1) rotate(10deg);
+  }
+
+  66% {
+    transform: translate(-30px, 40px) scale(0.9) rotate(-5deg);
+  }
+
+  100% {
+    transform: translate(20px, -20px) scale(1.05) rotate(5deg);
+  }
+}
+
+/* ---------- Glass materials (light) ---------- */
+/* Structural chrome: heavier material, stronger blur (sidebar, big panels) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Content surface: lighter material for cards sitting on the page */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition:
+    background 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark banner material — the one intentionally heavy layer on the page */
+.glass-banner-dark {
+  background: linear-gradient(150deg, rgba(28, 28, 32, 0.92), rgba(16, 16, 20, 0.9));
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.22); /* light catching the top edge */
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.35);
+  color: #fff;
+}
+
+.glass-button {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: var(--foreground);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-button:hover {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.glass-button:active {
+  transform: translateY(0px) scale(0.98);
+  background: #f3f4f6;
+}
+
+/* Press feedback lives on pointer-down, and it's instant */
+.press-scale {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.press-scale:active {
+  transform: scale(0.97);
+  transition-duration: 0.1s;
+}
+
+/* ---------- Range slider (week scrubber) ---------- */
+input[type="range"].week-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.08);
+  outline: none;
+}
+
+input[type="range"].week-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.15),
+    0 0 0 0 rgba(10, 132, 255, 0);
+  cursor: grab;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="range"].week-slider::-webkit-slider-thumb:hover {
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.15),
+    0 0 0 5px rgba(10, 132, 255, 0.15);
+}
+
+input[type="range"].week-slider:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+/* ---------- Toast ---------- */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.toast-pop {
+  animation: toast-in 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- Spinner ---------- */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner-dark {
+  border-color: rgba(0, 0, 0, 0.15);
+  border-top-color: rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Note (markdown) ---------- */
+.note-md {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* 강의 요약 탭 — 넓은 판형에서 읽기 좋게 (본문 크게·행간 여유) */
+.note-md-wide {
+  font-size: 0.975rem;
+  line-height: 1.78;
+}
+
+.note-md-wide h1 {
+  font-size: 1.6rem;
+}
+
+.note-md-wide h2 {
+  font-size: 1.25rem;
+  margin-top: 1.7em;
+}
+
+.note-md-wide h3 {
+  font-size: 1.08rem;
+}
+
+.note-md-wide blockquote {
+  font-size: 0.94rem;
+}
+
+.note-md h1,
+.note-md h2,
+.note-md h3,
+.note-md h4 {
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
+  margin: 1.25em 0 0.5em;
+}
+
+.note-md h1:first-child,
+.note-md h2:first-child,
+.note-md h3:first-child {
+  margin-top: 0;
+}
+
+.note-md h1 {
+  font-size: 1.125rem;
+}
+
+.note-md h2 {
+  font-size: 1rem;
+}
+
+.note-md h3,
+.note-md h4 {
+  font-size: 0.875rem;
+}
+
+.note-md p {
+  margin: 0.5em 0;
+}
+
+.note-md ul,
+.note-md ol {
+  margin: 0.5em 0;
+  padding-left: 1.4em;
+}
+
+.note-md ul {
+  list-style: disc;
+}
+
+.note-md ol {
+  list-style: decimal;
+}
+
+.note-md li {
+  margin: 0.25em 0;
+}
+
+.note-md strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+.note-md code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8em;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+}
+
+.note-md pre {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  margin: 0.75em 0;
+}
+
+.note-md pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.note-md blockquote {
+  border-left: 3px solid rgba(10, 132, 255, 0.4);
+  padding-left: 0.9em;
+  color: var(--text-secondary);
+  margin: 0.75em 0;
+}
+
+.note-md table {
+  border-collapse: collapse;
+  margin: 0.75em 0;
+  font-size: 0.8125rem;
+}
+
+.note-md th,
+.note-md td {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.35em 0.7em;
+  text-align: left;
+}
+
+.note-md th {
+  background: rgba(0, 0, 0, 0.03);
+  font-weight: 600;
+}
+
+.note-md hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin: 1em 0;
+}
+
+/* ---------- Scrollbar — minimalist light ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- Accessibility fallbacks ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-blob {
+    animation: none;
+  }
+
+  .glass-card,
+  .glass-button,
+  .press-scale {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-panel,
+  .glass-card {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .glass-banner-dark {
+    background: #141418;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

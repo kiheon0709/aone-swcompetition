@@ -1,0 +1,46 @@
+
+.DS_Store
+.next/
+.vercel
+*.log
+# 대용량 영상 원본·오피스 임시파일
+~$*.pptx
+aone.db-shm
+aone.db-wal
+goldset/데이터통신-테스트/
+goldset/운영체제-테스트/
+node_modules/
+out/
+target/
+test.db*
+기획서/데모원본.mov
+aone-app/src-tauri/resources/
+제출/Aone.dmg
+제출/Aone_전체코드.zip
+제출_최종/
+
+# 비코드 자료 (제출·저작권) — 레포엔 순수 코드만
+발표자료/
+기획서/
+제출/
+제출_최종/
+goldset/
+benchmark_tools/
+docs/
+*.pptx
+*.pdf
+에타시간표*.jpeg
+골드셋_인벤토리.md
+디자인_비교.html
+디자인목업_연결형_이전버전.html
+Aone_경진대회_방향정리_보고서_2026-07-14.pdf
+
+# public 데모 데이터 (교수 강의 자료 — 저작권). Vercel은 로컬 out/으로 배포.
+aone-app/public/docs/
+aone-app/public/uploads/
+aone-app/public/lecture-pdfs/
+aone-app/public/exams/
+aone-app/public/snapshots/
+aone-app/public/slides/
+pipeline/.extracted/
+*.db*
