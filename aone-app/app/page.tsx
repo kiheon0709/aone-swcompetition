@@ -96,6 +96,7 @@ import {
   dday,
   ddayLabel,
   loadExams,
+  seedWebDemoIfEmpty,
 } from "@/components/home/homeData";
 import { getUserName, getUserOrg, saveUserProfile } from "@/lib/user";
 
@@ -904,8 +905,11 @@ export default function Home() {
   lectureRef.current = lecture;
 
   useEffect(() => {
-    setDesktop(isTauriRuntime());
+    const isDesktop = isTauriRuntime();
+    setDesktop(isDesktop);
     setActiveEngineState(getActiveEngine());
+    // 웹 데모에서만: 처음 열었을 때 시간표·시험·과제를 한 번 채운다 (데스크톱은 빈 상태 유지)
+    seedWebDemoIfEmpty(isDesktop);
     setExams(loadExams());
     setUserName(getUserName());
     setUserOrg(getUserOrg());
