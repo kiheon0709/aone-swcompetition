@@ -5278,14 +5278,92 @@ export default function Home() {
                           </section>
                         )}
 
-                        {/* ── [강의 요약] 탭 (세부 페이지) — 폴더 요약 재활용 ── */}
+                        {/* ── [강의 요약] 탭 (세부 페이지) — 이 자료 한 장 정리 ── */}
                         {detailMode && detailTab === "note" && (
                           <section
                             className="mx-auto w-full max-w-[1100px]"
                             data-testid="detail-note"
                           >
-                            {noteHtml ? (
+                            {docSlides.length > 0 ? (
                               <div className="glass-card rounded-2xl px-10 py-9 lg:px-14">
+                                <header className="mb-7 border-b border-black/[0.06] pb-5">
+                                  <h2 className="text-xl font-bold tracking-tight text-gray-900">
+                                    {activeDocPdf?.title ?? activeDocKey}
+                                  </h2>
+                                  <p className="mt-1.5 text-sm text-gray-400">
+                                    이 자료 {docSlides.length}쪽을 순서대로 정리했어요
+                                  </p>
+                                </header>
+
+                                {/* 이 자료에서 시험 신호가 붙은 페이지 먼저 */}
+                                {docSlides.some((s) => s.exam_tip) && (
+                                  <div className="mb-7 rounded-2xl bg-amber-50/70 px-6 py-5">
+                                    <p className="mb-3 text-sm font-semibold text-amber-900">
+                                      시험에 나올 만한 곳
+                                    </p>
+                                    <ul className="flex flex-col gap-2">
+                                      {docSlides
+                                        .filter((s) => s.exam_tip)
+                                        .map((s) => (
+                                          <li
+                                            key={`tip-${s.slide_id}`}
+                                            className="flex gap-2.5 text-[13.5px] leading-relaxed text-amber-900/90"
+                                          >
+                                            <span className="shrink-0 font-mono text-xs font-semibold text-amber-700/80">
+                                              p.{s.page}
+                                            </span>
+                                            <span className="min-w-0">{s.exam_tip}</span>
+                                          </li>
+                                        ))}
+                                    </ul>
+                                  </div>
+                                )}
+
+                                {/* 페이지 순서대로 요약 */}
+                                <ol className="flex flex-col gap-6">
+                                  {docSlides.map((s) => (
+                                    <li key={s.slide_id} className="flex gap-4">
+                                      <button
+                                        onClick={() => {
+                                          setDocPage(s.page);
+                                          setDetailTab("slides");
+                                        }}
+                                        title={`${s.page}쪽으로 이동`}
+                                        className="press-scale mt-0.5 h-7 shrink-0 rounded-lg bg-primary/10 px-2.5 font-mono text-xs font-semibold text-primary transition-colors duration-200 hover:bg-primary/20"
+                                      >
+                                        {s.page}
+                                      </button>
+                                      <div className="min-w-0 flex-1">
+                                        <h3 className="text-[15px] font-bold text-gray-900">
+                                          {s.title_ko}
+                                        </h3>
+                                        <p className="mt-1 text-[14px] leading-relaxed text-gray-600">
+                                          {s.summary_ko}
+                                        </p>
+                                        {s.key_points_ko.length > 0 && (
+                                          <ul className="mt-2 flex flex-col gap-1">
+                                            {s.key_points_ko.map((k, i) => (
+                                              <li
+                                                key={i}
+                                                className="flex gap-2 text-[13.5px] leading-relaxed text-gray-500"
+                                              >
+                                                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-primary/50" />
+                                                <span className="min-w-0">{k}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        )}
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ol>
+                              </div>
+                            ) : noteHtml ? (
+                              /* 슬라이드별 설명이 아직 없으면 이 수업의 학습노트로 대체 */
+                              <div className="glass-card rounded-2xl px-10 py-9 lg:px-14">
+                                <p className="mb-5 text-sm text-gray-400">
+                                  이 자료의 쪽별 정리는 아직 없어서, 이 수업의 학습노트를 보여드려요.
+                                </p>
                                 <div
                                   className="note-md note-md-wide"
                                   dangerouslySetInnerHTML={{ __html: noteHtml }}
