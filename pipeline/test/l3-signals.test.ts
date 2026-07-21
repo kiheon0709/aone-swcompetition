@@ -26,6 +26,8 @@ function freshDb(): AoneDb {
 }
 
 const cfg = makeConfig({ goldsetDir: "", dbPath: ":memory:", outDir: "" });
+/** 점수 기대값은 설정의 가중치에서 계산한다 — 가중치를 조정해도 테스트가 깨지지 않게. */
+const W = cfg.scoreWeights;
 const key3: UnitKey = { subject: SUBJECT, unit: "3주차", unitOrder: 3 };
 
 test("computeScores: 근거 없는 개념 → importance = unitsSeen 최소 1로 기저값", () => {
@@ -34,8 +36,8 @@ test("computeScores: 근거 없는 개념 → importance = unitsSeen 최소 1로
   const { scored } = computeScores(db, cfg, key3);
   assert.equal(scored, 1);
   const s = db.score(CID, key3)!;
-  // importance = 14*1 = 14, examSignal = 0
-  assert.equal(s.importance, 14);
+  // importance = w.perWeekSeen * 1 (unitsSeen 최소 1), examSignal = 0
+  assert.equal(s.importance, Math.round(W.importancePerWeekSeen));
   assert.equal(s.exam_signal, 0);
   db.close();
 });
@@ -51,27 +53,51 @@ test("computeScores: 근거·강조·기출매칭 가중 합산 (경계 이하)"
 
   computeScores(db, cfg, key3);
   const s = db.score(CID, key3)!;
-  // importance = 14*2 + 3*2 + 5*1 + 6*1 = 28+6+5+6 = 45
-  assert.equal(s.importance, 45);
-  // examSignal = 10*1(emphasis) + 14*0(examHint) + 26*1(examMatch) = 36
-  assert.equal(s.exam_signal, 36);
+  // unitsSeen=2, evidence=2, emphasis=1, examMatch=1 (exam_hint의 source_type=exam은 매칭으로 집계)
+  assert.equal(
+    s.importance,
+    Math.round(
+      W.importancePerWeekSeen * 2 +
+        W.importancePerEvidence * 2 +
+        W.importancePerEmphasis * 1 +
+        W.importancePerExamMatch * 1,
+    ),
+  );
+  assert.equal(
+    s.exam_signal,
+    Math.round(W.examSignalPerEmphasis * 1 + W.examSignalPerExamMatch * 1),
+  );
   db.close();
 });
 
 test("computeScores: clamp — 과도한 신호는 100으로 상한", () => {
   const db = freshDb();
-  // 강조 5 + 시험언급 5 + 기출매칭 5 → examSignal = 50+70+130 = 250 → 100 clamp
-  for (let i = 0; i < 5; i++) {
+  // 강조·시험언급·기출매칭을 상한을 넘길 만큼 쌓아 clamp(100) 동작을 확인한다.
+  // (가중치를 바꿔도 깨지지 않도록 필요한 개수를 가중치에서 역산)
+  const need = Math.ceil(
+    100 / (W.examSignalPerEmphasis + W.examSignalPerExamHint + W.examSignalPerExamMatch),
+  ) + 1;
+  for (let i = 0; i < need; i++) {
     db.addSignal({ concept_id: CID, subject: SUBJECT, unit: "3주차", unit_order: 3, kind: "emphasis", source_type: "transcript", locator: `e${i}`, quote: "q" });
     db.addSignal({ concept_id: CID, subject: SUBJECT, unit: "3주차", unit_order: 3, kind: "exam_hint", source_type: "transcript", locator: `h${i}`, quote: "q" });
     db.addSignal({ concept_id: CID, subject: SUBJECT, unit: "3주차", unit_order: 3, kind: "exam_hint", source_type: "exam", locator: `m${i}`, quote: "q" });
   }
   computeScores(db, cfg, key3);
   const s = db.score(CID, key3)!;
-  // examSignal = 10*5 + 14*5 + 26*5 = 250 → clamp 100
+  // 상한 초과 → 100으로 clamp
   assert.equal(s.exam_signal, 100);
-  // importance = 14*1(unitsSeen 기저) + 5*5(emphasis) + 6*5(examMatch) = 69 (미clamp)
-  assert.equal(s.importance, 69);
+  // importance도 같은 신호로 계산된다 (미clamp면 가중 합, 넘으면 100)
+  assert.equal(
+    s.importance,
+    Math.min(
+      100,
+      Math.round(
+        W.importancePerWeekSeen * 1 +
+          W.importancePerEmphasis * need +
+          W.importancePerExamMatch * need,
+      ),
+    ),
+  );
   db.close();
 });
 
@@ -83,8 +109,8 @@ test("computeScores: unit_order 상한 — 미래 unit 근거·신호는 누적�
 
   computeScores(db, cfg, key3);
   const s = db.score(CID, key3)!;
-  // 미래 근거·신호 제외 → 기저값 14만
-  assert.equal(s.importance, 14);
+  // 미래 근거·신호 제외 → unitsSeen 기저값만
+  assert.equal(s.importance, Math.round(W.importancePerWeekSeen));
   assert.equal(s.exam_signal, 0);
   db.close();
 });

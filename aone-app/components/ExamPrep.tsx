@@ -6,7 +6,8 @@ import {
   AlertTriangle,
   CalendarPlus,
   Check,
-  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Download,
   FileText,
   GraduationCap,
@@ -182,9 +183,10 @@ const DIFFICULTY_LABEL: Record<string, string> = {
   easy: "쉬움",
 };
 
-type Segment = "review" | "note" | "mock";
+type Segment = "guide" | "review" | "note" | "mock";
 
 const SEGMENTS: { id: Segment; label: string }[] = [
+  { id: "guide", label: "학습 가이드" },
   { id: "review", label: "우선 복습" },
   { id: "note", label: "학습노트" },
   { id: "mock", label: "모의고사" },
@@ -320,11 +322,11 @@ interface Props {
  * 우선 복습 개념 TOP 10 · 전 범위 학습노트(내보내기) · 전 범위 모의고사.
  */
 export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props) {
-  const [segment, setSegment] = useState<Segment>("review");
+  const [segment, setSegment] = useState<Segment>("guide");
   const [snapshots, setSnapshots] = useState<LoadedSnapshot[] | null>(null);
   /** 시험 범위 — 선택된 unit 이름 집합. null = 전체 */
   const [scope, setScope] = useState<Set<string> | null>(null);
-  /** 사용자가 고른 시험 id — null이면 가장 임박한 시험 자동 선택 */
+  /** 사용자가 고른 시험 id — null이면 시험 선택 화면을 띄운다 (자동 선택 안 함) */
   const [activeExamId, setActiveExamId] = useState<string | null>(null);
 
   /** 다가오는 시험 전체 (지난 시험 제외, 임박순) — 선택기 목록 */
@@ -336,14 +338,17 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
     [exams]
   );
 
-  /** 선택된 시험 — activeExamId 우선, 없으면 가장 임박한 것 */
-  const exam = useMemo(() => {
-    if (activeExamId) {
-      const found = upcoming.find((e) => e.id === activeExamId);
-      if (found) return found;
-    }
-    return upcoming[0] ?? null;
-  }, [upcoming, activeExamId]);
+  /** 선택된 시험 — 사용자가 고른 것만. 없으면 null(=선택 화면) */
+  const exam = useMemo(
+    () => upcoming.find((e) => e.id === activeExamId) ?? null,
+    [upcoming, activeExamId]
+  );
+
+  /** 시험을 고르면 세부 페이지로 — 항상 학습 가이드부터 */
+  const openExam = useCallback((id: string) => {
+    setActiveExamId(id);
+    setSegment("guide");
+  }, []);
 
   /** 시험 과목의 unit 목록 (매니페스트 순서 = order 오름차순) */
   const units = useMemo(() => {
@@ -635,13 +640,12 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
   const [exporting, setExporting] = useState(false);
   const [exportMsg, setExportMsg] = useState<string | null>(null);
 
-  const handleExport = useCallback(async () => {
-    // 가이드가 있으면 가이드 본문을, 없으면 수업별 노트 모아보기를 내보낸다
-    const md = guide?.markdown ?? fullMarkdown;
+  /** 마크다운 하나를 파일로 저장 — 데스크톱은 저장 다이얼로그, 웹은 Blob 다운로드 */
+  const exportMarkdown = useCallback(async (md: string, kind: string) => {
     if (!md) return;
     setExporting(true);
     setExportMsg(null);
-    const name = `${exam?.subject ?? "전체"}_${scopeFileTag}_학습노트.md`;
+    const name = `${exam?.subject ?? "전체"}_${scopeFileTag}_${kind}.md`;
     try {
       const saved = await saveTextFile(name, md);
       setExportMsg(saved ? `저장했어요 — ${saved}` : null);
@@ -660,9 +664,29 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
     } finally {
       setExporting(false);
     }
-  }, [guide, fullMarkdown, exam, scopeFileTag]);
+  }, [exam, scopeFileTag]);
+
+  const exportGuide = useCallback(
+    () => void exportMarkdown(guide?.markdown ?? "", "학습가이드"),
+    [exportMarkdown, guide]
+  );
+  const exportNotes = useCallback(
+    () => void exportMarkdown(fullMarkdown, "학습노트"),
+    [exportMarkdown, fullMarkdown]
+  );
 
   const loading = snapshots === null;
+
+  // ── 시험을 아직 고르지 않았을 때 — 시험(과목) 선택 화면 ──
+  if (!exam && upcoming.length > 0) {
+    return (
+      <ExamPicker
+        exams={upcoming}
+        subjects={subjects}
+        onSelect={openExam}
+      />
+    );
+  }
 
   // ── 시험 일정이 없을 때 ──────────────────────────────────
   if (!exam) {
@@ -697,6 +721,14 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
     >
       {/* ── 헤더 — 과목 · 시험명 · D-day ── */}
       <div className="border-b border-black/[0.05] px-8 pb-5 pt-7">
+        <button
+          onClick={() => setActiveExamId(null)}
+          data-testid="examprep-back"
+          className="press-scale -ml-1.5 mb-2 flex items-center gap-1 rounded-lg px-1.5 py-1 text-xs font-semibold text-gray-400 transition-colors duration-200 hover:bg-black/[0.04] hover:text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        >
+          <ChevronLeft className="h-3.5 w-3.5" aria-hidden />
+          시험 선택으로
+        </button>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="min-w-0">
             <p className="mb-0.5 text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -733,31 +765,6 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
             </p>
           </div>
         </div>
-
-        {/* 시험 선택기 — 다가오는 시험이 2개 이상이면 드롭다운 노출 */}
-        {upcoming.length > 1 && (
-          <div className="mt-4 flex items-center gap-2" data-testid="examprep-picker">
-            <span className="text-xs font-semibold text-gray-400">시험 선택</span>
-            <div className="relative">
-              <select
-                value={exam.id}
-                onChange={(e) => setActiveExamId(e.target.value)}
-                aria-label="시험 선택"
-                className="press-scale appearance-none rounded-xl bg-black/[0.04] py-2 pl-3.5 pr-9 text-[13px] font-semibold text-gray-900 transition-colors duration-200 hover:bg-black/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-              >
-                {upcoming.map((e) => (
-                  <option key={e.id} value={e.id}>
-                    {e.subject} · {e.title} · {ddayLabel(dday(e.date))}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown
-                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-                aria-hidden
-              />
-            </div>
-          </div>
-        )}
 
         {/* 이 과목에 분석된 자료가 없을 때 안내 */}
         {!loading && snapshots?.length === 0 && (
@@ -859,6 +866,19 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
       <div className="min-h-0 flex-1 overflow-y-auto p-8">
         {loading ? (
           <p className="text-sm text-gray-400">{scopeLabel} 자료를 조립하는 중…</p>
+        ) : segment === "guide" ? (
+          <GuideSection
+            guide={guide}
+            guideHtml={guideHtml}
+            guideGen={guideGen}
+            guideLogTail={guideLogTail}
+            canRebuild={desktop}
+            onCompose={() => void startGuide()}
+            scopeLabel={scopeLabel}
+            onExport={exportGuide}
+            exporting={exporting}
+            exportMsg={exportMsg}
+          />
         ) : segment === "review" ? (
           <ReviewSection
             concepts={top10}
@@ -867,17 +887,11 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
           />
         ) : segment === "note" ? (
           <NoteSection
-            guide={guide}
-            guideHtml={guideHtml}
-            guideGen={guideGen}
-            guideLogTail={guideLogTail}
-            canCompose
-            onCompose={() => void startGuide()}
             html={fullNoteHtml}
             conceptCount={merged.length}
             unitCount={scoped?.length ?? 0}
             scopeLabel={scopeLabel}
-            onExport={handleExport}
+            onExport={exportNotes}
             exporting={exporting}
             exportMsg={exportMsg}
           />
@@ -969,7 +983,7 @@ function ReviewSection({
   );
 }
 
-// ── 학습노트 탭 — 시험 범위 학습 가이드(compose-guide) 우선, 없으면 수업별 모아보기 ──
+// ── 학습 가이드 탭 — 시험 범위 학습 가이드(compose-guide 산출물) ──
 
 /** 가이드 헤더의 범위 표기 — "학기 전체" 또는 "3주차~7주차" */
 const guideScopeText = (g: GuideSnapshot): string => {
@@ -985,16 +999,13 @@ const fmtGeneratedAt = (iso: string): string => {
   return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
 
-function NoteSection({
+function GuideSection({
   guide,
   guideHtml,
   guideGen,
   guideLogTail,
-  canCompose,
+  canRebuild,
   onCompose,
-  html,
-  conceptCount,
-  unitCount,
   scopeLabel,
   onExport,
   exporting,
@@ -1004,30 +1015,15 @@ function NoteSection({
   guideHtml: string;
   guideGen: "idle" | "running" | "failed";
   guideLogTail: string;
-  /** Tauri 데스크톱에서만 생성 가능 — 브라우저는 열람 전용 */
-  canCompose: boolean;
+  /** Tauri 데스크톱에서만 "다시 만들기" 노출 — 브라우저는 열람 전용 */
+  canRebuild: boolean;
   onCompose: () => void;
-  html: string;
-  conceptCount: number;
-  unitCount: number;
   scopeLabel: string;
   onExport: () => void;
   exporting: boolean;
   exportMsg: string | null;
 }) {
   const logLine = guideLogTail.trim().split("\n").filter(Boolean).pop() ?? "";
-
-  const exportButton = (
-    <button
-      onClick={onExport}
-      disabled={exporting}
-      data-testid="examprep-export"
-      className="press-scale flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50"
-    >
-      <Download className="h-4 w-4" aria-hidden />
-      {exporting ? "저장 중…" : "내보내기"}
-    </button>
-  );
 
   const exportNotice = exportMsg && (
     <p className="mb-4 flex items-center gap-1.5 rounded-xl bg-primary/10 px-4 py-2.5 text-xs font-medium text-primary">
@@ -1036,22 +1032,12 @@ function NoteSection({
     </p>
   );
 
-  const failNotice = guideGen === "failed" && (
-    <p
-      className="mb-4 rounded-xl bg-red-50 px-4 py-2.5 text-xs font-medium text-red-500"
-      data-testid="examprep-guide-error"
-    >
-      학습 가이드 생성에 실패했어요. 잠시 후 다시 시도해주세요.
-      {logLine && ` — ${logLine}`}
-    </p>
-  );
-
   // ── 가이드 뷰 — compose-guide 산출물 마크다운 ──
   if (guide) {
     return (
       <section
         className="mx-auto w-full max-w-[820px]"
-        data-testid="examprep-note"
+        data-testid="examprep-guide"
       >
         <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
           <div className="min-w-0">
@@ -1065,7 +1051,7 @@ function NoteSection({
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            {canCompose && (
+            {canRebuild && (
               <button
                 onClick={onCompose}
                 disabled={guideGen === "running"}
@@ -1085,7 +1071,15 @@ function NoteSection({
                 )}
               </button>
             )}
-            {exportButton}
+            <button
+              onClick={onExport}
+              disabled={exporting}
+              data-testid="examprep-export"
+              className="press-scale flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50"
+            >
+              <Download className="h-4 w-4" aria-hidden />
+              {exporting ? "저장 중…" : "내보내기"}
+            </button>
           </div>
         </div>
         {guideGen === "running" && logLine && (
@@ -1093,7 +1087,15 @@ function NoteSection({
             {logLine}
           </p>
         )}
-        {failNotice}
+        {guideGen === "failed" && (
+          <p
+            className="mb-4 rounded-xl bg-red-50 px-4 py-2.5 text-xs font-medium text-red-500"
+            data-testid="examprep-guide-error"
+          >
+            학습 가이드 생성에 실패했어요. 잠시 후 다시 시도해주세요.
+            {logLine && ` — ${logLine}`}
+          </p>
+        )}
         {exportNotice}
         <div className="glass-card rounded-2xl p-8">
           <div
@@ -1105,88 +1107,125 @@ function NoteSection({
     );
   }
 
-  // ── 가이드 없음 — 생성 CTA + 수업별 노트 모아보기(참고용) ──
+  // ── 가이드 없음 — 생성 CTA (웹에서는 DesktopOnlyModal 안내로 이어진다) ──
+  return (
+    <section
+      className="mx-auto w-full max-w-[820px]"
+      data-testid="examprep-guide"
+    >
+      <div
+        className="glass-card rounded-2xl border border-primary/20 bg-primary/[0.06] px-6 py-6 text-center"
+        data-testid="examprep-guide-cta"
+      >
+        <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+          <Sparkles className="h-5 w-5 text-primary" aria-hidden />
+        </span>
+        <p className="text-sm font-semibold text-gray-900">
+          시험 범위 학습 가이드가 아직 없어요
+        </p>
+        <p className="mx-auto mt-1 max-w-md text-xs leading-relaxed text-gray-500">
+          {scopeLabel}의 개념·기출을 즉석에서 가이드 하나로 조립해드려요.
+        </p>
+        <button
+          onClick={onCompose}
+          disabled={guideGen === "running"}
+          data-testid="examprep-guide-compose"
+          className="press-scale mx-auto mt-5 flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50"
+        >
+          {guideGen === "running" ? (
+            <>
+              <span className="spinner" aria-hidden />
+              만드는 중…
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-4 w-4" aria-hidden />
+              학습 가이드 만들기
+            </>
+          )}
+        </button>
+        {guideGen === "running" && logLine && (
+          <p className="mt-3 truncate font-mono text-[11px] text-gray-500">
+            {logLine}
+          </p>
+        )}
+        {guideGen === "failed" && (
+          <p
+            className="mt-3 text-xs font-medium text-red-500"
+            data-testid="examprep-guide-error"
+          >
+            학습 가이드 생성에 실패했어요. 잠시 후 다시 시도해주세요.
+            {logLine && ` — ${logLine}`}
+          </p>
+        )}
+      </div>
+      <p className="mt-4 text-center text-xs text-gray-400">
+        가이드 없이도 <span className="font-semibold text-gray-500">학습노트</span>{" "}
+        탭에서 수업별 노트를 모아 볼 수 있어요.
+      </p>
+    </section>
+  );
+}
+
+// ── 학습노트 탭 — 수업별 노트 모아보기(누적 노트) ──
+function NoteSection({
+  html,
+  conceptCount,
+  unitCount,
+  scopeLabel,
+  onExport,
+  exporting,
+  exportMsg,
+}: {
+  html: string;
+  conceptCount: number;
+  unitCount: number;
+  scopeLabel: string;
+  onExport: () => void;
+  exporting: boolean;
+  exportMsg: string | null;
+}) {
+  if (!html) {
+    return <p className="text-sm text-gray-400">학습노트가 아직 없습니다.</p>;
+  }
   return (
     <section
       className="mx-auto w-full max-w-[820px]"
       data-testid="examprep-note"
     >
-      {canCompose && (
-        <div
-          className="glass-card mb-4 rounded-2xl border border-primary/20 bg-primary/[0.06] px-5 py-4"
-          data-testid="examprep-guide-cta"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-gray-900">
-                시험 범위 학습 가이드가 아직 없어요
-              </p>
-              <p className="mt-0.5 text-xs text-gray-500">
-                {scopeLabel}의 개념·기출을 즉석에서 가이드 하나로 조립해드려요.
-              </p>
-            </div>
-            <button
-              onClick={onCompose}
-              disabled={guideGen === "running"}
-              data-testid="examprep-guide-compose"
-              className="press-scale flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50"
-            >
-              {guideGen === "running" ? (
-                <>
-                  <span className="spinner" aria-hidden />
-                  만드는 중…
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4" aria-hidden />
-                  시험 범위 학습 가이드 만들기
-                </>
-              )}
-            </button>
-          </div>
-          {guideGen === "running" && logLine && (
-            <p className="mt-3 truncate font-mono text-[11px] text-gray-500">
-              {logLine}
-            </p>
-          )}
-          {guideGen === "failed" && (
-            <p
-              className="mt-3 text-xs font-medium text-red-500"
-              data-testid="examprep-guide-error"
-            >
-              학습 가이드 생성에 실패했어요. 잠시 후 다시 시도해주세요.
-              {logLine && ` — ${logLine}`}
-            </p>
-          )}
+      <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
+        <div className="min-w-0">
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-900">
+            <FileText className="h-4 w-4 text-primary" aria-hidden />
+            수업별 노트 모아보기 · {scopeLabel}
+          </p>
+          <p className="mt-0.5 text-xs text-gray-400">
+            수업 {unitCount}개의 학습노트를 이어붙인 참고용 뷰예요 · 개념{" "}
+            {conceptCount}개
+          </p>
         </div>
+        <button
+          onClick={onExport}
+          disabled={exporting}
+          data-testid="examprep-export"
+          className="press-scale flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50"
+        >
+          <Download className="h-4 w-4" aria-hidden />
+          {exporting ? "저장 중…" : "내보내기"}
+        </button>
+      </div>
+      {exportMsg && (
+        <p className="mb-4 flex items-center gap-1.5 rounded-xl bg-primary/10 px-4 py-2.5 text-xs font-medium text-primary">
+          <Check className="h-3.5 w-3.5" aria-hidden />
+          {exportMsg}
+        </p>
       )}
-
-      {!html ? (
-        <p className="text-sm text-gray-400">학습노트가 아직 없습니다.</p>
-      ) : (
-        <>
-          <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
-            <div className="min-w-0">
-              <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-900">
-                <FileText className="h-4 w-4 text-primary" aria-hidden />
-                수업별 노트 모아보기 · {scopeLabel}
-              </p>
-              <p className="mt-0.5 text-xs text-gray-400">
-                수업 {unitCount}개의 학습노트를 이어붙인 참고용 뷰예요 · 개념{" "}
-                {conceptCount}개
-              </p>
-            </div>
-            {exportButton}
-          </div>
-          {exportNotice}
-          <div className="glass-card rounded-2xl p-8">
-            <div
-              className="note-md note-md-wide"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          </div>
-        </>
-      )}
+      <div className="glass-card rounded-2xl p-8">
+        <div
+          className="note-md note-md-wide"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </div>
     </section>
   );
 }
@@ -1485,5 +1524,105 @@ function MockSection({ questions }: { questions: MockQuestion[] }) {
         </div>
       )}
     </section>
+  );
+}
+
+// ── 시험(과목) 선택 화면 — [시험 대비] 진입 시 가장 먼저 뜬다 ──
+function ExamPicker({
+  exams,
+  subjects,
+  onSelect,
+}: {
+  exams: ExamInfo[];
+  subjects: ManifestSubject[] | null;
+  onSelect: (id: string) => void;
+}) {
+  /** 과목별 가이드 스냅샷 — 카드의 분석 현황 한 줄에 개념 수를 얹는다 */
+  const [guides, setGuides] = useState<Record<string, GuideSnapshot>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    const names = [...new Set(exams.map((e) => e.subject))];
+    Promise.all(
+      names.map((s) =>
+        loadSnapshot("guide", s)
+          .then((g) => [s, g] as const)
+          .catch(() => [s, null] as const)
+      )
+    ).then((rows) => {
+      if (cancelled) return;
+      const next: Record<string, GuideSnapshot> = {};
+      for (const [s, g] of rows) if (isGuideSnapshot(g)) next[s] = g;
+      setGuides(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [exams]);
+
+  return (
+    <div
+      className="min-h-0 flex-1 overflow-y-auto px-8 pb-10 pt-7"
+      data-testid="examprep-picker"
+    >
+      <p className="mb-0.5 text-xs font-semibold uppercase tracking-wider text-gray-400">
+        시험 대비
+      </p>
+      <h1 className="flex items-center gap-2 text-[26px] font-bold tracking-tight text-gray-900">
+        <GraduationCap className="h-6 w-6 text-primary" aria-hidden />
+        어떤 시험을 대비할까요?
+      </h1>
+      <p className="mt-1 text-sm text-gray-500">
+        과목을 고르면 학습 가이드 · 우선 복습 · 모의고사를 준비해드려요.
+      </p>
+
+      <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+        {exams.map((e) => {
+          const d = dday(e.date);
+          const units = subjects?.find((s) => s.name === e.subject)?.units ?? [];
+          const g = guides[e.subject];
+          const status =
+            units.length === 0
+              ? "아직 분석된 수업이 없어요"
+              : g
+                ? `${units.length}개 수업 분석됨 · 개념 ${g.concepts}개`
+                : `${units.length}개 수업`;
+          return (
+            <li key={e.id}>
+              <button
+                onClick={() => onSelect(e.id)}
+                data-testid={`examprep-pick-${e.id}`}
+                className="glass-card glass-card-hover flex w-full items-center gap-4 rounded-2xl p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[15px] font-bold tracking-tight text-gray-900">
+                    {e.subject}
+                  </span>
+                  <span className="mt-0.5 block truncate text-sm font-medium text-gray-500">
+                    {e.title} · {formatDateK(e.date)}
+                  </span>
+                  <span className="mt-2 block text-xs text-gray-400">
+                    {status}
+                  </span>
+                </span>
+                <span
+                  className={`shrink-0 rounded-lg px-2.5 py-1 text-[13px] font-bold ${
+                    d <= 14
+                      ? "bg-red-50 text-red-500"
+                      : "bg-black/[0.04] text-gray-500"
+                  }`}
+                >
+                  {ddayLabel(d)}
+                </span>
+                <ChevronRight
+                  className="h-4 w-4 shrink-0 text-gray-300"
+                  aria-hidden
+                />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

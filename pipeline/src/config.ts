@@ -86,16 +86,21 @@ export function makeConfig(partial: Partial<PipelineConfig> & { goldsetDir: stri
     engine: "stub",
     maxConceptsPerWeek: 12,
     maxSignalsPerConceptKindWeek: 5,
+    // 한 학기(7주 이상) 누적을 견디는 가중치.
+    // 이전 값(주차당 14점 등)은 4~5주만 지나도 대부분의 개념이 상한 100에 붙어
+    // 우선순위 변별력이 사라졌다. 실측 분포(등장 주차 평균 3·최대 7, 근거 평균 8·최대 38,
+    // 기출매칭 평균 6·최대 33)를 기준으로 상위 개념이 90~100, 평균 개념이 40~60에
+    // 오도록 낮췄다.
     scoreWeights: {
-      importancePerWeekSeen: 14,
-      importancePerEvidence: 3,
-      importancePerEmphasis: 5,
-      importancePerExamMatch: 6,
-      examSignalPerEmphasis: 10,
-      examSignalPerExamHint: 14,
-      examSignalPerExamMatch: 26,
+      importancePerWeekSeen: 6,
+      importancePerEvidence: 1.2,
+      importancePerEmphasis: 4,
+      importancePerExamMatch: 2.2,
+      examSignalPerEmphasis: 7,
+      examSignalPerExamHint: 12,
+      examSignalPerExamMatch: 8,
     },
-    // 강조(emphasis)만으로는 도달 불가한 값(강조 상한 5×10=50) →
+    // 강조(emphasis)만으로는 도달 불가한 값(강조 상한 5×7=35) →
     // 시험 언급/기출 매칭이 있어야 능동 제안이 발동한다.
     proactiveExamSignalThreshold: 55,
     ...partial,
