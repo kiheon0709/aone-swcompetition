@@ -214,6 +214,12 @@ export function loadPastExams(jsonText: string): PastExamItem[] {
 const SLIDE_FILE_RE = /^(?:.*_)?(theory|practice)_(\d+)\.txt$/;
 
 /**
+ * 과목 아래 "족보" 폴더 이름 후보 — 앱(files.rs)이 기출로 분류하는 이름과 맞춘다.
+ * 족보는 과목 단위 자료이므로 수업 폴더가 아니라 과목 루트에서 찾는다.
+ */
+const EXAM_FOLDER_NAMES = ["족보", "기출", "exam", "exams"];
+
+/**
  * goldset/{subject}/{unit} 디렉토리에서 해당 unit 입력 일체를 적재.
  * extractedDir가 주어지면 L0 캐시(extractedDir/{subject}/{unit}/*.txt)의 PDF 추출 텍스트도
  * 슬라이드 문서로 포함한다 (doc 태그 = 원본 PDF 파일명(확장자 제외), NFC 정규화).
@@ -262,14 +268,23 @@ export function loadUnitInputs(goldsetDir: string, key: UnitKey, extractedDir?: 
 
   // 족보(past_exams.json)는 선택적 보조 데이터 — 손상돼도 분석 전체를 막지 않는다.
   // (사용자가 족보 폴더에 이상한 파일을 넣어도 개념·신호 추출은 계속 진행)
+  //
+  // 족보는 과목 단위 자료다. 앱이 과목마다 "족보" 폴더를 만들어 주므로 거기를 먼저 보고,
+  // 수업 폴더 안에 직접 넣어둔 경우(구 구조·개별 회차 기출)도 함께 읽어 병합한다.
   let pastExams: PastExamItem[] = [];
-  const examPath = path.join(dir, "past_exams.json");
-  if (fs.existsSync(examPath)) {
+  const examPaths = [
+    ...EXAM_FOLDER_NAMES.map((n) => path.join(dir, "..", n, "past_exams.json")),
+    path.join(dir, "past_exams.json"),
+  ];
+  const seen = new Set<string>();
+  for (const examPath of examPaths) {
+    if (!fs.existsSync(examPath) || seen.has(examPath)) continue;
+    seen.add(examPath);
     try {
-      pastExams = loadPastExams(fs.readFileSync(examPath, "utf8"));
+      pastExams = pastExams.concat(loadPastExams(fs.readFileSync(examPath, "utf8")));
     } catch (e) {
       console.warn(
-        `  경고: past_exams.json을 읽지 못해 기출은 건너뜁니다 (${e instanceof Error ? e.message : String(e)}). 분석은 계속합니다.`,
+        `  경고: ${path.basename(path.dirname(examPath))}/past_exams.json을 읽지 못해 그 기출은 건너뜁니다 (${e instanceof Error ? e.message : String(e)}). 분석은 계속합니다.`,
       );
     }
   }

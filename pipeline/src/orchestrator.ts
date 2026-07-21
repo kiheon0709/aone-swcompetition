@@ -327,8 +327,17 @@ export async function handleUnitEvent(
   );
 }
 
+/**
+ * 이 unit 분석에 쓸 기출이 있는지 — 과목의 족보 폴더(과목 단위 자료)와
+ * 수업 폴더 직속(구 구조) 둘 다 확인한다. l1-normalize의 로딩 경로와 일치해야 한다.
+ */
 function unitHasPastExams(goldsetDir: string, key: UnitKey): boolean {
-  return fs.existsSync(path.join(goldsetDir, key.subject, key.unit, "past_exams.json"));
+  const subjectDir = path.join(goldsetDir, key.subject);
+  const candidates = [
+    ...["족보", "기출", "exam", "exams"].map((n) => path.join(subjectDir, n, "past_exams.json")),
+    path.join(subjectDir, key.unit, "past_exams.json"),
+  ];
+  return candidates.some((p) => fs.existsSync(p));
 }
 
 /** unit 폴더의 자료 파일 수 (숨김 파일 제외) — 오케스트레이터 계획 로그용 */
