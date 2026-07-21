@@ -24,6 +24,7 @@ import {
   runComposeGuide,
 } from "@/lib/engines";
 import { loadSnapshot, saveTextFile } from "@/lib/fs-bridge";
+import DesktopOnlyModal from "@/components/DesktopOnlyModal";
 import { slugOf, type ManifestSubject } from "@/lib/manifest";
 
 // ── 스냅샷 타입 (page.tsx와 동일 형태 — 이 화면에서 필요한 필드만) ──
@@ -456,6 +457,10 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
 
   // ── 시험 범위 학습 가이드 (compose-guide 산출물) ──────────
   const [desktop, setDesktop] = useState(false);
+  /** 웹 데모 안내 모달 — 데스크톱 전용 기능을 브라우저에서 눌렀을 때 */
+  const [desktopOnlyFeature, setDesktopOnlyFeature] = useState<string | null>(
+    null
+  );
   useEffect(() => {
     setDesktop(isTauriRuntime());
   }, []);
@@ -502,7 +507,12 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
 
   /** 현재 선택 범위로 가이드 생성 시작 → 2초 폴링 → done이면 스냅샷 리로드 */
   const startGuide = useCallback(async () => {
-    if (!exam || !desktop || guideGen === "running") return;
+    // 웹 데모: 실행 대신 안내 모달 (데스크톱 경로는 아래 그대로)
+    if (!desktop) {
+      setDesktopOnlyFeature("시험 범위 학습 가이드 만들기");
+      return;
+    }
+    if (!exam || guideGen === "running") return;
     const subject = exam.subject;
     setGuideGen("running");
     setGuideLogTail("");
@@ -861,7 +871,7 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
             guideHtml={guideHtml}
             guideGen={guideGen}
             guideLogTail={guideLogTail}
-            canCompose={desktop}
+            canCompose
             onCompose={() => void startGuide()}
             html={fullNoteHtml}
             conceptCount={merged.length}
@@ -875,6 +885,12 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
           <MockSection questions={mockQuestions} />
         )}
       </div>
+
+      {/* 웹 데모 안내 모달 — 데스크톱에서는 feature가 항상 null이라 렌더되지 않는다 */}
+      <DesktopOnlyModal
+        feature={desktopOnlyFeature}
+        onClose={() => setDesktopOnlyFeature(null)}
+      />
     </div>
   );
 }

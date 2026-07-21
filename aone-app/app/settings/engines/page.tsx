@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, Monitor } from "lucide-react";
 import {
   codexStatus,
   connectCodex,
@@ -277,6 +277,25 @@ export default function EnginesPage() {
         </p>
       </div>
 
+      {/* 웹 데모 안내 — 브라우저에서는 연결 버튼이 모두 의미 없다 */}
+      {!desktop && (
+        <div
+          className="glass-card mb-6 rounded-2xl border border-black/[0.06] bg-black/[0.02] p-5"
+          data-testid="settings-web-demo-notice"
+        >
+          <p className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+            <Monitor className="h-4 w-4 text-primary" aria-hidden />
+            웹 데모 — 엔진 연결은 데스크톱 앱에서 동작해요
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-gray-500">
+            AI는 내 컴퓨터에 설치된 Claude·GPT·Gemini로 동작하기 때문에 브라우저에서는
+            연결할 수 없어요. 아래 카드는 데스크톱 앱(Aone.dmg)에서 어떤 화면이 뜨는지
+            보여드리는 미리보기입니다. 웹 데모에서는 이미 분석된 결과를 모두 열람하실
+            수 있어요.
+          </p>
+        </div>
+      )}
+
       <div className="space-y-4">
         {/* GPT (Codex) */}
         <section className="glass-card rounded-2xl p-5">
@@ -422,12 +441,6 @@ export default function EnginesPage() {
           </section>
         )}
       </div>
-
-      {!desktop && (
-        <p className="mt-6 text-xs text-gray-400">
-          브라우저 미리보기 모드입니다. 엔진 연결은 데스크톱 앱에서만 동작합니다.
-        </p>
-      )}
 
       {/* Claude 터미널 가이드 모달 */}
       {showClaudeGuide && (

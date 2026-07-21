@@ -89,6 +89,7 @@ import ExamViewer from "@/components/ExamViewer";
 import QuizTab from "@/components/QuizTab";
 import { signalMeta, signalMetaOf, signalLevel, type SignalLevel } from "@/lib/signal";
 import AgentConsole from "@/components/AgentConsole";
+import DesktopOnlyModal, { WebDemoBadge } from "@/components/DesktopOnlyModal";
 import HomeView, { type HomeViewHandle } from "@/components/home/HomeView";
 import ExamPrep, { type ExamInfo } from "@/components/ExamPrep";
 import {
@@ -696,6 +697,18 @@ export default function Home() {
   const newFolderRef = useRef<HTMLInputElement | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // ── 웹 데모 (브라우저) 전용 상태 ────────────────────────────
+  /** 데스크톱 전용 기능 안내 모달 — 열려 있으면 기능 이름 */
+  const [desktopOnlyFeature, setDesktopOnlyFeature] = useState<string | null>(
+    null
+  );
+  /** 브라우저에서 사용자가 직접 연 PDF (blob URL) — 뷰어 전용, 분석 없음 */
+  const [webPdf, setWebPdf] = useState<{ name: string; url: string } | null>(
+    null
+  );
+  const [webPdfPage, setWebPdfPage] = useState(1);
+  const webPdfInputRef = useRef<HTMLInputElement | null>(null);
+
   // 파일 전용 화면 — 자료 탭에서 파일을 열면 그 파일만 보는 풀 뷰로 전환
   const [openFile, setOpenFile] = useState<FileEntry | null>(null);
   const [docs, setDocs] = useState<DocsSnapshot | null>(null);
@@ -1030,6 +1043,52 @@ export default function Home() {
       onClick ? 5000 : 2600
     );
   }, []);
+
+  /** 웹 데모: 데스크톱 전용 기능 안내 모달 열기 */
+  const showDesktopOnly = useCallback((feature: string) => {
+    setDesktopOnlyFeature(feature);
+  }, []);
+
+  /** 웹 데모: 브라우저 파일 선택 → blob URL로 PdfViewer에 띄운다 (분석 없음) */
+  const openWebPdf = useCallback(() => {
+    webPdfInputRef.current?.click();
+  }, []);
+
+  /** 웹 데모: PDF 파일 하나를 blob URL로 열어 뷰어에 띄운다 (파일 선택·드롭 공용) */
+  const showWebPdf = useCallback((file: File) => {
+    const url = URL.createObjectURL(file);
+    setWebPdf((prev) => {
+      if (prev) URL.revokeObjectURL(prev.url);
+      return { name: file.name, url };
+    });
+    setWebPdfPage(1);
+  }, []);
+
+  const handleWebPdfSelected = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      e.target.value = "";
+      if (file) showWebPdf(file);
+    },
+    [showWebPdf]
+  );
+
+  const closeWebPdf = useCallback(() => {
+    setWebPdf((prev) => {
+      if (prev) URL.revokeObjectURL(prev.url);
+      return null;
+    });
+  }, []);
+
+  // 언마운트 시 blob URL 정리 (최신 값을 ref로 읽어 effect 재실행 없이 해제)
+  const webPdfRef = useRef<{ name: string; url: string } | null>(null);
+  webPdfRef.current = webPdf;
+  useEffect(
+    () => () => {
+      if (webPdfRef.current) URL.revokeObjectURL(webPdfRef.current.url);
+    },
+    []
+  );
 
   // 파일 매니페스트(§7) 로드 — 파일시스템(goldset)이 단일 진실
   useEffect(() => {
@@ -1481,9 +1540,13 @@ export default function Home() {
   startAnalysisRef.current = startAnalysis;
 
   const handleRunAnalysis = useCallback(() => {
+    if (!desktop) {
+      showDesktopOnly("자료 분석 실행");
+      return;
+    }
     if (!lecture) return;
     void startAnalysis(lecture.subject, lecture.unit);
-  }, [lecture, startAnalysis]);
+  }, [desktop, showDesktopOnly, lecture, startAnalysis]);
 
   /** 진행 스트립 [중지] — Rust에서 Child를 kill하고 상태를 정리한다 */
   const handleStopRun = useCallback(async () => {
@@ -1867,7 +1930,11 @@ export default function Home() {
   const signalCount =
     snapshot?.concepts.filter((c) => c.examSignal > 0).length ?? 0;
 
-  const canRun = desktop && lecture !== null && runState !== "running";
+  // 웹 데모에서는 버튼을 비활성 대신 살려둔다 — 누르면 안내 모달이 뜨는 편이
+  // "왜 안 눌리지?"보다 친절하다. 데스크톱 동작은 그대로.
+  const canRun = desktop
+    ? lecture !== null && runState !== "running"
+    : true;
 
   /** 지금 열린 수업의 실패 정보 — 수업 화면 상단 실패 배너 (S5) */
   const lectureFailure = lecture ? failures[lecture.folderKey] ?? null : null;
@@ -1992,7 +2059,10 @@ export default function Home() {
   const uploadTo = useCallback(
     async (folder: string, label: string, accept: "material" | "note" = "material") => {
       if (!desktop) {
-        showToast("업로드는 데모 버전에서 준비 중입니다.");
+        // 웹 데모: 강의자료 업로드 자리에서는 "내 PDF 열어보기"로 체험을 잇고,
+        // 전사본·필기(note)는 대체 체험이 없으므로 안내 모달만 띄운다.
+        if (accept === "material") openWebPdf();
+        else showDesktopOnly("전사본·필기 올리기");
         return;
       }
       const isNote = (n: string) => /\.(txt|md)$/i.test(n);
@@ -2026,7 +2096,7 @@ export default function Home() {
         showToast(userErrorMessage(e));
       }
     },
-    [desktop, showToast]
+    [desktop, showToast, openWebPdf, showDesktopOnly]
   );
 
   /**
@@ -2040,7 +2110,7 @@ export default function Home() {
     setNewFolderName("");
     if (!name || name.includes("/")) return;
     if (!desktop) {
-      showToast("폴더 만들기는 데스크톱 앱에서만 할 수 있습니다.");
+      showDesktopOnly("폴더 만들기");
       return;
     }
     const subject = kind === "unit" ? activeSubject : null;
@@ -2068,7 +2138,7 @@ export default function Home() {
     origin: "sidebar" | "card";
   }) => {
     if (!desktop) {
-      showToast("이름 바꾸기는 데스크톱 앱에서만 할 수 있습니다.");
+      showDesktopOnly("이름 바꾸기");
       return;
     }
     setRenamingFolder(target);
@@ -2122,7 +2192,7 @@ export default function Home() {
     name: string;
   }) => {
     if (!desktop) {
-      showToast("삭제는 데스크톱 앱에서만 할 수 있습니다.");
+      showDesktopOnly("폴더 삭제");
       return;
     }
     try {
@@ -2173,6 +2243,40 @@ export default function Home() {
 
   const isImagePath = (p: string): boolean =>
     /\.(jpe?g|png)$/i.test(p);
+
+  /**
+   * 웹 데모: 브라우저 창에 파일을 떨어뜨리면 기본 동작(그 파일로 페이지 이동)이 일어나
+   * 앱이 사라진다. 이를 막고, PDF면 뷰어로 열어 데스크톱과 같은 흐름을 준다.
+   */
+  useEffect(() => {
+    if (desktop) return;
+    const onDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      setDragOver(true);
+    };
+    const onDragLeave = (e: DragEvent) => {
+      if (e.relatedTarget === null) setDragOver(false);
+    };
+    const onDrop = (e: DragEvent) => {
+      e.preventDefault();
+      setDragOver(false);
+      const file = e.dataTransfer?.files?.[0];
+      if (!file) return;
+      if (/\.pdf$/i.test(file.name)) showWebPdf(file);
+      else
+        showToast(
+          "웹 데모에서는 PDF만 열어볼 수 있어요 — 자료 업로드와 분석은 데스크톱 앱에서 동작합니다."
+        );
+    };
+    window.addEventListener("dragover", onDragOver);
+    window.addEventListener("dragleave", onDragLeave);
+    window.addEventListener("drop", onDrop);
+    return () => {
+      window.removeEventListener("dragover", onDragOver);
+      window.removeEventListener("dragleave", onDragLeave);
+      window.removeEventListener("drop", onDrop);
+    };
+  }, [desktop, showWebPdf, showToast]);
 
   useEffect(() => {
     if (!desktop) return;
@@ -2420,7 +2524,11 @@ export default function Home() {
 
   /** 수동 "슬라이드 요약 생성" 버튼 — 공용 큐 실행기(runSlideJob)로 위임 */
   const handleGenerateSlides = useCallback(async () => {
-    if (!lecture || !activeDocKey || !desktop || slideGenState === "running")
+    if (!desktop) {
+      showDesktopOnly("슬라이드별 설명 만들기");
+      return;
+    }
+    if (!lecture || !activeDocKey || slideGenState === "running")
       return;
     enqueueSlideJob({
       subject: lecture.subject,
@@ -2428,7 +2536,15 @@ export default function Home() {
       doc: activeDocKey,
       label: activeDocPdf?.title ?? activeDocKey,
     });
-  }, [lecture, activeDocKey, activeDocPdf, desktop, slideGenState, enqueueSlideJob]);
+  }, [
+    lecture,
+    activeDocKey,
+    activeDocPdf,
+    desktop,
+    showDesktopOnly,
+    slideGenState,
+    enqueueSlideJob,
+  ]);
 
   // ── 전사 탭 파생값 ────────────────────────────────────────
   const transcriptBody = useMemo(
@@ -2889,13 +3005,17 @@ export default function Home() {
         variant={viewMode}
         canDelete={desktop}
         onOpen={opts.onClick}
-        onDelete={() =>
+        onDelete={() => {
+          if (!desktop) {
+            showDesktopOnly("파일 삭제");
+            return;
+          }
           setPendingDelete({
             folder: opts.folder as string,
             entry: d.entry,
             title: d.title,
-          })
-        }
+          });
+        }}
       />
     ) : null;
     return viewMode === "grid" ? (
@@ -3155,8 +3275,20 @@ export default function Home() {
           아직 자료가 없어요
         </p>
         <p className="mt-1 text-xs text-gray-400">
-          강의 자료를 드래그하거나 업로드하면 에이전트가 알아서 정리합니다.
+          {desktop
+            ? "강의 자료를 드래그하거나 업로드하면 에이전트가 알아서 정리합니다."
+            : "웹 데모에서는 내 PDF를 열어 뷰어를 체험해보실 수 있어요. 분석은 데스크톱 앱에서 동작합니다."}
         </p>
+        {!desktop && (
+          <button
+            onClick={openWebPdf}
+            data-testid="web-pdf-open-empty"
+            className="press-scale mt-5 flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover"
+          >
+            <FileText className="h-4 w-4" aria-hidden />
+            PDF 열어보기
+          </button>
+        )}
       </div>
     );
 
@@ -3190,7 +3322,7 @@ export default function Home() {
       disabled={!canRun}
       title={
         !desktop
-          ? "데스크톱 앱에서만 실행할 수 있습니다."
+          ? "웹 데모 — 분석은 데스크톱 앱에서 동작해요"
           : "자료를 다시 분석합니다"
       }
       className="press-scale flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
@@ -3752,6 +3884,18 @@ export default function Home() {
                 <span className="truncate">휴지통</span>
               </button>
             </div>
+
+            {/* 웹 데모 한 줄 안내 — 데스크톱 앱에서는 렌더하지 않는다 */}
+            {!desktop && (
+              <p
+                className="mt-auto px-2 pb-1 pt-4 text-[11px] leading-relaxed text-gray-400"
+                data-testid="web-demo-note"
+              >
+                웹 데모 · 분석 결과 열람용
+                <br />
+                (전체 기능은 데스크톱 앱)
+              </p>
+            )}
           </>
         )}
       </aside>
@@ -3823,10 +3967,15 @@ export default function Home() {
 
           {/* 우측 액션 — [엔진 배지] [설정] [알림벨] | [프로필] [로그아웃] */}
           <div className="flex shrink-0 items-center gap-2.5">
-            <span className="hidden items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary lg:flex">
-              <Check className="h-3.5 w-3.5" aria-hidden />
-              엔진: {ENGINE_LABELS[activeEngine]}
-            </span>
+            {/* 웹 데모에서는 엔진 배지가 의미 없다 — "웹 데모" 배지로 대체 */}
+            {desktop ? (
+              <span className="hidden items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary lg:flex">
+                <Check className="h-3.5 w-3.5" aria-hidden />
+                엔진: {ENGINE_LABELS[activeEngine]}
+              </span>
+            ) : (
+              <WebDemoBadge className="hidden lg:inline-flex" />
+            )}
 
             <Link
               href="/settings/engines"
@@ -3996,6 +4145,7 @@ export default function Home() {
                 agentRunKind={agentRunKind}
                 slideGenState={slideGenState}
                 pendingCount={pendingCount}
+                desktop={desktop}
                 failures={failureList}
                 onRetry={(f) => void startAnalysis(f.subject, f.unit)}
                 onStop={handleStopRun}
@@ -4078,7 +4228,7 @@ export default function Home() {
                           className="press-scale flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
                         >
                           <Upload className="h-4 w-4" aria-hidden />
-                          업로드
+                          {desktop ? "업로드" : "PDF 열어보기"}
                         </button>
                       </div>
                     )}
@@ -4389,7 +4539,9 @@ export default function Home() {
                                         folder: activeSubject ?? "",
                                         onClick: () =>
                                           showToast(
-                                            "이 파일은 아직 분석 전입니다 — 수업 폴더에 넣으면 요약과 퀴즈가 만들어져요."
+                                            desktop
+                                              ? "이 파일은 아직 분석 전입니다 — 수업 폴더에 넣으면 요약과 퀴즈가 만들어져요."
+                                              : "이 파일은 아직 분석 전입니다 — 분석은 데스크톱 앱에서 동작해요."
                                           ),
                                       })
                                     )}
@@ -4770,7 +4922,7 @@ export default function Home() {
                                   onClick={handleUpload}
                                   className="press-scale rounded-xl bg-primary/10 px-6 py-2.5 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-primary/20"
                                 >
-                                  기출 자료 업로드
+                                  {desktop ? "기출 자료 업로드" : "PDF 열어보기"}
                                 </button>,
                                 "exam-empty"
                               )
@@ -4867,7 +5019,7 @@ export default function Home() {
                                   onClick={handleUpload}
                                   className="press-scale rounded-xl bg-primary/10 px-6 py-2.5 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-primary/20"
                                 >
-                                  강의자료 업로드
+                                  {desktop ? "강의자료 업로드" : "PDF 열어보기"}
                                 </button>,
                                 "slides-empty"
                               )
@@ -4957,13 +5109,13 @@ export default function Home() {
                                                 void handleGenerateSlides()
                                               }
                                               disabled={
-                                                !desktop ||
+                                                desktop &&
                                                 slideGenState === "running"
                                               }
                                               data-testid="slide-generate-button"
                                               title={
                                                 !desktop
-                                                  ? "데스크톱 앱에서만 실행할 수 있습니다."
+                                                  ? "웹 데모 — 설명 생성은 데스크톱 앱에서 동작해요"
                                                   : "이 문서의 슬라이드별 설명 만들기"
                                               }
                                               className="press-scale mt-5 flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
@@ -5100,11 +5252,11 @@ export default function Home() {
                                 </p>
                                 <button
                                   onClick={() => void handleGenerateSlides()}
-                                  disabled={!desktop || slideGenState === "running"}
+                                  disabled={desktop && slideGenState === "running"}
                                   data-testid="ppt-generate-button"
                                   title={
                                     !desktop
-                                      ? "데스크톱 앱에서만 실행할 수 있습니다."
+                                      ? "웹 데모 — 요약 생성은 데스크톱 앱에서 동작해요"
                                       : "이 슬라이드의 요약 생성"
                                   }
                                   className="press-scale mt-5 flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
@@ -5718,8 +5870,14 @@ export default function Home() {
                   className="mt-4 w-full rounded-xl border border-black/[0.08] bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-primary/60 focus:outline-none"
                 />
                 <p className="mt-3 rounded-xl bg-black/[0.03] px-3 py-2.5 text-xs text-gray-500">
-                  저장소 위치 ·{" "}
-                  <span className="font-mono text-gray-700">~/Aone</span>
+                  {desktop ? (
+                    <>
+                      저장소 위치 ·{" "}
+                      <span className="font-mono text-gray-700">~/Aone</span>
+                    </>
+                  ) : (
+                    <>웹 데모 · 분석 결과 열람용 (전체 기능은 데스크톱 앱)</>
+                  )}
                 </p>
               </>
             )}
@@ -5729,19 +5887,22 @@ export default function Home() {
                   <Zap className="h-6 w-6 text-primary" aria-hidden />
                 </span>
                 <h2 className="text-lg font-bold tracking-tight text-gray-900">
-                  AI 엔진을 연결하세요
+                  {desktop ? "AI 엔진을 연결하세요" : "AI는 내 컴퓨터에서 동작해요"}
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500">
-                  이미 쓰고 있는 Claude·GPT 구독을 그대로 연결합니다. 추가 비용이
-                  들지 않습니다.
+                  {desktop
+                    ? "이미 쓰고 있는 Claude·GPT 구독을 그대로 연결합니다. 추가 비용이 들지 않습니다."
+                    : "이미 쓰고 있는 Claude·GPT 구독을 그대로 씁니다. 웹 데모에서는 이미 분석된 결과를 열람하실 수 있어요."}
                 </p>
-                <Link
-                  href="/settings/engines"
-                  onClick={finishOnboarding}
-                  className="mt-4 inline-block text-sm font-medium text-primary underline-offset-2 hover:underline"
-                >
-                  설정에서 연결하기 →
-                </Link>
+                {desktop && (
+                  <Link
+                    href="/settings/engines"
+                    onClick={finishOnboarding}
+                    className="mt-4 inline-block text-sm font-medium text-primary underline-offset-2 hover:underline"
+                  >
+                    설정에서 연결하기 →
+                  </Link>
+                )}
               </>
             )}
             {onboardStep === 3 && (
@@ -5753,8 +5914,9 @@ export default function Home() {
                   준비 끝!
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500">
-                  수업 폴더에 자료가 추가되면 에이전트가 자동으로 분석을 시작합니다.
-                  지금 바로 둘러보세요.
+                  {desktop
+                    ? "수업 폴더에 자료가 추가되면 에이전트가 자동으로 분석을 시작합니다. 지금 바로 둘러보세요."
+                    : "이미 분석된 수업 자료가 준비돼 있어요. 강의자료 세부 화면과 시험 대비를 바로 둘러보세요."}
                 </p>
               </>
             )}
@@ -5861,6 +6023,61 @@ export default function Home() {
             <span className="text-sm font-medium text-white">{toast.message}</span>
           </div>
         ))}
+
+      {/* ── 웹 데모 전용 — 데스크톱 기능 안내 모달 · 내 PDF 뷰어 ── */}
+      {!desktop && (
+        <>
+          <input
+            ref={webPdfInputRef}
+            type="file"
+            accept=".pdf,application/pdf"
+            onChange={handleWebPdfSelected}
+            className="hidden"
+            data-testid="web-pdf-input"
+          />
+          <DesktopOnlyModal
+            feature={desktopOnlyFeature}
+            onClose={() => setDesktopOnlyFeature(null)}
+          />
+          {webPdf && (
+            <div
+              className="fixed inset-0 z-[65] flex flex-col bg-black/50 p-4 backdrop-blur-sm sm:p-8"
+              data-testid="web-pdf-overlay"
+            >
+              <div className="glass-panel flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl">
+                <div className="flex shrink-0 items-center gap-3 border-b border-black/[0.06] px-5 py-3">
+                  <FileText className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-bold tracking-tight text-gray-900">
+                      {webPdf.name}
+                    </span>
+                    <span className="block text-[11px] text-gray-400">
+                      웹 데모 · 이 PDF는 브라우저에서만 열람됩니다. AI 분석은
+                      데스크톱 앱에서 동작해요
+                    </span>
+                  </span>
+                  <button
+                    onClick={closeWebPdf}
+                    aria-label="닫기"
+                    data-testid="web-pdf-close"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-gray-400 transition-colors duration-200 hover:bg-black/[0.05] hover:text-gray-700"
+                  >
+                    <X className="h-4 w-4" aria-hidden />
+                  </button>
+                </div>
+                <div className="flex min-h-0 flex-1 flex-col p-3">
+                  <PdfViewer
+                    url={webPdf.url}
+                    page={webPdfPage}
+                    onPageChange={setWebPdfPage}
+                    maxHeight="100%"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -5945,7 +6162,6 @@ function FileCardMenu({
           </button>
           <button
             role="menuitem"
-            disabled={!canDelete}
             onClick={() => {
               setOpen(false);
               onDelete();
@@ -6176,6 +6392,7 @@ function AgentGlobalView({
   agentRunKind,
   slideGenState,
   pendingCount,
+  desktop,
   failures,
   onRetry,
   onStop,
@@ -6195,6 +6412,8 @@ function AgentGlobalView({
   slideGenState: RunUiState;
   /** 대기 큐(부록 A4) 건수 */
   pendingCount: number;
+  /** Tauri 런타임 여부 — 웹 데모에서는 실행 유도 문구를 쓰지 않는다 */
+  desktop: boolean;
   /** 실패한 유닛 목록 (S5) — 다시 분석/설정 열기 버튼 */
   failures: AnalysisFailure[];
   onRetry: (f: AnalysisFailure) => void;
@@ -6261,8 +6480,9 @@ function AgentGlobalView({
             </div>
           ) : (
             <p className="glass-card rounded-2xl px-5 py-4 text-sm text-gray-500">
-              실행 중인 분석이 없습니다. 수업 화면에서 &ldquo;이 수업
-              자료를 넣으면 여기에 에이전트의 진행 상태가 표시됩니다.
+              {desktop
+                ? "실행 중인 분석이 없습니다. 수업 화면에서 자료를 넣으면 여기에 에이전트의 진행 상태가 표시됩니다."
+                : "웹 데모에서는 에이전트를 실행하지 않아요 — 아래는 데스크톱 앱이 이미 수행한 분석 활동 기록입니다."}
             </p>
           )}
 
