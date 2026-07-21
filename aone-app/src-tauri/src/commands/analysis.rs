@@ -172,12 +172,11 @@ fn dev_snapshot_out_dir() -> PathBuf {
 ///   (폴더명엔 이런 문자가 오지 않는다.)
 /// 엔진별 --concurrency 플래그. codex는 동시 세션을 못 물어 동시성이 높으면 전량 실패하므로
 /// 플래그를 아예 안 붙여 CLI 기본값(1)을 쓰게 한다. 그 외 엔진은 기존대로 2.
-fn concurrency_flag(cli_engine: &str) -> &'static str {
-    if cli_engine == "codex-cli" {
-        ""
-    } else {
-        "--concurrency 2"
-    }
+/// 분석 스폰에 붙일 동시성 플래그.
+/// 세 엔진 모두 동시 호출을 지원한다(codex도 실측으로 4병렬 확인). 앱에서는
+/// 사용자 체감 응답성과 한도 여유를 위해 2로 통일한다.
+fn concurrency_flag(_cli_engine: &str) -> &'static str {
+    "--concurrency 2"
 }
 
 #[cfg(unix)]

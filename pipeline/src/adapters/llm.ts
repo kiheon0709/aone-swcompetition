@@ -92,7 +92,7 @@ export function createEngine(
       // codex(GPT 구독)는 동시 세션을 여러 개 물지 못해, 동시성이 높으면(4) execFile로
       // 동시에 부른 세션들이 출력 파일을 만들지 못하고 전량 실패한다("대용량 실패"의 실제 원인).
       // 따라서 기본 동시성을 1로 둔다 (호출은 세마포어가 직렬화). Claude·Gemini는 영향 없음.
-      return new CodexCliEngine(opts.concurrency ?? 1, opts.model, opts.retryDelayMs);
+      return new CodexCliEngine(opts.concurrency ?? 3, opts.model, opts.retryDelayMs);
     case "gemini-api":
       // Gemini 무료 티어는 분당 요청 한도가 좁아 처음부터 동시성 2로 시작 (429 예방).
       // (CLI 구독 엔진은 한도가 넓어 4 유지)

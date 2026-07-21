@@ -119,11 +119,8 @@ pub async fn run_slide_summarize(
             "--engine",
             cli_engine,
         ]);
-    // codex는 동시 세션을 못 물어 동시성이 높으면 실패하므로 플래그를 안 붙여 CLI 기본값(1)을 쓴다.
-    // 그 외 엔진은 기존대로 2.
-    if cli_engine != "codex-cli" {
-        cmd.args(["--concurrency", "2"]);
-    }
+    // 세 엔진 모두 동시 호출을 지원한다(codex도 4병렬 실측 확인). 응답성과 한도 여유를 위해 2로 통일.
+    cmd.args(["--concurrency", "2"]);
     cmd.current_dir(pipeline_dir())
         .env("PATH", spawn_path_env())
         .env("CLAUDE_BIN", claude_bin());
