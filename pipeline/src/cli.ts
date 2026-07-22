@@ -299,14 +299,27 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
               ``,
               `또한 자료 전체를 놓고 두 가지를 더 만들어라 (쪽별 카드만으로는 알 수 없는 것이다):`,
               `- overview: 이 자료가 무엇을 다루고 어떤 흐름으로 이어지는지 3~4문장`,
-              `- themes: 큰 주제 3~6개. 각 주제는 {name, pages:[해당 페이지 번호들], point:"한 줄 설명"}.`,
-              `  한 주제가 떨어진 페이지에 나뉘어 나오면 그 번호를 모두 담아라(예: 앞에서 소개하고 뒤에서 복습하는 경우).`,
+              `- themes: 큰 주제 3~6개. 각 주제는 다음을 담는다:`,
+              `    · name: 주제 이름`,
+              `    · pages: 해당 페이지 번호들. 한 주제가 떨어진 페이지에 나뉘어 나오면 모두 담아라(앞에서 소개하고 뒤에서 복습하는 경우 등)`,
+              `    · point: 이 주제가 무엇을 다루는지 한 줄`,
+              `    · body: 이 주제의 내용 정리. 담당하는 페이지 수에 비례해 충분히 길게 써라`,
+              `      — 페이지 3~5쪽이면 4~6문장, 8쪽 이상이면 8~12문장. 짧게 압축하지 마라.`,
+              `      이 주제에 속한 페이지들의 내용이 실제로 담겨야 한다. 학생이 이 문단만 읽고도`,
+              `      해당 페이지들을 안 봐도 될 정도로 구체적으로.`,
+              `      정의·구분·이유·동작 순서·예시를 실제로 서술하라. 용어를 나열만 하지 마라`,
+              `      (나쁜 예: "ready, blocked, suspended 상태를 설명한다" / 좋은 예: "CPU를 받으면 running,`,
+              `      받을 준비가 됐으면 ready, I/O를 기다리면 blocked다")`,
+              `      숫자·공식·조건·코드가 원문에 있으면 그대로 살려라 (예: "타임 퀀텀이 만료되면", "n개 중 1개만").`,
+              `    · keyPoints: 짚고 넘어갈 것 5~10개. 각 항목은 내용을 담은 완결된 한 문장.`,
+              `      제목만 적지 말 것 — "2상태 모델"이 아니라 "2상태 모델은 running/not-running 둘뿐이라`,
+              `      왜 못 도는지를 구분 못 한다"처럼. 시험 직전에 이것만 훑어도 되도록 쓴다.`,
             ]
           : [`- overview는 빈 문자열, themes는 빈 배열로 두어라 (이 호출은 자료 일부만 본다).`]),
       ].join("\n"),
       payload,
       whole
-        ? `{"slides":[{"slide_id":"${tag}_p01","title_ko":"...","summary_ko":"...","key_points_ko":["..."],"diagram_ko":"","exam_tip":"","lecture_ref":""}],"overview":"...","themes":[{"name":"...","pages":[1,2],"point":"..."}]}`
+        ? `{"slides":[{"slide_id":"${tag}_p01","title_ko":"...","summary_ko":"...","key_points_ko":["..."],"diagram_ko":"","exam_tip":"","lecture_ref":""}],"overview":"...","themes":[{"name":"...","pages":[1,2],"point":"...","body":"...","keyPoints":["..."]}]}`
         : `{"slides":[{"slide_id":"${tag}_p01","title_ko":"...","summary_ko":"...","key_points_ko":["..."],"diagram_ko":"","exam_tip":"","lecture_ref":""}],"overview":"","themes":[]}`,
     );
     return engine.call({
@@ -404,13 +417,17 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
             `아래는 대학 '${key.subject}' ${key.unit} 자료(${tag})의 쪽별 요약이다.`,
             `이 자료 전체를 놓고 두 가지만 만들어라. slides는 빈 배열로 두어라.`,
             `- overview: 이 자료가 무엇을 다루고 어떤 흐름으로 이어지는지 3~4문장`,
-            `- themes: 큰 주제 3~6개. {name, pages:[페이지 번호들], point:"한 줄 설명"}.`,
+            `- themes: 큰 주제 3~6개. {name, pages, point, body, keyPoints}.`,
+            `    · point: 무엇을 다루는지 한 줄`,
+            `    · body: 내용 정리. 담당 페이지 수에 비례해 길게(3~5쪽이면 4~6문장, 8쪽 이상이면 8~12문장).`,
+            `      용어 나열이 아니라 정의·구분·이유·동작을 실제로 서술하고, 숫자·공식·조건은 그대로 살린다.`,
+            `    · keyPoints: 짚을 것 5~10개, 각 항목은 내용을 담은 완결된 한 문장`,
             `  한 주제가 떨어진 페이지에 나뉘어 나오면 번호를 모두 담아라.`,
             ``,
             digest,
           ].join("\n"),
           payload,
-          `{"slides":[],"overview":"...","themes":[{"name":"...","pages":[1,2],"point":"..."}]}`,
+          `{"slides":[],"overview":"...","themes":[{"name":"...","pages":[1,2],"point":"...","body":"...","keyPoints":["..."]}]}`,
         ),
       });
       overview = out.overview ?? "";

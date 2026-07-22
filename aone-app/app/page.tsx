@@ -225,7 +225,16 @@ interface DocSummary {
   doc: string;
   /** 이 자료가 무엇을 다루고 어떤 흐름인지 */
   overview: string;
-  themes: { name: string; pages: number[]; point: string }[];
+  themes: {
+    name: string;
+    pages: number[];
+    /** 무엇을 다루는지 한 줄 */
+    point: string;
+    /** 핵심 내용 2~4문장 — 이것만 읽어도 알맹이가 잡히도록 */
+    body?: string;
+    /** 짚고 넘어갈 것 3~5개 */
+    keyPoints?: string[];
+  }[];
   pages: number;
   generatedAt: string;
 }
@@ -5340,23 +5349,30 @@ export default function Home() {
                                   </p>
                                 )}
 
-                                {/* 주제별 묶음 — 흩어진 페이지를 주제로 모아 보여준다 */}
+                                {/* 주제별 정리 — 이 화면만 봐도 핵심이 잡히도록 내용까지 담는다 */}
                                 {activeDocSummary && activeDocSummary.themes.length > 0 && (
-                                  <div className="mb-7">
-                                    <p className="mb-3 text-sm font-semibold text-gray-900">
-                                      이런 주제들을 다뤄요
+                                  <div className="mb-8">
+                                    <p className="mb-4 flex items-baseline gap-2 text-sm font-bold text-gray-900">
+                                      핵심 정리
+                                      <span className="text-xs font-medium text-gray-400">
+                                        {activeDocSummary.themes.length}개 주제
+                                      </span>
                                     </p>
-                                    <ul className="flex flex-col gap-3">
-                                      {activeDocSummary.themes.map((t) => (
+                                    <ol className="flex flex-col gap-5">
+                                      {activeDocSummary.themes.map((t, ti) => (
                                         <li
                                           key={t.name}
-                                          className="rounded-2xl border border-black/[0.06] px-5 py-4"
+                                          className="rounded-2xl border border-black/[0.07] bg-white/60 px-6 py-5"
                                         >
-                                          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
-                                            <span className="text-[14.5px] font-bold text-gray-900">
+                                          {/* 주제 제목 + 이 주제가 나온 쪽 */}
+                                          <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-black/[0.05] pb-3">
+                                            <h3 className="flex items-center gap-2.5 text-[15.5px] font-bold text-gray-900">
+                                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-[11px] font-bold text-primary">
+                                                {ti + 1}
+                                              </span>
                                               {t.name}
-                                            </span>
-                                            <span className="flex flex-wrap gap-1">
+                                            </h3>
+                                            <span className="flex flex-wrap items-center gap-1">
                                               {t.pages.map((pg) => (
                                                 <button
                                                   key={pg}
@@ -5364,46 +5380,39 @@ export default function Home() {
                                                     setDocPage(pg);
                                                     setDetailTab("slides");
                                                   }}
-                                                  title={`${pg}쪽으로 이동`}
-                                                  className="press-scale rounded-md bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-primary transition-colors duration-200 hover:bg-primary/20"
+                                                  title={`${pg}쪽 보기`}
+                                                  className="press-scale rounded-md bg-black/[0.04] px-1.5 py-0.5 font-mono text-[11px] font-semibold text-gray-500 transition-colors duration-200 hover:bg-primary/15 hover:text-primary"
                                                 >
                                                   {pg}
                                                 </button>
                                               ))}
                                             </span>
                                           </div>
-                                          {t.point && (
-                                            <p className="mt-1.5 text-[13.5px] leading-relaxed text-gray-600">
-                                              {t.point}
+
+                                          {/* 핵심 내용 — 용어 나열이 아니라 실제 설명 */}
+                                          {(t.body || t.point) && (
+                                            <p className="whitespace-pre-line text-[14.5px] leading-[1.85] text-gray-700">
+                                              {t.body || t.point}
                                             </p>
+                                          )}
+
+                                          {/* 짚고 넘어갈 것 */}
+                                          {t.keyPoints && t.keyPoints.length > 0 && (
+                                            <ul className="mt-3.5 flex flex-col gap-2 rounded-xl bg-black/[0.02] px-4 py-3.5">
+                                              {t.keyPoints.map((k, i) => (
+                                                <li
+                                                  key={i}
+                                                  className="flex gap-2.5 text-[13.5px] leading-relaxed text-gray-600"
+                                                >
+                                                  <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-primary/60" />
+                                                  <span className="min-w-0">{k}</span>
+                                                </li>
+                                              ))}
+                                            </ul>
                                           )}
                                         </li>
                                       ))}
-                                    </ul>
-                                  </div>
-                                )}
-
-                                {/* 이 자료에서 시험 신호가 붙은 페이지 먼저 */}
-                                {docSlides.some((s) => s.exam_tip) && (
-                                  <div className="mb-7 rounded-2xl bg-amber-50/70 px-6 py-5">
-                                    <p className="mb-3 text-sm font-semibold text-amber-900">
-                                      시험에 나올 만한 곳
-                                    </p>
-                                    <ul className="flex flex-col gap-2">
-                                      {docSlides
-                                        .filter((s) => s.exam_tip)
-                                        .map((s) => (
-                                          <li
-                                            key={`tip-${s.slide_id}`}
-                                            className="flex gap-2.5 text-[13.5px] leading-relaxed text-amber-900/90"
-                                          >
-                                            <span className="shrink-0 font-mono text-xs font-semibold text-amber-700/80">
-                                              p.{s.page}
-                                            </span>
-                                            <span className="min-w-0">{s.exam_tip}</span>
-                                          </li>
-                                        ))}
-                                    </ul>
+                                    </ol>
                                   </div>
                                 )}
 

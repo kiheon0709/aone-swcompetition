@@ -410,13 +410,22 @@ export const ComposeSlideSummariesOutput = z.object({
   slides: z.array(SlideSummaryItemSchema),
   /** 이 자료 전체가 무엇을 다루는지 3~4문장 */
   overview: z.string().default(""),
-  /** 큰 주제 묶음 — 흩어진 페이지를 주제로 모은다 */
+  /**
+   * 큰 주제 묶음 — 흩어진 페이지를 주제로 모으고, 그 주제의 핵심 내용까지 담는다.
+   * point만 있으면 "무엇을 다루는지"만 알 뿐 "그래서 그게 뭔데"에 답하지 못해
+   * 결국 쪽별 카드를 다시 훑게 된다. body·keyPoints가 그 답이다.
+   */
   themes: z
     .array(
       z.object({
         name: z.string(),
         pages: z.array(z.number().int()),
+        /** 이 주제가 무엇을 다루는지 한 줄 */
         point: z.string().default(""),
+        /** 핵심 내용 2~4문장 — 이것만 읽어도 주제의 알맹이가 잡혀야 한다 */
+        body: z.string().default(""),
+        /** 짚고 넘어갈 것 3~5개 (짧은 문장) */
+        keyPoints: z.array(z.string()).default([]),
       }),
     )
     .default([]),
