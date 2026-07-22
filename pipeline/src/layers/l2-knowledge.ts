@@ -10,6 +10,8 @@ import {
   ExtractConceptsPayload,
   ExtractKnowledgeOutput,
   ExtractKnowledgePayload,
+  MergeAliasesOutput,
+  MergeAliasesPayload,
   buildPrompt,
 } from "../adapters/llm.js";
 import type { SlideDoc, Utterance, UnitInputs } from "./l1-normalize.js";
@@ -383,4 +385,79 @@ function applyExtractedConcepts(
     }
   }
   return { newConcepts, merged, evidenceAdded };
+}
+
+/** 개념 별칭 병합 결과 */
+export interface MergeAliasesResult {
+  /** 흡수되어 사라진 개념 수 */
+  merged: number;
+  /** 사람이 읽을 병합 로그 ("레이스 컨디션 → 경쟁 상태(Race Condition)") */
+  log: string[];
+}
+
+/**
+ * 표기만 다른 동일 개념을 LLM 판단으로 병합한다.
+ *
+ * isSameConcept은 문자열 유사도 기반이라 "레이스 컨디션" ↔ "경쟁 상태(Race Condition)",
+ * "독자-작성자 문제" ↔ "Readers-Writers 문제"처럼 한/영 표기 체계가 다른 쌍을 잡지 못한다.
+ * 이 경우 같은 개념이 여러 행으로 흩어져 등장 unit 수가 낮게 집계되고,
+ * importance(= w1·등장unit수 + …)가 실제보다 과소평가된다.
+ *
+ * 병합은 먼저 등록된 개념(first_unit_order가 빠른 쪽)을 남기고 나머지를 흡수시킨다.
+ * evidence/signals는 남는 개념으로 이관하고, 파생 테이블(scores·questions)은 재계산 대상이라 삭제한다.
+ */
+export async function mergeConceptAliases(
+  db: AoneDb,
+  engine: LlmEngine,
+  subject: string,
+): Promise<MergeAliasesResult> {
+  const result: MergeAliasesResult = { merged: 0, log: [] };
+  const concepts = db.allConcepts(subject);
+  if (concepts.length < 2) return result;
+
+  const out = await engine.call({
+    task: "merge_concept_aliases",
+    payload: { conceptNames: concepts.map((c) => c.name) } satisfies MergeAliasesPayload,
+    schema: MergeAliasesOutput,
+    prompt: buildPrompt(
+      "merge_concept_aliases",
+      `아래는 대학 '${subject}' 강의에서 추출된 개념 이름 목록이다. ` +
+        "표기만 다르고 실제로는 같은 개념인 것들을 묶어라. " +
+        "예: 한글/영어 표기 차이, 약어와 full name, 괄호 보충 유무. " +
+        "canonical에는 가장 명확하고 대표적인 이름을, aliases에는 그 개념으로 흡수될 나머지 이름을 넣어라. " +
+        "반드시 목록에 있는 이름을 그대로 사용하라. " +
+        "주의: 상위-하위 관계이거나 서로 구별해서 배우는 별개 개념은 묶지 마라 " +
+        "(예: '세마포어'와 '바이너리 세마포어'는 구별되는 개념이므로 묶지 않는다). " +
+        "확신이 없으면 묶지 않는 쪽을 택하라. 묶을 것이 없으면 groups를 빈 배열로 반환하라.",
+      { concepts: concepts.map((c) => c.name) },
+      `{"groups":[{"canonical":"...","aliases":["..."]}]}`,
+    ),
+  });
+
+  const byName = new Map(concepts.map((c) => [normalizeName(c.name), c]));
+  const removed = new Set<string>();
+
+  for (const group of out.groups ?? []) {
+    const canonical = byName.get(normalizeName(group.canonical));
+    if (!canonical || removed.has(canonical.id)) continue;
+
+    for (const alias of group.aliases ?? []) {
+      const drop = byName.get(normalizeName(alias));
+      // 자기 자신·이미 병합된 것·목록에 없는 이름은 건너뛴다 (LLM이 지어낸 이름 방어)
+      if (!drop || drop.id === canonical.id || removed.has(drop.id)) continue;
+
+      db.raw.prepare("UPDATE OR IGNORE evidence SET concept_id = ? WHERE concept_id = ?").run(canonical.id, drop.id);
+      db.raw.prepare("DELETE FROM evidence WHERE concept_id = ?").run(drop.id);
+      db.raw.prepare("UPDATE OR IGNORE signals SET concept_id = ? WHERE concept_id = ?").run(canonical.id, drop.id);
+      db.raw.prepare("DELETE FROM signals WHERE concept_id = ?").run(drop.id);
+      db.raw.prepare("DELETE FROM concept_scores WHERE concept_id = ?").run(drop.id);
+      db.raw.prepare("DELETE FROM predicted_questions WHERE concept_id = ?").run(drop.id);
+      db.raw.prepare("DELETE FROM concepts WHERE id = ?").run(drop.id);
+
+      removed.add(drop.id);
+      result.merged++;
+      result.log.push(`${drop.name} → ${canonical.name}`);
+    }
+  }
+  return result;
 }

@@ -70,8 +70,88 @@
           ]
         },
         {
-          "name": "족보",
+          "name": "4주차",
           "order": 3,
+          "files": [
+            {
+              "name": "(실습)20260324-4주차.pptx.pdf",
+              "size": 1020054
+            },
+            {
+              "name": "(이론) 3-데이터통신-2-pied-piper.pdf",
+              "size": 1437106
+            },
+            {
+              "name": "transcript.txt",
+              "size": 68398
+            }
+          ]
+        },
+        {
+          "name": "5주차",
+          "order": 4,
+          "files": [
+            {
+              "name": "(실습) 20260331-morse code over sound.pptx .pdf",
+              "size": 593848
+            },
+            {
+              "name": "(이론) 4-new-데이터통신-1-라인코딩-블록코딩.pdf",
+              "size": 666248
+            },
+            {
+              "name": "(이론) 5-new-데이터통신-mux.pdf",
+              "size": 603523
+            },
+            {
+              "name": "transcript.txt",
+              "size": 78241
+            }
+          ]
+        },
+        {
+          "name": "6주차",
+          "order": 5,
+          "files": [
+            {
+              "name": "(실습) 20260407-Morse code over sound with noise.pdf",
+              "size": 645465
+            },
+            {
+              "name": "(이론) 5-데이터통신-cable-공개.pdf",
+              "size": 1421921
+            },
+            {
+              "name": "(이론) 6-new-데이터통신-성능.pdf",
+              "size": 2032010
+            },
+            {
+              "name": "(이론) 6-무선 통신.pdf",
+              "size": 1703305
+            },
+            {
+              "name": "transcript.txt",
+              "size": 12475
+            }
+          ]
+        },
+        {
+          "name": "7주차",
+          "order": 6,
+          "files": [
+            {
+              "name": "(실습) 20260414-실습7주차-Unicode over sound with noise.pptx.pdf",
+              "size": 852049
+            },
+            {
+              "name": "transcript.txt",
+              "size": 25978
+            }
+          ]
+        },
+        {
+          "name": "족보",
+          "order": 7,
           "files": [
             {
               "name": "past_exam_2025_raw.txt",
@@ -80,6 +160,135 @@
             {
               "name": "past_exams.json",
               "size": 7324
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "운영체제",
+      "units": [
+        {
+          "name": "1주차",
+          "order": 0,
+          "files": [
+            {
+              "name": "01_Operating_System_overview.pdf",
+              "size": 881799
+            },
+            {
+              "name": "transcript.txt",
+              "size": 19063
+            }
+          ]
+        },
+        {
+          "name": "2주차",
+          "order": 1,
+          "files": [
+            {
+              "name": "02_Process_description_and_Control.pdf",
+              "size": 1026623
+            },
+            {
+              "name": "transcript.txt",
+              "size": 40690
+            }
+          ]
+        },
+        {
+          "name": "3주차",
+          "order": 2,
+          "files": [
+            {
+              "name": "02_Process_description_and_Control.pdf",
+              "size": 1026623
+            },
+            {
+              "name": "transcript.txt",
+              "size": 32924
+            }
+          ]
+        },
+        {
+          "name": "4주차",
+          "order": 3,
+          "files": [
+            {
+              "name": "03_Threads.pdf",
+              "size": 286430
+            },
+            {
+              "name": "transcript.txt",
+              "size": 45023
+            }
+          ]
+        },
+        {
+          "name": "5주차",
+          "order": 4,
+          "files": [
+            {
+              "name": "04_Mutual_Exclusion_and_Synchronization.pdf",
+              "size": 762636
+            },
+            {
+              "name": "transcript.txt",
+              "size": 100317
+            }
+          ]
+        },
+        {
+          "name": "6주차",
+          "order": 5,
+          "files": [
+            {
+              "name": "04_Mutual_Exclusion_and_Synchronization.pdf",
+              "size": 762636
+            },
+            {
+              "name": "transcript.txt",
+              "size": 112402
+            }
+          ]
+        },
+        {
+          "name": "7주차",
+          "order": 6,
+          "files": [
+            {
+              "name": "05_Deadlock_and_Starvation.pdf",
+              "size": 1029713
+            },
+            {
+              "name": "06_File_Management.pdf",
+              "size": 4224012
+            },
+            {
+              "name": "transcript.txt",
+              "size": 127619
+            }
+          ]
+        },
+        {
+          "name": "족보",
+          "order": 7,
+          "files": [
+            {
+              "name": "12중간문제1.jpg",
+              "size": 580729
+            },
+            {
+              "name": "16중간문제-1.png",
+              "size": 254685
+            },
+            {
+              "name": "18중간답1.jpg",
+              "size": 179291
+            },
+            {
+              "name": "18중간문제-1.png",
+              "size": 928873
             }
           ]
         }

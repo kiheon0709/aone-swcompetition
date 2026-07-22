@@ -126,9 +126,9 @@ pub async fn run_slide_summarize(
         .env("CLAUDE_BIN", claude_bin());
     inject_root_env(&mut cmd);
     inject_model_env(&mut cmd);
-    // B안: 비전 지원 엔진(Claude·Gemini)이면 원본 PDF를 첨부해 그림·도식까지 요약.
-    // (codex는 텍스트만이라 미적용) pipeline이 AONE_ATTACH_PDF=1을 읽는다.
-    if cli_engine == "claude-cli" || cli_engine == "gemini-api" {
+    // B안: 비전 지원 엔진이면 원본 PDF를 첨부해 그림·도식까지 요약.
+    // 세 엔진 모두 PDF를 직접 본다(codex는 exec -i). pipeline이 AONE_ATTACH_PDF=1을 읽는다.
+    if cli_engine == "claude-cli" || cli_engine == "gemini-api" || cli_engine == "codex-cli" {
         cmd.env("AONE_ATTACH_PDF", "1");
     }
     if let Some(key) = gemini_key {

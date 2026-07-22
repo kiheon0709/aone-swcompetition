@@ -183,6 +183,21 @@ CREATE TABLE IF NOT EXISTS activity_log (
   layer TEXT NOT NULL CHECK (layer IN ('L0','L1','L2','L3','L4','orchestrator')),
   text TEXT NOT NULL
 );
+/*
+ * 개념 간 선수관계 — prerequisite_id를 먼저 이해해야 concept_id를 이해할 수 있다.
+ * origin: 판정 근거.
+ *   curriculum = 배운 순서(first_unit_order)가 앞선다
+ *   exam_pair  = 같은 기출 문항에서 함께 물어본다 (묶어서 공부할 짝)
+ *   llm        = 같은 주차 개념 사이의 논리적 의존 (LLM 판정)
+ */
+CREATE TABLE IF NOT EXISTS concept_prereqs (
+  concept_id TEXT NOT NULL REFERENCES concepts(id),
+  prerequisite_id TEXT NOT NULL REFERENCES concepts(id),
+  subject TEXT NOT NULL,
+  origin TEXT NOT NULL CHECK (origin IN ('curriculum','exam_pair','llm')),
+  weight INTEGER NOT NULL DEFAULT 1,
+  PRIMARY KEY (concept_id, prerequisite_id, origin)
+);
 `;
 
 export class AoneDb {

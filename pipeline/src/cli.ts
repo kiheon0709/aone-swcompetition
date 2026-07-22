@@ -251,9 +251,10 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
   const concurrency = opts.has("concurrency") ? parseInt(opts.get("concurrency")!, 10) : undefined;
 
   // B안: --attach-pdf (또는 env AONE_ATTACH_PDF=1) + vision 지원 엔진이면 원본 PDF를 첨부.
-  // claude-cli·gemini-api만 PDF를 직접 본다. codex·stub은 텍스트만.
+  // 실제 LLM을 쓰는 세 엔진 모두 PDF를 직접 본다 (codex는 exec -i). stub만 텍스트다.
   const wantPdf = opts.has("attach-pdf") || process.env.AONE_ATTACH_PDF === "1";
-  const visionEngine = engineName === "claude-cli" || engineName === "gemini-api";
+  const visionEngine =
+    engineName === "claude-cli" || engineName === "gemini-api" || engineName === "codex-cli";
   const pdfPath = wantPdf && visionEngine ? findDocPdf(goldsetDir, key, tag) : null;
 
   const pages = await loadDocPages(goldsetDir, key, tag, DEFAULT_EXTRACTED);

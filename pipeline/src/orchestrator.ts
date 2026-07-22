@@ -15,6 +15,7 @@ import { extractUnitPdfs } from "./layers/l0-extract.js";
 import { loadUnitInputs, UnitInputs } from "./layers/l1-normalize.js";
 import { updateKnowledge, updateKnowledgeUnified } from "./layers/l2-knowledge.js";
 import { extractSignals, ingestPastExams, computeScores } from "./layers/l3-signals.js";
+import { linkPrerequisites } from "./layers/l3-prereqs.js";
 import { generateQuestions, composeNote, decideProactive } from "./layers/l4-artifacts.js";
 import { folderKeyOf, type UnitKey } from "./folders.js";
 
@@ -180,10 +181,28 @@ function buildDag(cfg: PipelineConfig, hasExamUpload: boolean): Task[] {
       },
     },
     {
+      // ── 추론(4): 개념 간 선수관계 갱신 (공부 순서의 근거)
+      // 중요도는 "무엇이 나오나"에 답하지만 "뭐부터 하나"에는 답하지 못한다.
+      // curriculum·exam_pair는 SQL로 전체 재계산(LLM 0회), 논리적 의존만 이번 주차에 대해 1회 판정한다.
+      id: "L3.prereqs",
+      layer: "L3",
+      deps: ["L3.scores"],
+      title: "개념 선수관계 갱신",
+      run: async (ctx) => {
+        const r = await linkPrerequisites(ctx.db, ctx.engine, ctx.key.subject, ctx.key.unitOrder);
+        ctx.db.log(
+          ctx.key,
+          "L3",
+          `선수관계 갱신 — 커리큘럼 ${r.curriculum}건, 기출 동시출현 ${r.examPair}건, 논리적 의존 ${r.llm}건`,
+        );
+        ctx.detail = `선수관계 ${r.curriculum + r.examPair + r.llm}건 (커리큘럼 ${r.curriculum} · 기출쌍 ${r.examPair} · 논리 ${r.llm})`;
+      },
+    },
+    {
       // ── 행동(1): 예상문제 생성 + 검증
       id: "L4.questions",
       layer: "L4",
-      deps: ["L3.scores"],
+      deps: ["L3.prereqs"],
       title: "예상문제 생성 → 근거 검증",
       run: async (ctx) => {
         const r = await generateQuestions(ctx.db, ctx.engine, ctx.cfg, ctx.key);

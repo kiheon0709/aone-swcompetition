@@ -22,6 +22,7 @@ import {
   buildPrompt,
 } from "../adapters/llm.js";
 import type { UnitKey } from "../folders.js";
+import { studyOrder } from "./l3-prereqs.js";
 
 export interface QuestionSource {
   type: SourceType;
@@ -598,7 +599,15 @@ export async function composeGuide(
   const pastExamRows = db.pastExamItemsForSubject(subject, units);
   const pastExams = pastExamRows.map((e) => ({ unit: e.unit, year: e.year, question: e.question }));
 
-  const payload: ComposeGuidePayload = { subject, scopeLabel, concepts, pastExams };
+  // 공부 순서는 LLM 추측이 아니라 선수관계 그래프에서 계산한다.
+  // 그래프는 매 주차 분석(L3)에서 증분 갱신되므로 여기서는 읽기만 한다.
+  const order = studyOrder(
+    db,
+    subject,
+    ranked.map((r) => r.conceptId),
+  ).map((o) => ({ name: o.name, prereqs: o.prereqs }));
+
+  const payload: ComposeGuidePayload = { subject, scopeLabel, concepts, pastExams, studyOrder: order };
 
   const out = await engine.call({
     task: "compose_guide",
@@ -613,7 +622,13 @@ export async function composeGuide(
         pastExams.length > 0
           ? "② 기출 빈출 — pastExams(족보)를 근거로, 자주 나오는 주제·출제 형태를 정리."
           : "② 기출 빈출 — 족보(pastExams)가 없으므로 이 섹션은 생략하라.",
-        "③ 공부 순서 제안 — 선수 개념→심화 순으로, 시험신호 높은 개념을 우선.",
+        order.length > 0
+          ? "③ 공부 순서 — studyOrder는 선수관계로 계산된 순서다. 이 순서를 그대로 지켜 번호를 매겨라(임의로 바꾸지 마라). " +
+            "각 항목에 왜 그 자리에 오는지 한 줄씩 붙이되, 학생에게 말하듯 자연스럽게 써라. " +
+            "'prereqs', 'studyOrder' 같은 데이터 필드 이름을 문장에 그대로 쓰지 말고, " +
+            "'~를 먼저 알아야 ~가 이해된다' 식으로 선수 개념의 이름을 자연스럽게 녹여라. " +
+            "선수 개념이 없는 항목은 '먼저 알아야 할 게 없다'는 말을 반복하지 말고, 그 개념이 왜 그 자리에서 시작점이 되는지를 설명하라."
+          : "③ 공부 순서 제안 — 선수 개념→심화 순으로, 시험신호 높은 개념을 우선.",
         "evidence 인용문에 실제로 근거하고, 없는 사실을 지어내지 마라.",
         "출력은 markdown 필드 하나의 JSON으로만.",
       ].join("\n"),

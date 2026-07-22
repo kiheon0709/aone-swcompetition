@@ -27,6 +27,8 @@ export type LlmTask =
   | "extract_signals"
   | "extract_knowledge" // L2+L3 통합: 개념+근거+평가신호를 청크당 1회 호출로
   | "match_exam_items"
+  | "merge_concept_aliases" // 표기만 다른 동일 개념 묶기 (한/영, 축약형, 부분 표현)
+  | "link_prerequisites" // 같은 주차 개념들 사이의 논리적 선수관계 판정
   | "generate_question"
   | "verify_question"
   | "generate_questions_batch" // L4: 상위 개념 전체 문항 1회 일괄 생성
@@ -185,6 +187,37 @@ export const MatchExamOutput = z.object({
 });
 export type MatchExamOutputT = z.infer<typeof MatchExamOutput>;
 
+export interface MergeAliasesPayload {
+  conceptNames: string[];
+}
+
+/**
+ * 표기만 다른 동일 개념 묶음.
+ * canonical은 그 묶음의 대표 이름, aliases는 canonical로 흡수될 이름들.
+ * 문자열 유사도(isSameConcept)로는 "레이스 컨디션" ↔ "경쟁 상태(Race Condition)"처럼
+ * 표기 체계가 다른 쌍을 잡지 못해 LLM 판단이 필요하다.
+ */
+export const MergeAliasesOutput = z.object({
+  groups: z.array(z.object({ canonical: z.string(), aliases: z.array(z.string()) })),
+});
+export type MergeAliasesOutputT = z.infer<typeof MergeAliasesOutput>;
+
+export interface LinkPrerequisitesPayload {
+  /** 같은 주차에 처음 등장해 배운 순서로는 선후를 알 수 없는 개념들 */
+  conceptNames: string[];
+  unit: string;
+}
+
+/**
+ * 선수관계: prerequisite를 먼저 이해해야 concept를 이해할 수 있다.
+ * 주차가 다른 개념은 커리큘럼 순서(first_unit_order)로 이미 판정되므로,
+ * LLM은 같은 주차 안에서만 논리적 의존을 판정한다.
+ */
+export const LinkPrerequisitesOutput = z.object({
+  links: z.array(z.object({ concept: z.string(), prerequisite: z.string() })),
+});
+export type LinkPrerequisitesOutputT = z.infer<typeof LinkPrerequisitesOutput>;
+
 export interface GenerateQuestionPayload {
   concept: { name: string; importance: number; examSignal: number };
   evidence: { type: string; unit: string; unitOrder: number; locator: string; quote: string }[];
@@ -300,6 +333,11 @@ export interface ComposeGuidePayload {
   }[];
   /** 족보(기출) — 있을 때만 "기출 빈출" 섹션. 없으면 빈 배열 → 스킵. */
   pastExams: { unit: string; year: number | null; question: string }[];
+  /**
+   * 선수관계로 계산된 공부 순서 (앞에서부터 차례로).
+   * LLM이 순서를 지어내지 않고 이 배열을 그대로 쓰게 한다.
+   */
+  studyOrder: { name: string; prereqs: string[] }[];
 }
 
 export const ComposeGuideOutput = z.object({ markdown: z.string().min(1) });
@@ -428,6 +466,14 @@ class StubEngine implements LlmEngine {
         break;
       case "match_exam_items":
         out = stubMatchExamItems(req.payload as MatchExamPayload);
+        break;
+      case "merge_concept_aliases":
+        // stub은 LLM 판단을 흉내내지 않는다 — 병합 없음(빈 그룹)이 안전한 기본값.
+        out = { groups: [] } satisfies MergeAliasesOutputT;
+        break;
+      case "link_prerequisites":
+        // 같은 이유로 링크 없음이 기본값 — 커리큘럼 순서 기반 관계는 코드가 따로 만든다.
+        out = { links: [] } satisfies LinkPrerequisitesOutputT;
         break;
       case "generate_question":
         out = stubGenerateQuestion(req.payload as GenerateQuestionPayload);
@@ -859,7 +905,7 @@ class ClaudeCliEngine extends RetryingCliEngine {
  * 주면서 stdin(execFile의 non-TTY 파이프)이 열려 있으면 codex가 stdin 입력을 계속
  * 기다리다 타임아웃돼 출력 파일을 만들지 못한다("대용량 실패"의 실제 원인).
  * 위치 인자를 "-"로 두면 codex가 stdin에서 프롬프트를 읽는다. (프롬프트는 caller가 stdin으로 씀) */
-export function buildCodexExecArgs(outFile: string, model?: string): string[] {
+export function buildCodexExecArgs(outFile: string, model?: string, attachPath?: string): string[] {
   return [
     "exec",
     "--skip-git-repo-check",
@@ -870,6 +916,8 @@ export function buildCodexExecArgs(outFile: string, model?: string): string[] {
     "-o",
     outFile,
     ...(model ? ["--model", model] : []),
+    // vision: codex도 이미지·PDF 첨부를 지원한다(-i). 스캔 PDF까지 읽는 것을 실측 확인.
+    ...(attachPath ? ["-i", attachPath] : []),
     "-", // 프롬프트를 stdin에서 읽는다
   ];
 }
@@ -888,7 +936,8 @@ class CodexCliEngine extends RetryingCliEngine {
     return new Promise<T>((resolve, reject) => {
       const child = execFile(
         process.env.CODEX_BIN ?? "codex",
-        buildCodexExecArgs(outFile, this.model),
+        // 슬라이드 요약의 PDF 첨부(pdfPath)와 이미지 입력(imagePath) 모두 codex는 -i로 받는다.
+        buildCodexExecArgs(outFile, this.model, req.pdfPath ?? req.imagePath),
         // CODEX_HOME 등은 process.env를 그대로 전달
         { encoding: "utf8", timeout: 600_000, maxBuffer: 32 * 1024 * 1024, env: process.env }, // 10분 — 긴 조립 대응
         (err, _stdout, stderr) => {
