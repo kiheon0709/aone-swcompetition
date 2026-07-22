@@ -1018,7 +1018,7 @@ function ConceptCard({
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors duration-200 hover:bg-black/[0.02]"
+        className="flex w-full items-center gap-3.5 px-5 py-4 text-left transition-colors duration-200 hover:bg-black/[0.02]"
       >
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black/[0.04] text-xs font-bold text-gray-500">
           {index + 1}
@@ -1115,19 +1115,22 @@ function StudyFlow({ order }: { order: GuideDoc["studyOrder"] }) {
   }, [order]);
 
   return (
-    <div className="overflow-x-auto">
-      <div className="flex min-w-max items-stretch gap-2 pb-1">
+    <div className="-mx-1 overflow-x-auto px-1 pt-1">
+      <div className="flex min-w-max items-start gap-3">
         {layers.map((layer, li) => (
-          <div key={li} className="flex items-stretch gap-2">
-            <div className="flex flex-col gap-1.5">
-              <span className="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-300">
-                {li + 1}단계
+          <div key={li} className="flex items-start gap-3">
+            <div className="flex min-w-[132px] flex-col gap-2">
+              <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                <span className="flex h-4 w-4 items-center justify-center rounded bg-primary/10 text-[9px] text-primary">
+                  {li + 1}
+                </span>
+                단계
               </span>
               {layer.map((item) => (
                 <span
                   key={item.name}
                   title={item.reason}
-                  className="rounded-lg border border-primary/20 bg-primary/[0.06] px-3 py-1.5 text-[12px] font-semibold text-gray-700"
+                  className="rounded-xl border border-black/[0.06] bg-white px-3 py-2 text-[12.5px] font-semibold leading-tight text-gray-700 shadow-sm"
                 >
                   {item.name}
                 </span>
@@ -1135,7 +1138,7 @@ function StudyFlow({ order }: { order: GuideDoc["studyOrder"] }) {
             </div>
             {li < layers.length - 1 && (
               <ChevronRight
-                className="mt-6 h-4 w-4 shrink-0 self-start text-gray-300"
+                className="mt-7 h-4 w-4 shrink-0 text-gray-300"
                 aria-hidden
               />
             )}
@@ -1213,15 +1216,23 @@ function GuideSection({
         className="mx-auto w-full max-w-[1400px]"
         data-testid="examprep-guide"
       >
-        <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
+        {/* 히어로 — 범위 요약 + 흐름(숲)을 한 덩어리로. 따로 두면 짧은 카드에 빈 공간이 남는다 */}
+        <div className="glass-card mb-5 overflow-hidden rounded-3xl">
+          <div className="flex flex-wrap items-start justify-between gap-4 border-b border-black/[0.05] bg-gradient-to-br from-primary/[0.07] to-transparent px-7 py-6">
           <div className="min-w-0">
-            <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-900">
-              <FileText className="h-4 w-4 text-primary" aria-hidden />
-              {guideScopeText(guide)} · 개념 {guide.concepts}개 · 기출{" "}
-              {guide.pastExams}문항
+            <p className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wider text-primary">
+              <Compass className="h-4 w-4" aria-hidden />
+              학습 가이드
             </p>
-            <p className="mt-0.5 text-xs text-gray-400">
-              시험 범위 학습 가이드 · {fmtGeneratedAt(guide.generatedAt)} 생성
+            <p className="mt-2 text-[22px] font-bold tracking-tight text-gray-900">
+              {guideScopeText(guide)}
+            </p>
+            <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-gray-500">
+              <span>개념 <b className="font-semibold text-gray-700">{guide.concepts}</b>개</span>
+              <span className="text-gray-300">·</span>
+              <span>기출 <b className="font-semibold text-gray-700">{guide.pastExams}</b>문항</span>
+              <span className="text-gray-300">·</span>
+              <span className="text-gray-400">{fmtGeneratedAt(guide.generatedAt)} 생성</span>
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
@@ -1255,6 +1266,13 @@ function GuideSection({
               {exporting ? "저장 중…" : "내보내기"}
             </button>
           </div>
+          </div>
+
+          {guide.guide.overview && (
+            <p className="whitespace-pre-line px-7 py-6 text-[15px] leading-[1.9] text-gray-700">
+              {guide.guide.overview}
+            </p>
+          )}
         </div>
         {guideGen === "running" && logLine && (
           <p className="mb-4 truncate rounded-xl bg-black/[0.03] px-4 py-2.5 font-mono text-[11px] text-gray-500">
@@ -1272,41 +1290,27 @@ function GuideSection({
         )}
         {exportNotice}
 
-        {/* 상단 — 흐름(숲) + 학습 경로 다이어그램 */}
-        <div className="mb-4 grid items-start gap-4 xl:grid-cols-[1fr_1.15fr]">
-          {guide.guide.overview && (
-            <div className="glass-card rounded-2xl px-6 py-5">
-              <SectionHead
-                icon={<Compass className="h-4 w-4" aria-hidden />}
-                title="이 범위는 이런 흐름입니다"
-              />
-              <p className="whitespace-pre-line text-[14px] leading-[1.85] text-gray-700">
-                {guide.guide.overview}
-              </p>
-            </div>
-          )}
-
-          {guide.guide.studyOrder.length > 0 && (
-            <div className="glass-card rounded-2xl px-6 py-5">
-              <SectionHead
-                icon={<Route className="h-4 w-4" aria-hidden />}
-                title="학습 경로"
-                sub="같은 단계는 순서를 바꿔 봐도 괜찮아요"
-              />
-              <StudyFlow order={guide.guide.studyOrder} />
-            </div>
-          )}
-        </div>
+        {/* 학습 경로 — 전폭. 단계가 5~6개라 좁은 칸에 넣으면 가로 스크롤이 생긴다 */}
+        {guide.guide.studyOrder.length > 0 && (
+          <div className="glass-card mb-5 rounded-3xl px-7 py-6">
+            <SectionHead
+              icon={<Route className="h-4 w-4" aria-hidden />}
+              title="학습 경로"
+              sub="왼쪽부터 순서대로 · 같은 단계끼리는 순서를 바꿔도 괜찮아요"
+            />
+            <StudyFlow order={guide.guide.studyOrder} />
+          </div>
+        )}
 
         {/* 본문 — 개념(넓게) + 기출·순서(사이드) */}
-        <div className="grid gap-4 xl:grid-cols-[1.6fr_1fr] xl:items-start">
+        <div className="grid gap-5 xl:grid-cols-[1.65fr_1fr] xl:items-start">
           <div>
             <SectionHead
               icon={<MapIcon className="h-4 w-4" aria-hidden />}
               title={`핵심 개념 ${guide.guide.concepts.length}개`}
               sub="이름을 보고 떠올려본 뒤 펼쳐보세요"
             />
-            <ol className="space-y-2">
+            <ol className="space-y-2.5">
               {guide.guide.concepts.map((c, i) => (
                 <ConceptCard
                   key={c.name}
@@ -1322,16 +1326,16 @@ function GuideSection({
             </ol>
           </div>
 
-          <div className="space-y-4 xl:sticky xl:top-16">
+          <div className="space-y-5 xl:sticky xl:top-16">
             {/* 기출 — 족보가 있을 때만 */}
             {guide.guide.pastExamTopics.length > 0 && (
-              <div className="glass-card rounded-2xl px-6 py-5">
+              <div className="glass-card rounded-3xl px-6 py-6">
                 <SectionHead
                   icon={<FileText className="h-4 w-4" aria-hidden />}
                   title="기출에서 이렇게 나왔어요"
                   sub={`족보 ${guide.pastExams}문항 분석`}
                 />
-                <ul className="space-y-3.5">
+                <ul className="space-y-4">
                   {guide.guide.pastExamTopics.map((t) => (
                     <li key={t.topic}>
                       <p className="flex flex-wrap items-center gap-2">
@@ -1357,7 +1361,7 @@ function GuideSection({
 
             {/* 순서별 이유 — 다이어그램에서 생략된 설명을 여기서 */}
             {guide.guide.studyOrder.length > 0 && (
-              <div className="glass-card rounded-2xl px-6 py-5">
+              <div className="glass-card rounded-3xl px-6 py-6">
                 <SectionHead
                   icon={<ListChecks className="h-4 w-4" aria-hidden />}
                   title="왜 이 순서인가"
