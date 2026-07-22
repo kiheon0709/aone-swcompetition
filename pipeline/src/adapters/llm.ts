@@ -36,6 +36,7 @@ export type LlmTask =
   | "compose_note" // L4: 누적 학습노트 마크다운 조립
   | "compose_guide" // 시험대비 전체 재조립: 과목/범위 학습 가이드 1회 생성
   | "compose_slide_summaries" // 슬라이드 페이지 텍스트 → 앱 표시용 페이지별 요약 카드
+  | "match_transcript" // 슬라이드 ↔ 전사본 발화 매칭 (실험용 — 4차 참조)
   | "recognize_timetable"; // 시간표 캡처 이미지 → 강의 목록 (부록 A2)
 
 export interface LlmRequest<T> {
@@ -217,6 +218,30 @@ export const LinkPrerequisitesOutput = z.object({
   links: z.array(z.object({ concept: z.string(), prerequisite: z.string() })),
 });
 export type LinkPrerequisitesOutputT = z.infer<typeof LinkPrerequisitesOutput>;
+
+/**
+ * 슬라이드 ↔ 전사본 매칭 (4차 실험).
+ * candidates가 있으면 그중에서 고르고(하이브리드), 없으면 전체에서 찾는다(전량 LLM).
+ */
+export interface MatchTranscriptPayload {
+  slides: { page: number; title: string; summary: string }[];
+  utterances: { index: number; timestamp: string | null; text: string }[];
+  /** 코드가 미리 좁힌 후보 — {페이지: [발화 index들]} */
+  candidates?: Record<number, number[]>;
+}
+
+export const MatchTranscriptOutput = z.object({
+  matches: z.array(
+    z.object({
+      page: z.number().int(),
+      /** 이 슬라이드를 설명하는 발화 index들 (연속이어야 함). 없으면 빈 배열 */
+      utteranceIndexes: z.array(z.number().int()),
+      /** 왜 그렇게 판단했는지 한 줄 — 검증용 */
+      reason: z.string().default(""),
+    }),
+  ),
+});
+export type MatchTranscriptOutputT = z.infer<typeof MatchTranscriptOutput>;
 
 export interface GenerateQuestionPayload {
   concept: { name: string; importance: number; examSignal: number };
@@ -534,6 +559,9 @@ class StubEngine implements LlmEngine {
         break;
       case "match_exam_items":
         out = stubMatchExamItems(req.payload as MatchExamPayload);
+        break;
+      case "match_transcript":
+        out = { matches: [] } satisfies MatchTranscriptOutputT;
         break;
       case "merge_concept_aliases":
         // stub은 LLM 판단을 흉내내지 않는다 — 병합 없음(빈 그룹)이 안전한 기본값.
