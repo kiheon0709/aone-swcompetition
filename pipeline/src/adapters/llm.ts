@@ -340,7 +340,43 @@ export interface ComposeGuidePayload {
   studyOrder: { name: string; prereqs: string[] }[];
 }
 
-export const ComposeGuideOutput = z.object({ markdown: z.string().min(1) });
+/**
+ * 학습 가이드 산출물 — 마크다운 한 덩어리가 아니라 구조화 데이터로 받는다.
+ *
+ * 앱 화면은 개념을 접었다 펴고 섹션을 따로 배치해야 하는데, 마크다운을 역파싱하면
+ * LLM이 과목·엔진마다 조금씩 다르게 쓰는 문장 형식에 의존하게 된다.
+ * (실제로 같은 프롬프트에서 "**왜 중요할까:**"와 "중요 이유:" 두 형식이 관측됐다)
+ * 스키마로 강제하면 어떤 과목이 들어와도 화면이 같은 방식으로 동작한다.
+ */
+export const ComposeGuideOutput = z.object({
+  /** 이 시험 범위가 전체적으로 어떤 흐름인지 2~4문장 — 개념을 보기 전에 읽는 "숲" */
+  overview: z.string().min(1),
+  concepts: z.array(
+    z.object({
+      /** 입력 concepts의 name과 정확히 일치해야 한다 */
+      name: z.string().min(1),
+      /** 파인만식 설명 — 쉬운 말과 비유로 */
+      body: z.string().min(1),
+      /** 왜 시험에 중요한지 한 문장 */
+      why: z.string(),
+      /** "5주차 #L19" 같은 근거 위치 (없으면 빈 문자열) */
+      source: z.string(),
+    }),
+  ),
+  /** 기출 빈출 주제 — 족보가 없으면 빈 배열 */
+  pastExamTopics: z.array(
+    z.object({
+      /** 주제명 (예: "PCB와 process context") */
+      topic: z.string().min(1),
+      /** 어떻게 출제되는지 */
+      detail: z.string(),
+      /** 출제 연도 (알 수 있을 때만) */
+      years: z.array(z.number().int()),
+    }),
+  ),
+  /** 공부 순서 — studyOrder 입력과 같은 순서·같은 이름. reason은 왜 그 자리인지 */
+  studyOrder: z.array(z.object({ name: z.string().min(1), reason: z.string() })),
+});
 export type ComposeGuideOutputT = z.infer<typeof ComposeGuideOutput>;
 
 /** 슬라이드 요약: doc 태그 하나의 페이지 텍스트 묶음(청크) → 앱 슬라이드 JSON 항목들 */
@@ -691,38 +727,34 @@ function stubComposeNote(p: ComposeNotePayload): ComposeNoteOutputT {
   return { markdown: lines.join("\n") };
 }
 
-/** 학습 가이드 stub: 결정적 마크다운 (핵심 개념 요약 + 기출 빈출[있을 때만] + 공부 순서 제안) */
+/** 학습 가이드 stub: 결정적 구조화 출력 (LLM 없이 입력만으로 조립) */
 function stubComposeGuide(p: ComposeGuidePayload): ComposeGuideOutputT {
   const byImportance = [...p.concepts].sort((a, b) => b.importance - a.importance || b.examSignal - a.examSignal);
-  const lines: string[] = [`# ${p.subject} 학습 가이드 — ${p.scopeLabel}`, ""];
-
-  lines.push("## ① 핵심 개념 요약 (중요도 순)", "");
-  byImportance.forEach((c, i) => {
-    lines.push(`### ${i + 1}. ${c.name}${c.examAlert ? " ⚠️" : ""}`);
-    lines.push(
-      `중요도 ${c.importance}/100, 시험신호 ${c.examSignal}/100 — 강조 ${c.signalSummary.emphasis}회, 시험 언급 ${c.signalSummary.examHint}회, 기출 매칭 ${c.signalSummary.examMatch}회.`,
-    );
-    const ev = c.evidence[0];
-    if (ev) lines.push(`> "${ev.quote}" — (${ev.type} ${ev.unit} ${ev.locator})`);
-    lines.push("");
-  });
-
-  if (p.pastExams.length > 0) {
-    lines.push("## ② 기출 빈출", "");
-    for (const e of p.pastExams) {
-      const yr = e.year ? `${e.year} ` : "";
-      lines.push(`- (${yr}${e.unit}) ${e.question}`);
-    }
-    lines.push("");
-  }
-
-  lines.push("## ③ 공부 순서 제안", "");
-  byImportance.forEach((c, i) => {
-    lines.push(`${i + 1}. ${c.name}${c.examAlert ? " (시험 대비 우선)" : ""}`);
-  });
-  lines.push("");
-
-  return { markdown: lines.join("\n") };
+  return {
+    overview: `${p.subject} ${p.scopeLabel} 범위 — 개념 ${p.concepts.length}개, 기출 ${p.pastExams.length}문항.`,
+    concepts: byImportance.map((c) => {
+      const ev = c.evidence[0];
+      return {
+        name: c.name,
+        body: ev ? ev.quote : `${c.name} — 근거 인용 없음.`,
+        why: `강조 ${c.signalSummary.emphasis}회, 시험 언급 ${c.signalSummary.examHint}회, 기출 매칭 ${c.signalSummary.examMatch}회.`,
+        source: ev ? `${ev.unit} ${ev.locator}` : "",
+      };
+    }),
+    pastExamTopics: p.pastExams.slice(0, 10).map((e) => ({
+      topic: truncate(e.question, 40),
+      detail: e.question,
+      years: e.year ? [e.year] : [],
+    })),
+    // studyOrder 입력이 있으면 그대로, 없으면 중요도 순 (stub은 순서를 지어내지 않는다)
+    studyOrder:
+      p.studyOrder.length > 0
+        ? p.studyOrder.map((o) => ({
+            name: o.name,
+            reason: o.prereqs.length > 0 ? `${o.prereqs.join(", ")}를 먼저 본다.` : "선행 개념 없음.",
+          }))
+        : byImportance.map((c) => ({ name: c.name, reason: "" })),
+  };
 }
 
 /** 슬라이드 요약 stub: 페이지 첫 줄=제목, 상위 줄=요약/포인트, 시험 단서 줄이 있을 때만 exam_tip */

@@ -534,10 +534,36 @@ const GUIDE_TOP_CONCEPTS = 20;
 const GUIDE_EVIDENCE_PER_CONCEPT = 2;
 
 export interface GuideResult {
-  markdown: string;
+  guide: GuideDoc;
   concepts: number;
   pastExams: number;
-  markdownChars: number;
+}
+
+/**
+ * 학습 가이드 산출물 — 앱이 그대로 화면에 쓰는 구조.
+ *
+ * 마크다운 한 덩어리 대신 구조화해서 넘긴다. 화면은 개념을 접었다 펴고 섹션을
+ * 따로 배치해야 하는데, 마크다운을 역파싱하면 LLM이 과목·엔진마다 다르게 쓰는
+ * 문장 형식에 의존하게 되기 때문이다.
+ */
+export interface GuideDoc {
+  /** 개념을 보기 전에 읽는 "숲" — 이 범위가 어떤 흐름인지 */
+  overview: string;
+  concepts: {
+    name: string;
+    body: string;
+    why: string;
+    /** 근거 위치 ("5주차 #L19"). 없으면 "" */
+    source: string;
+    /** 아래 셋은 LLM이 아니라 코드가 계산한 값 */
+    importance: number;
+    examSignal: number;
+    examAlert: boolean;
+  }[];
+  /** 기출 빈출 주제 — 족보가 없으면 빈 배열 */
+  pastExamTopics: { topic: string; detail: string; years: number[] }[];
+  /** 선수관계로 계산된 공부 순서 */
+  studyOrder: { name: string; reason: string; prereqs: string[] }[];
 }
 
 /**
@@ -575,7 +601,13 @@ export async function composeGuide(
     .sort((a, b) => b.importance - a.importance || b.exam_signal - a.exam_signal || a.conceptId.localeCompare(b.conceptId))
     .slice(0, GUIDE_TOP_CONCEPTS);
 
-  const threshold = 55; // 노트 ⚠️ 기준과 동일 (config.proactiveExamSignalThreshold 기본값)
+  // examAlert("기출 빈출" 강조)는 절대 점수가 아니라 이 범위 안에서의 상대 위치로 정한다.
+  // 절대 임계값(55)을 쓰면 신호가 많은 과목은 20개 전부 강조되고(=강조의 의미 상실),
+  // 적은 과목은 하나도 안 붙는다. 실제로 두 과목에서 20/20과 1/20으로 갈렸다.
+  // 상위 30%만 강조하되, 신호가 실제로 있는 개념(>0)으로 한정한다.
+  const signalsDesc = ranked.map((r) => r.exam_signal).sort((a, b) => b - a);
+  const cutoffIndex = Math.max(0, Math.ceil(signalsDesc.length * 0.3) - 1);
+  const threshold = Math.max(1, signalsDesc[cutoffIndex] ?? 1);
   const concepts: ComposeGuidePayload["concepts"] = ranked.flatMap((r) => {
     const c = conceptRows.find((cr) => cr.id === r.conceptId);
     if (!c) return [];
@@ -616,31 +648,63 @@ export async function composeGuide(
     prompt: buildPrompt(
       "compose_guide",
       [
-        `대학 '${subject}' 수강생을 위한 시험대비 "학습 가이드"를 마크다운으로 작성하라. 범위: ${scopeLabel}.`,
-        "다음 세 섹션으로 구성하라:",
-        "① 핵심 개념 요약 — concepts를 중요도(importance) 순으로. 설명은 파인만 기법으로(전공용어 나열이 아니라 처음 배우는 사람에게 설명하듯 쉬운 말과 비유로, 각 개념이 왜 중요한지 한 줄). examAlert=true인 개념은 제목에 ⚠️.",
+        `대학 '${subject}' 수강생을 위한 시험대비 학습 가이드를 만들어라. 범위: ${scopeLabel}.`,
+        "",
+        "각 필드를 이렇게 채워라:",
+        "",
+        "overview — 이 시험 범위가 전체적으로 어떤 흐름인지 2~4문장. 개념 하나하나가 아니라 '무엇에서 출발해 무엇으로 이어지는 과목인지' 지형을 먼저 잡아주는 글이다. studyOrder의 흐름을 참고하라.",
+        "",
+        "concepts — 입력 concepts 각각에 대해:",
+        "  · name: 입력의 이름을 그대로 (바꾸지 마라)",
+        "  · body: 처음 배우는 사람에게 설명하듯 쉬운 말과 비유로. 전공용어를 나열하지 마라. 2~4문장.",
+        "  · why: 이게 왜 시험에 중요한지 한 문장. evidence와 기출에 실제로 근거하라.",
+        "  · source: 근거 위치를 evidence의 unit·locator로 (예: \"5주차 #L19\"). 없으면 빈 문자열.",
+        "  입력 순서(중요도 순)를 유지하라.",
+        "",
         pastExams.length > 0
-          ? "② 기출 빈출 — pastExams(족보)를 근거로, 자주 나오는 주제·출제 형태를 정리."
-          : "② 기출 빈출 — 족보(pastExams)가 없으므로 이 섹션은 생략하라.",
+          ? "pastExamTopics — pastExams(족보)를 주제별로 묶어라. topic은 주제명, detail은 어떤 형태로 출제되는지(O/X·계산·서술 등), years는 출제 연도. 5~10개."
+          : "pastExamTopics — 족보가 없으므로 빈 배열로 두어라.",
+        "",
         order.length > 0
-          ? "③ 공부 순서 — studyOrder는 선수관계로 계산된 순서다. 이 순서를 그대로 지켜 번호를 매겨라(임의로 바꾸지 마라). " +
-            "각 항목에 왜 그 자리에 오는지 한 줄씩 붙이되, 학생에게 말하듯 자연스럽게 써라. " +
-            "'prereqs', 'studyOrder' 같은 데이터 필드 이름을 문장에 그대로 쓰지 말고, " +
-            "'~를 먼저 알아야 ~가 이해된다' 식으로 선수 개념의 이름을 자연스럽게 녹여라. " +
-            "선수 개념이 없는 항목은 '먼저 알아야 할 게 없다'는 말을 반복하지 말고, 그 개념이 왜 그 자리에서 시작점이 되는지를 설명하라."
-          : "③ 공부 순서 제안 — 선수 개념→심화 순으로, 시험신호 높은 개념을 우선.",
+          ? "studyOrder — 입력 studyOrder는 선수관계로 계산된 순서다. name과 순서를 그대로 유지하고 reason만 채워라. " +
+            "reason은 왜 그 자리에 오는지 한 문장으로, 학생에게 말하듯 자연스럽게. " +
+            "'prereqs' 같은 데이터 필드 이름을 문장에 쓰지 말고 '~를 먼저 알아야 ~가 이해된다' 식으로 선수 개념 이름을 녹여라. " +
+            "선수 개념이 없는 항목은 '먼저 알아야 할 게 없다'를 반복하지 말고 그 개념이 왜 시작점인지 설명하라."
+          : "studyOrder — 입력이 비었으므로 concepts를 중요도 순으로 넣고 reason은 빈 문자열로 두어라.",
+        "",
         "evidence 인용문에 실제로 근거하고, 없는 사실을 지어내지 마라.",
-        "출력은 markdown 필드 하나의 JSON으로만.",
       ].join("\n"),
       payload,
-      `{"markdown":"# ..."}`,
+      `{"overview":"...","concepts":[{"name":"...","body":"...","why":"...","source":"..."}],"pastExamTopics":[{"topic":"...","detail":"...","years":[2023]}],"studyOrder":[{"name":"...","reason":"..."}]}`,
     ),
   });
 
+  // 개념 메타(점수)는 LLM 출력이 아니라 계산값을 붙인다 — 화면이 순위·강조를 판단할 때 쓴다.
+  const metaByName = new Map(concepts.map((c) => [c.name, c]));
+
   return {
-    markdown: out.markdown,
+    guide: {
+      overview: out.overview,
+      concepts: out.concepts.map((c) => {
+        const meta = metaByName.get(c.name);
+        return {
+          name: c.name,
+          body: c.body,
+          why: c.why,
+          source: c.source,
+          importance: meta?.importance ?? 0,
+          examSignal: meta?.examSignal ?? 0,
+          examAlert: meta?.examAlert ?? false,
+        };
+      }),
+      pastExamTopics: out.pastExamTopics,
+      studyOrder: out.studyOrder.map((o) => ({
+        name: o.name,
+        reason: o.reason,
+        prereqs: order.find((x) => x.name === o.name)?.prereqs ?? [],
+      })),
+    },
     concepts: concepts.length,
     pastExams: pastExams.length,
-    markdownChars: out.markdown.length,
   };
 }

@@ -1,18 +1,30 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { marked } from "marked";
 import {
   AlertTriangle,
   CalendarPlus,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Compass,
   Download,
   FileText,
   GraduationCap,
+  Lightbulb,
   ListChecks,
+  Map as MapIcon,
   RotateCcw,
+  Route,
   Sparkles,
   Timer,
   X,
@@ -69,6 +81,24 @@ interface Snapshot {
   note?: { markdown: string };
 }
 
+/** 학습 가이드 본문 — 파이프라인이 구조화해서 넘긴다 (마크다운 파싱 없음) */
+interface GuideDoc {
+  /** 개념을 보기 전에 읽는 "숲" */
+  overview: string;
+  concepts: {
+    name: string;
+    body: string;
+    why: string;
+    /** 근거 위치 ("5주차 #L19"). 없으면 "" */
+    source: string;
+    importance: number;
+    examSignal: number;
+    examAlert: boolean;
+  }[];
+  pastExamTopics: { topic: string; detail: string; years: number[] }[];
+  studyOrder: { name: string; reason: string; prereqs: string[] }[];
+}
+
 /** compose-guide 산출물 스냅샷 (pipeline GuideSnapshotSchema와 동일) */
 interface GuideSnapshot {
   subject: string;
@@ -80,7 +110,7 @@ interface GuideSnapshot {
   concepts: number;
   /** 기출 문항 수 */
   pastExams: number;
-  markdown: string;
+  guide: GuideDoc;
 }
 
 /**
@@ -100,11 +130,21 @@ const normalizeSnapshot = (data: unknown): Snapshot | null => {
   };
 };
 
-const isGuideSnapshot = (g: unknown): g is GuideSnapshot =>
-  typeof g === "object" &&
-  g !== null &&
-  typeof (g as GuideSnapshot).markdown === "string" &&
-  (g as GuideSnapshot).markdown.length > 0;
+/**
+ * 가이드 스냅샷 판별 — guide.concepts가 배열이어야 화면을 그릴 수 있다.
+ * 구조가 깨진 파일(구버전 markdown 형식 포함)은 여기서 걸러 "가이드 없음"으로 처리한다.
+ */
+const isGuideSnapshot = (g: unknown): g is GuideSnapshot => {
+  if (typeof g !== "object" || g === null) return false;
+  const doc = (g as GuideSnapshot).guide;
+  return (
+    typeof doc === "object" &&
+    doc !== null &&
+    Array.isArray(doc.concepts) &&
+    Array.isArray(doc.studyOrder) &&
+    Array.isArray(doc.pastExamTopics)
+  );
+};
 
 /** 시험 과목의 unit 하나에 대해 로드한 스냅샷 */
 interface LoadedSnapshot {
@@ -565,9 +605,33 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
     }, 2000);
   }, [exam, desktop, guideGen, scopeSel, stopGuidePolling]);
 
-  const guideHtml = useMemo(() => {
+  /** 내보내기용 마크다운 — 화면은 구조를 직접 그리므로, 파일로 저장할 때만 조립한다 */
+  const guideMarkdown = useMemo(() => {
     if (!guide) return "";
-    return marked.parse(guide.markdown, { async: false }) as string;
+    const d = guide.guide;
+    const out: string[] = [`# ${guide.subject} 시험대비 학습 가이드`, ""];
+    if (d.overview) out.push(d.overview, "");
+    out.push("## 핵심 개념", "");
+    for (const c of d.concepts) {
+      out.push(`### ${c.examAlert ? "⚠️ " : ""}${c.name}`, c.body);
+      if (c.why) out.push(`**왜 중요할까:** ${c.why}`);
+      if (c.source) out.push(`_근거: ${c.source}_`);
+      out.push("");
+    }
+    if (d.pastExamTopics.length > 0) {
+      out.push("## 기출 빈출", "");
+      for (const t of d.pastExamTopics) {
+        const yrs = t.years.length > 0 ? ` (${t.years.join(", ")})` : "";
+        out.push(`- **${t.topic}**${yrs} — ${t.detail}`);
+      }
+      out.push("");
+    }
+    if (d.studyOrder.length > 0) {
+      out.push("## 공부 순서", "");
+      d.studyOrder.forEach((o, i) => out.push(`${i + 1}. **${o.name}** — ${o.reason}`));
+      out.push("");
+    }
+    return out.join("\n");
   }, [guide]);
 
   /** 범위 필터를 통과한 스냅샷 — 우선 복습·학습노트·모의고사가 전부 여기서 병합된다 */
@@ -667,8 +731,8 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
   }, [exam, scopeFileTag]);
 
   const exportGuide = useCallback(
-    () => void exportMarkdown(guide?.markdown ?? "", "학습가이드"),
-    [exportMarkdown, guide]
+    () => void exportMarkdown(guideMarkdown, "학습가이드"),
+    [exportMarkdown, guideMarkdown]
   );
   const exportNotes = useCallback(
     () => void exportMarkdown(fullMarkdown, "학습노트"),
@@ -716,11 +780,11 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
 
   return (
     <div
-      className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      className="flex min-h-0 flex-1 flex-col overflow-y-auto"
       data-testid="exam-prep"
     >
       {/* ── 헤더 — 과목 · 시험명 · D-day ── */}
-      <div className="border-b border-black/[0.05] px-8 pb-5 pt-7">
+      <div className="sticky top-0 z-10 border-b border-black/[0.05] bg-white/80 px-6 pb-5 pt-7 backdrop-blur-xl lg:px-10">
         <button
           onClick={() => setActiveExamId(null)}
           data-testid="examprep-back"
@@ -863,13 +927,13 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
       </div>
 
       {/* ── 본문 ── */}
-      <div className="min-h-0 flex-1 overflow-y-auto p-8">
+      <div className="px-6 py-8 lg:px-10">
         {loading ? (
           <p className="text-sm text-gray-400">{scopeLabel} 자료를 조립하는 중…</p>
         ) : segment === "guide" ? (
           <GuideSection
             guide={guide}
-            guideHtml={guideHtml}
+
             guideGen={guideGen}
             guideLogTail={guideLogTail}
             canRebuild={desktop}
@@ -999,9 +1063,99 @@ const fmtGeneratedAt = (iso: string): string => {
   return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
 
+/**
+ * 개념 카드 — 기본은 접혀 있고, 펼쳐야 설명이 보인다.
+ *
+ * 설명을 처음부터 늘어놓으면 학생은 "읽었다"는 느낌만 얻고 넘어간다
+ * (fluency illusion). 이름만 먼저 보여주고 스스로 떠올릴 틈을 준 뒤 펼치게 한다.
+ */
+function ConceptCard({
+  concept,
+  index,
+  prereqs,
+}: {
+  concept: GuideDoc["concepts"][number];
+  index: number;
+  prereqs: string[];
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <li className="glass-card overflow-hidden rounded-2xl">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors duration-200 hover:bg-black/[0.02]"
+      >
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black/[0.04] text-xs font-bold text-gray-500">
+          {index + 1}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="text-[15px] font-semibold text-gray-900">{concept.name}</span>
+            {concept.examAlert && (
+              <span className="rounded-md bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                기출 빈출
+              </span>
+            )}
+          </span>
+          {prereqs.length > 0 && (
+            <span className="mt-1 block text-xs text-gray-400">
+              {prereqs.join(" · ")} 먼저
+            </span>
+          )}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </button>
+
+      {open && (
+        <div className="border-t border-black/[0.06] px-5 pb-5 pt-4">
+          <p className="whitespace-pre-line text-[14px] leading-[1.75] text-gray-700">
+            {concept.body}
+          </p>
+          {concept.why && (
+            <p className="mt-3 flex gap-2 rounded-xl bg-primary/[0.06] px-4 py-3 text-[13px] leading-relaxed text-gray-700">
+              <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+              <span>{concept.why}</span>
+            </p>
+          )}
+          {concept.source && (
+            <p className="mt-2 text-[11px] text-gray-400">근거 · {concept.source}</p>
+          )}
+        </div>
+      )}
+    </li>
+  );
+}
+
+/** 섹션 제목 — 아이콘 + 제목 + 부제 */
+function SectionHead({
+  icon,
+  title,
+  sub,
+}: {
+  icon: ReactNode;
+  title: string;
+  sub?: string;
+}) {
+  return (
+    <div className="mb-3 flex items-center gap-2.5">
+      <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        {icon}
+      </span>
+      <div>
+        <h3 className="text-[15px] font-bold text-gray-900">{title}</h3>
+        {sub && <p className="text-xs text-gray-400">{sub}</p>}
+      </div>
+    </div>
+  );
+}
+
 function GuideSection({
   guide,
-  guideHtml,
   guideGen,
   guideLogTail,
   canRebuild,
@@ -1012,7 +1166,7 @@ function GuideSection({
   exportMsg,
 }: {
   guide: GuideSnapshot | null;
-  guideHtml: string;
+
   guideGen: "idle" | "running" | "failed";
   guideLogTail: string;
   /** Tauri 데스크톱에서만 "다시 만들기" 노출 — 브라우저는 열람 전용 */
@@ -1036,7 +1190,7 @@ function GuideSection({
   if (guide) {
     return (
       <section
-        className="mx-auto w-full max-w-[820px]"
+        className="mx-auto w-full max-w-[1080px]"
         data-testid="examprep-guide"
       >
         <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
@@ -1097,12 +1251,100 @@ function GuideSection({
           </p>
         )}
         {exportNotice}
-        <div className="glass-card rounded-2xl p-8">
-          <div
-            className="note-md note-md-wide"
-            dangerouslySetInnerHTML={{ __html: guideHtml }}
+
+        {/* ① 숲 — 개념 하나하나를 보기 전에 범위 전체의 흐름부터 */}
+        {guide.guide.overview && (
+          <div className="glass-card mb-4 rounded-2xl px-6 py-5">
+            <SectionHead
+              icon={<Compass className="h-4 w-4" aria-hidden />}
+              title="이 범위는 이런 흐름입니다"
+            />
+            <p className="whitespace-pre-line text-[14px] leading-[1.8] text-gray-700">
+              {guide.guide.overview}
+            </p>
+          </div>
+        )}
+
+        {/* ② 공부 순서 — 선수관계로 계산된 경로. 개념보다 먼저 둔다 */}
+        {guide.guide.studyOrder.length > 0 && (
+          <div className="glass-card mb-4 rounded-2xl px-6 py-5">
+            <SectionHead
+              icon={<Route className="h-4 w-4" aria-hidden />}
+              title="이 순서로 보세요"
+              sub="먼저 알아야 할 개념부터 이어지도록 계산했어요"
+            />
+            <ol className="mt-4 space-y-3">
+              {guide.guide.studyOrder.map((o, i) => (
+                <li key={o.name} className="flex gap-3">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[14px] font-semibold text-gray-900">{o.name}</p>
+                    {o.reason && (
+                      <p className="mt-0.5 text-[13px] leading-relaxed text-gray-500">
+                        {o.reason}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {/* ③ 나무 — 개념 카드. 기본 접힘으로 두어 스스로 떠올릴 여지를 남긴다 */}
+        <div className="mb-4">
+          <SectionHead
+            icon={<MapIcon className="h-4 w-4" aria-hidden />}
+            title={`핵심 개념 ${guide.guide.concepts.length}개`}
+            sub="이름을 보고 떠올려본 뒤 펼쳐보세요"
           />
+          <ol className="space-y-2">
+            {guide.guide.concepts.map((c, i) => (
+              <ConceptCard
+                key={c.name}
+                concept={c}
+                index={i}
+                prereqs={
+                  guide.guide.studyOrder.find((o) => o.name === c.name)?.prereqs ?? []
+                }
+              />
+            ))}
+          </ol>
         </div>
+
+        {/* ④ 기출 — 족보가 있을 때만 */}
+        {guide.guide.pastExamTopics.length > 0 && (
+          <div className="glass-card rounded-2xl px-6 py-5">
+            <SectionHead
+              icon={<FileText className="h-4 w-4" aria-hidden />}
+              title="기출에서 이렇게 나왔어요"
+              sub={`족보 ${guide.pastExams}문항 분석`}
+            />
+            <ul className="mt-4 space-y-3.5">
+              {guide.guide.pastExamTopics.map((t) => (
+                <li key={t.topic}>
+                  <p className="flex flex-wrap items-center gap-2">
+                    <span className="text-[14px] font-semibold text-gray-900">
+                      {t.topic}
+                    </span>
+                    {t.years.length > 0 && (
+                      <span className="rounded-md bg-black/[0.04] px-1.5 py-0.5 text-[11px] font-medium text-gray-500">
+                        {t.years.join(" · ")}
+                      </span>
+                    )}
+                  </p>
+                  {t.detail && (
+                    <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
+                      {t.detail}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
     );
   }

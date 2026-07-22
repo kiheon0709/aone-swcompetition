@@ -440,7 +440,27 @@ const GuideSnapshotSchema = z.object({
   generatedAt: z.string(),
   concepts: z.number().int(),
   pastExams: z.number().int(),
-  markdown: z.string().min(1),
+  /** 앱이 그대로 렌더링하는 구조화 가이드 */
+  guide: z.object({
+    overview: z.string(),
+    concepts: z.array(
+      z.object({
+        name: z.string(),
+        body: z.string(),
+        why: z.string(),
+        source: z.string(),
+        importance: z.number().int(),
+        examSignal: z.number().int(),
+        examAlert: z.boolean(),
+      }),
+    ),
+    pastExamTopics: z.array(
+      z.object({ topic: z.string(), detail: z.string(), years: z.array(z.number().int()) }),
+    ),
+    studyOrder: z.array(
+      z.object({ name: z.string(), reason: z.string(), prereqs: z.array(z.string()) }),
+    ),
+  }),
 });
 
 async function cmdComposeGuide(opts: Map<string, string>): Promise<void> {
@@ -472,14 +492,14 @@ async function cmdComposeGuide(opts: Map<string, string>): Promise<void> {
       generatedAt: new Date().toISOString(),
       concepts: r.concepts,
       pastExams: r.pastExams,
-      markdown: r.markdown,
+      guide: r.guide,
     });
 
     const outFile = guideFilePath(subject, appSnapshotsDir());
     fs.mkdirSync(path.dirname(outFile), { recursive: true });
     fs.writeFileSync(outFile, JSON.stringify(snapshot, null, 2) + "\n", "utf8");
     console.log(
-      `학습 가이드 생성 → ${outFile} (개념 ${r.concepts}개, 기출 ${r.pastExams}건, 마크다운 ${r.markdownChars}자, zod 통과)`,
+      `학습 가이드 생성 → ${outFile} (개념 ${r.guide.concepts.length}개, 기출 주제 ${r.guide.pastExamTopics.length}개, 공부 순서 ${r.guide.studyOrder.length}단계, zod 통과)`,
     );
   } finally {
     db.close();
