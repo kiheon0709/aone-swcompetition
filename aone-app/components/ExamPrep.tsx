@@ -223,11 +223,10 @@ const DIFFICULTY_LABEL: Record<string, string> = {
   easy: "쉬움",
 };
 
-type Segment = "guide" | "review" | "note" | "mock";
+type Segment = "guide" | "note" | "mock";
 
 const SEGMENTS: { id: Segment; label: string }[] = [
   { id: "guide", label: "학습 가이드" },
-  { id: "review", label: "우선 복습" },
   { id: "note", label: "학습노트" },
   { id: "mock", label: "모의고사" },
 ];
@@ -646,7 +645,11 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
     [scoped]
   );
 
-  const top10 = useMemo(() => merged.slice(0, 10), [merged]);
+  /** 개념 이름 → 등장 수업 정보. 가이드 카드에서 "N개 수업에서 반복"·수업 이동에 쓴다 */
+  const mergedByName = useMemo(
+    () => new Map(merged.map((c) => [c.name, c])),
+    [merged],
+  );
 
   /** 범위 학습노트 — 수업별 note.markdown을 unit 헤더로 이어붙인다 */
   const fullMarkdown = useMemo(() => {
@@ -784,7 +787,7 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
       data-testid="exam-prep"
     >
       {/* ── 헤더 — 과목 · 시험명 · D-day ── */}
-      <div className="sticky top-0 z-10 border-b border-black/[0.05] bg-white/80 px-6 pb-5 pt-7 backdrop-blur-xl lg:px-10">
+      <div className="px-6 pb-1 pt-7 lg:px-10">
         <button
           onClick={() => setActiveExamId(null)}
           data-testid="examprep-back"
@@ -853,8 +856,8 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
               aria-hidden
             />
             <span className="text-sm font-medium text-gray-900">
-              에이전트가 {scopeLabel} 학습노트를 조립했고, 우선 복습할 개념{" "}
-              {top10.length}개를 골라뒀어요.
+              에이전트가 {scopeLabel} 자료에서 개념 {merged.length}개를 뽑고
+              공부 순서까지 정리했어요.
             </span>
           </div>
         )}
@@ -902,9 +905,12 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
           </div>
         )}
 
-        {/* 세그먼트 탭 */}
+      </div>
+
+      {/* 세그먼트 탭 — 스크롤해도 탭은 남는다 (헤더 전체를 고정하면 본문이 너무 좁아진다) */}
+      <div className="sticky top-0 z-10 border-b border-black/[0.05] bg-white/85 px-6 py-3 backdrop-blur-xl lg:px-10">
         <div
-          className="mt-5 inline-flex rounded-xl bg-black/[0.04] p-1"
+          className="inline-flex rounded-xl bg-black/[0.04] p-1"
           role="tablist"
         >
           {SEGMENTS.map((s) => (
@@ -942,11 +948,7 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
             onExport={exportGuide}
             exporting={exporting}
             exportMsg={exportMsg}
-          />
-        ) : segment === "review" ? (
-          <ReviewSection
-            concepts={top10}
-            scopeLabel={scopeLabel}
+            mergedByName={mergedByName}
             onGoUnit={(unit) => onGoUnit(exam.subject, unit)}
           />
         ) : segment === "note" ? (
@@ -970,80 +972,6 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
         onClose={() => setDesktopOnlyFeature(null)}
       />
     </div>
-  );
-}
-
-// ── 우선 복습 개념 TOP 10 ────────────────────────────────────
-function ReviewSection({
-  concepts,
-  scopeLabel,
-  onGoUnit,
-}: {
-  concepts: MergedConcept[];
-  scopeLabel: string;
-  onGoUnit: (unit: string) => void;
-}) {
-  if (concepts.length === 0) {
-    return <p className="text-sm text-gray-400">아직 분석된 개념이 없습니다.</p>;
-  }
-  return (
-    <section className="mx-auto w-full max-w-[840px]">
-      <h2 className="mb-1 text-sm font-semibold tracking-tight text-gray-900">
-        우선 복습 개념 TOP {concepts.length}
-      </h2>
-      <p className="mb-4 text-xs text-gray-400">
-        {scopeLabel} 개념을 시험 신호 순으로 정렬했어요. 클릭하면 그 개념이 나온
-        수업으로 이동합니다.
-      </p>
-      <ol className="space-y-2.5" data-testid="examprep-top10">
-        {concepts.map((c, i) => (
-          <li key={c.name}>
-            <button
-              onClick={() => onGoUnit(c.topUnit)}
-              className="glass-card glass-card-hover flex w-full items-start gap-4 rounded-2xl p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-            >
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">
-                {i + 1}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm font-semibold text-gray-900">
-                    {c.name}
-                  </span>
-                  {c.examSignal >= 70 && (
-                    <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-500">
-                      <AlertTriangle className="h-3 w-3" aria-hidden />
-                      시험에 나올 가능성 높음
-                    </span>
-                  )}
-                </span>
-                <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                  {c.units.map((u) => (
-                    <span
-                      key={u}
-                      className="rounded-md bg-black/[0.04] px-1.5 py-0.5 text-[11px] font-medium text-gray-500"
-                    >
-                      {u}
-                    </span>
-                  ))}
-                  <span className="text-[11px] text-gray-400">
-                    · {evidenceOf(c)}
-                  </span>
-                </span>
-              </span>
-              <span className="shrink-0 text-right">
-                <span className="block text-sm font-bold text-primary">
-                  {c.examSignal}
-                </span>
-                <span className="block text-[10px] font-medium text-gray-400">
-                  시험 신호
-                </span>
-              </span>
-            </button>
-          </li>
-        ))}
-      </ol>
-    </section>
   );
 }
 
@@ -1073,10 +1001,15 @@ function ConceptCard({
   concept,
   index,
   prereqs,
+  merged,
+  onGoUnit,
 }: {
   concept: GuideDoc["concepts"][number];
   index: number;
   prereqs: string[];
+  /** 스냅샷에서 온 등장 수업 정보 (없을 수도 있다) */
+  merged?: MergedConcept;
+  onGoUnit: (unit: string) => void;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -1099,11 +1032,15 @@ function ConceptCard({
               </span>
             )}
           </span>
-          {prereqs.length > 0 && (
-            <span className="mt-1 block text-xs text-gray-400">
-              {prereqs.join(" · ")} 먼저
-            </span>
-          )}
+          <span className="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-gray-400">
+            {/* 반복 횟수는 "왜 위에 있는지"의 근거다 — 점수 대신 이걸 보여준다 */}
+            {merged && merged.units.length > 1 && (
+              <span className="font-medium text-gray-500">
+                {merged.units.length}개 수업에서 반복
+              </span>
+            )}
+            {prereqs.length > 0 && <span>{prereqs.join(" · ")} 먼저</span>}
+          </span>
         </span>
         <ChevronDown
           className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -1125,9 +1062,87 @@ function ConceptCard({
           {concept.source && (
             <p className="mt-2 text-[11px] text-gray-400">근거 · {concept.source}</p>
           )}
+
+          {/* 이 개념이 나온 수업 — 누르면 그 수업 자료로 이동한다 */}
+          {merged && merged.units.length > 0 && (
+            <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-black/[0.06] pt-3">
+              <span className="mr-0.5 text-[11px] font-semibold text-gray-400">
+                나온 수업
+              </span>
+              {merged.units.map((u) => (
+                <button
+                  key={u}
+                  onClick={() => onGoUnit(u)}
+                  className={`press-scale rounded-md px-2 py-0.5 text-[11px] font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                    u === merged.topUnit
+                      ? "bg-primary/10 text-primary hover:bg-primary/20"
+                      : "bg-black/[0.04] text-gray-500 hover:bg-black/[0.08]"
+                  }`}
+                  title={u === merged.topUnit ? "시험 신호가 가장 높았던 수업" : undefined}
+                >
+                  {u}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </li>
+  );
+}
+
+/**
+ * 학습 경로 다이어그램 — 선수관계를 단계(layer)로 묶어 흐름으로 보여준다.
+ *
+ * 번호 목록으로 20개를 늘어놓으면 "무엇 다음에 무엇"은 보여도 "무엇과 무엇이
+ * 같은 층위인지"가 보이지 않는다. 선수 개념이 모두 앞 단계에 있으면 같은 단계로
+ * 묶어, 병렬로 봐도 되는 것과 순서를 지켜야 하는 것을 구분한다.
+ */
+function StudyFlow({ order }: { order: GuideDoc["studyOrder"] }) {
+  const layers = useMemo(() => {
+    const placed = new Map<string, number>();
+    const result: GuideDoc["studyOrder"][] = [];
+    for (const item of order) {
+      // 선수 개념 중 가장 늦은 단계의 다음 단계에 놓는다
+      const depth = item.prereqs.reduce(
+        (max, p) => Math.max(max, placed.has(p) ? placed.get(p)! + 1 : 0),
+        0,
+      );
+      placed.set(item.name, depth);
+      (result[depth] ??= []).push(item);
+    }
+    return result.filter(Boolean);
+  }, [order]);
+
+  return (
+    <div className="overflow-x-auto">
+      <div className="flex min-w-max items-stretch gap-2 pb-1">
+        {layers.map((layer, li) => (
+          <div key={li} className="flex items-stretch gap-2">
+            <div className="flex flex-col gap-1.5">
+              <span className="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-300">
+                {li + 1}단계
+              </span>
+              {layer.map((item) => (
+                <span
+                  key={item.name}
+                  title={item.reason}
+                  className="rounded-lg border border-primary/20 bg-primary/[0.06] px-3 py-1.5 text-[12px] font-semibold text-gray-700"
+                >
+                  {item.name}
+                </span>
+              ))}
+            </div>
+            {li < layers.length - 1 && (
+              <ChevronRight
+                className="mt-6 h-4 w-4 shrink-0 self-start text-gray-300"
+                aria-hidden
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -1164,6 +1179,8 @@ function GuideSection({
   onExport,
   exporting,
   exportMsg,
+  mergedByName,
+  onGoUnit,
 }: {
   guide: GuideSnapshot | null;
 
@@ -1176,6 +1193,9 @@ function GuideSection({
   onExport: () => void;
   exporting: boolean;
   exportMsg: string | null;
+  /** 개념 이름 → 등장 수업 정보 (스냅샷 기반) */
+  mergedByName: Map<string, MergedConcept>;
+  onGoUnit: (unit: string) => void;
 }) {
   const logLine = guideLogTail.trim().split("\n").filter(Boolean).pop() ?? "";
 
@@ -1190,7 +1210,7 @@ function GuideSection({
   if (guide) {
     return (
       <section
-        className="mx-auto w-full max-w-[1080px]"
+        className="mx-auto w-full max-w-[1400px]"
         data-testid="examprep-guide"
       >
         <div className="glass-card mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl px-5 py-4">
@@ -1252,99 +1272,117 @@ function GuideSection({
         )}
         {exportNotice}
 
-        {/* ① 숲 — 개념 하나하나를 보기 전에 범위 전체의 흐름부터 */}
-        {guide.guide.overview && (
-          <div className="glass-card mb-4 rounded-2xl px-6 py-5">
-            <SectionHead
-              icon={<Compass className="h-4 w-4" aria-hidden />}
-              title="이 범위는 이런 흐름입니다"
-            />
-            <p className="whitespace-pre-line text-[14px] leading-[1.8] text-gray-700">
-              {guide.guide.overview}
-            </p>
-          </div>
-        )}
+        {/* 상단 — 흐름(숲) + 학습 경로 다이어그램 */}
+        <div className="mb-4 grid items-start gap-4 xl:grid-cols-[1fr_1.15fr]">
+          {guide.guide.overview && (
+            <div className="glass-card rounded-2xl px-6 py-5">
+              <SectionHead
+                icon={<Compass className="h-4 w-4" aria-hidden />}
+                title="이 범위는 이런 흐름입니다"
+              />
+              <p className="whitespace-pre-line text-[14px] leading-[1.85] text-gray-700">
+                {guide.guide.overview}
+              </p>
+            </div>
+          )}
 
-        {/* ② 공부 순서 — 선수관계로 계산된 경로. 개념보다 먼저 둔다 */}
-        {guide.guide.studyOrder.length > 0 && (
-          <div className="glass-card mb-4 rounded-2xl px-6 py-5">
+          {guide.guide.studyOrder.length > 0 && (
+            <div className="glass-card rounded-2xl px-6 py-5">
+              <SectionHead
+                icon={<Route className="h-4 w-4" aria-hidden />}
+                title="학습 경로"
+                sub="같은 단계는 순서를 바꿔 봐도 괜찮아요"
+              />
+              <StudyFlow order={guide.guide.studyOrder} />
+            </div>
+          )}
+        </div>
+
+        {/* 본문 — 개념(넓게) + 기출·순서(사이드) */}
+        <div className="grid gap-4 xl:grid-cols-[1.6fr_1fr] xl:items-start">
+          <div>
             <SectionHead
-              icon={<Route className="h-4 w-4" aria-hidden />}
-              title="이 순서로 보세요"
-              sub="먼저 알아야 할 개념부터 이어지도록 계산했어요"
+              icon={<MapIcon className="h-4 w-4" aria-hidden />}
+              title={`핵심 개념 ${guide.guide.concepts.length}개`}
+              sub="이름을 보고 떠올려본 뒤 펼쳐보세요"
             />
-            <ol className="mt-4 space-y-3">
-              {guide.guide.studyOrder.map((o, i) => (
-                <li key={o.name} className="flex gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
-                    {i + 1}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[14px] font-semibold text-gray-900">{o.name}</p>
-                    {o.reason && (
-                      <p className="mt-0.5 text-[13px] leading-relaxed text-gray-500">
-                        {o.reason}
-                      </p>
-                    )}
-                  </div>
-                </li>
+            <ol className="space-y-2">
+              {guide.guide.concepts.map((c, i) => (
+                <ConceptCard
+                  key={c.name}
+                  concept={c}
+                  index={i}
+                  prereqs={
+                    guide.guide.studyOrder.find((o) => o.name === c.name)?.prereqs ?? []
+                  }
+                  merged={mergedByName.get(c.name)}
+                  onGoUnit={onGoUnit}
+                />
               ))}
             </ol>
           </div>
-        )}
 
-        {/* ③ 나무 — 개념 카드. 기본 접힘으로 두어 스스로 떠올릴 여지를 남긴다 */}
-        <div className="mb-4">
-          <SectionHead
-            icon={<MapIcon className="h-4 w-4" aria-hidden />}
-            title={`핵심 개념 ${guide.guide.concepts.length}개`}
-            sub="이름을 보고 떠올려본 뒤 펼쳐보세요"
-          />
-          <ol className="space-y-2">
-            {guide.guide.concepts.map((c, i) => (
-              <ConceptCard
-                key={c.name}
-                concept={c}
-                index={i}
-                prereqs={
-                  guide.guide.studyOrder.find((o) => o.name === c.name)?.prereqs ?? []
-                }
-              />
-            ))}
-          </ol>
-        </div>
+          <div className="space-y-4 xl:sticky xl:top-16">
+            {/* 기출 — 족보가 있을 때만 */}
+            {guide.guide.pastExamTopics.length > 0 && (
+              <div className="glass-card rounded-2xl px-6 py-5">
+                <SectionHead
+                  icon={<FileText className="h-4 w-4" aria-hidden />}
+                  title="기출에서 이렇게 나왔어요"
+                  sub={`족보 ${guide.pastExams}문항 분석`}
+                />
+                <ul className="space-y-3.5">
+                  {guide.guide.pastExamTopics.map((t) => (
+                    <li key={t.topic}>
+                      <p className="flex flex-wrap items-center gap-2">
+                        <span className="text-[13.5px] font-semibold text-gray-900">
+                          {t.topic}
+                        </span>
+                        {t.years.length > 0 && (
+                          <span className="rounded-md bg-amber-50 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                            {t.years.join(" · ")}
+                          </span>
+                        )}
+                      </p>
+                      {t.detail && (
+                        <p className="mt-1 text-[12.5px] leading-relaxed text-gray-500">
+                          {t.detail}
+                        </p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-        {/* ④ 기출 — 족보가 있을 때만 */}
-        {guide.guide.pastExamTopics.length > 0 && (
-          <div className="glass-card rounded-2xl px-6 py-5">
-            <SectionHead
-              icon={<FileText className="h-4 w-4" aria-hidden />}
-              title="기출에서 이렇게 나왔어요"
-              sub={`족보 ${guide.pastExams}문항 분석`}
-            />
-            <ul className="mt-4 space-y-3.5">
-              {guide.guide.pastExamTopics.map((t) => (
-                <li key={t.topic}>
-                  <p className="flex flex-wrap items-center gap-2">
-                    <span className="text-[14px] font-semibold text-gray-900">
-                      {t.topic}
-                    </span>
-                    {t.years.length > 0 && (
-                      <span className="rounded-md bg-black/[0.04] px-1.5 py-0.5 text-[11px] font-medium text-gray-500">
-                        {t.years.join(" · ")}
+            {/* 순서별 이유 — 다이어그램에서 생략된 설명을 여기서 */}
+            {guide.guide.studyOrder.length > 0 && (
+              <div className="glass-card rounded-2xl px-6 py-5">
+                <SectionHead
+                  icon={<ListChecks className="h-4 w-4" aria-hidden />}
+                  title="왜 이 순서인가"
+                />
+                <ol className="space-y-2.5">
+                  {guide.guide.studyOrder.map((o, i) => (
+                    <li key={o.name} className="flex gap-2.5">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black/[0.04] text-[10px] font-bold text-gray-400">
+                        {i + 1}
                       </span>
-                    )}
-                  </p>
-                  {t.detail && (
-                    <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
-                      {t.detail}
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
+                      <div className="min-w-0">
+                        <p className="text-[13px] font-semibold text-gray-800">{o.name}</p>
+                        {o.reason && (
+                          <p className="mt-0.5 text-[12px] leading-relaxed text-gray-500">
+                            {o.reason}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </section>
     );
   }
