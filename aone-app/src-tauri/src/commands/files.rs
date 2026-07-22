@@ -239,6 +239,11 @@ pub fn read_snapshot(kind: String, subject: String, unit: Option<String>) -> Res
                 let u = unit_n.clone().ok_or("unit이 필요합니다")?;
                 root.join(&subject).join(&u).join(".aone").join(format!("{kind}.json"))
             }
+            // 자료 단위 요약(overview·themes) — slides.json은 카드 배열이라 따로 둔다.
+            "docSummaries" => {
+                let u = unit_n.clone().ok_or("unit이 필요합니다")?;
+                root.join(&subject).join(&u).join(".aone").join("doc-summaries.json")
+            }
             other => return Err(format!("알 수 없는 스냅샷 종류: {other}")),
         }
     } else {
@@ -257,6 +262,10 @@ pub fn read_snapshot(kind: String, subject: String, unit: Option<String>) -> Res
             "slides" => {
                 let u = unit_n.clone().ok_or("unit이 필요합니다")?;
                 public.join("slides").join(format!("{}.json", slug(&subject, &u)))
+            }
+            "docSummaries" => {
+                let u = unit_n.clone().ok_or("unit이 필요합니다")?;
+                public.join("slides").join(format!("docsum_{}.json", slug(&subject, &u)))
             }
             "guide" => public.join("snapshots").join(format!("guide_{subject}.json")),
             other => return Err(format!("알 수 없는 스냅샷 종류: {other}")),

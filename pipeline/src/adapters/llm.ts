@@ -397,7 +397,30 @@ export const SlideSummaryItemSchema = z.object({
   exam_tip: z.string().optional(),
   lecture_ref: z.string().optional(),
 });
-export const ComposeSlideSummariesOutput = z.object({ slides: z.array(SlideSummaryItemSchema) });
+/**
+ * 슬라이드 요약 산출물.
+ *
+ * 자료 전체를 한 번에 넘길 때는 overview·themes까지 함께 받는다. 쪽별 카드만
+ * 이어붙이면 "이 자료가 무엇을 다루는지"가 어디에도 없고, 흩어진 페이지가 같은
+ * 주제라는 것도 드러나지 않는다(예: PCB가 11~16쪽과 25~27쪽에 나뉘어 등장).
+ * 긴 자료를 청크로 나눌 때는 청크 하나가 전체를 못 보므로 비워두고,
+ * 청크가 다 끝난 뒤 따로 1회 조립한다.
+ */
+export const ComposeSlideSummariesOutput = z.object({
+  slides: z.array(SlideSummaryItemSchema),
+  /** 이 자료 전체가 무엇을 다루는지 3~4문장 */
+  overview: z.string().default(""),
+  /** 큰 주제 묶음 — 흩어진 페이지를 주제로 모은다 */
+  themes: z
+    .array(
+      z.object({
+        name: z.string(),
+        pages: z.array(z.number().int()),
+        point: z.string().default(""),
+      }),
+    )
+    .default([]),
+});
 export type ComposeSlideSummariesOutputT = z.infer<typeof ComposeSlideSummariesOutput>;
 
 // ─────────────────────────────────────────────────────────────
@@ -774,7 +797,12 @@ function stubComposeSlideSummaries(p: ComposeSlideSummariesPayload): ComposeSlid
       lecture_ref: "",
     };
   });
-  return { slides };
+  // stub은 주제를 판단하지 않는다 — 페이지 수만 알리는 결정적 문장으로 둔다.
+  return {
+    slides,
+    overview: `${p.tag} — ${p.pages.length}쪽 자료.`,
+    themes: [],
+  };
 }
 
 // ─────────────────────────────────────────────────────────────

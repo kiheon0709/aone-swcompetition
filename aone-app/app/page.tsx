@@ -216,6 +216,20 @@ interface SlideSummary {
   lecture_ref: string;
 }
 
+/**
+ * 자료 단위 요약 — 쪽별 카드로는 알 수 없는 것들.
+ * 흩어진 페이지가 같은 주제라는 것(예: PCB가 11~16쪽과 25~27쪽)은
+ * 자료 전체를 한 번에 봐야 나오므로 파이프라인이 따로 만들어 둔다.
+ */
+interface DocSummary {
+  doc: string;
+  /** 이 자료가 무엇을 다루고 어떤 흐름인지 */
+  overview: string;
+  themes: { name: string; pages: number[]; point: string }[];
+  pages: number;
+  generatedAt: string;
+}
+
 /** 강의 PDF 매니페스트 (public/lecture-pdfs/manifest.json) — 키는 slug */
 interface LecturePdfEntry {
   file: string;
@@ -721,6 +735,7 @@ export default function Home() {
   // 슬라이드 리더 — 열린 PDF · 페이지 · 우측 패널
   const [pdfManifest, setPdfManifest] = useState<LecturePdfManifest | null>(null);
   const [slides, setSlides] = useState<SlideSummary[] | null>(null);
+  const [docSummaries, setDocSummaries] = useState<DocSummary[]>([]);
   const [slideDocKey, setSlideDocKey] = useState<string | null>(null);
   const [docPage, setDocPage] = useState(1);
   const [docNumPages, setDocNumPages] = useState<number | null>(null);
@@ -1144,6 +1159,14 @@ export default function Home() {
       })
       .catch(() => {
         if (!cancelled) setSlides([]);
+      });
+    // 자료 단위 요약은 없을 수 있다(구 분석본) — 없으면 쪽별 카드만 보여준다.
+    loadSnapshot("docSummaries", lecture.subject, lecture.unit)
+      .then((data) => {
+        if (!cancelled) setDocSummaries(Array.isArray(data) ? (data as DocSummary[]) : []);
+      })
+      .catch(() => {
+        if (!cancelled) setDocSummaries([]);
       });
     return () => {
       cancelled = true;
@@ -2058,10 +2081,12 @@ export default function Home() {
    * accept로 업로드 성격을 구분한다:
    *  - "material"(기본): 강의자료(PDF·PPT·이미지)만. 전사·필기(txt·md)는 거부하고 안내.
    *  - "note": 전사본·필기(txt·md)만 (세부페이지 "녹음·필기" 탭 전용).
+   *  - "exam": 족보 폴더 — 기출은 PDF·스캔 사진·타이핑한 텍스트 어느 형태로든 오므로
+   *    Rust 화이트리스트(pdf·ppt·txt·md·png·jpg) 전부를 그대로 받는다.
    * 전사 텍스트는 "어느 강의와 짝인지" 명확해야 하므로 세부페이지에서만 받는다.
    */
   const uploadTo = useCallback(
-    async (folder: string, label: string, accept: "material" | "note" = "material") => {
+    async (folder: string, label: string, accept: "material" | "note" | "exam" = "material") => {
       if (!desktop) {
         // 웹 데모: 강의자료 업로드 자리에서는 "내 PDF 열어보기"로 체험을 잇고,
         // 전사본·필기(note)는 대체 체험이 없으므로 안내 모달만 띄운다.
@@ -2075,9 +2100,11 @@ export default function Home() {
         if (copied.length === 0 && rejected.length === 0) return; // 사용자가 취소
         // 성격에 안 맞는 파일은 되돌린다 (Rust 화이트리스트는 넓지만 UI에서 컨텍스트로 좁힘).
         // material 컨텍스트에선 전사·필기(txt·md) 거부, note 컨텍스트에선 그 외 거부.
-        const misplaced = copied.filter((n) =>
-          accept === "material" ? isNote(n) : !isNote(n)
-        );
+        // exam(족보)은 형태를 가리지 않으므로 되돌리지 않는다.
+        const misplaced =
+          accept === "exam"
+            ? []
+            : copied.filter((n) => (accept === "material" ? isNote(n) : !isNote(n)));
         const good = copied.filter((n) => !misplaced.includes(n));
         for (const n of misplaced) {
           try { await deleteFile(folder, n); } catch { /* 정리 실패는 무시 */ }
@@ -2234,8 +2261,9 @@ export default function Home() {
       );
       return;
     }
-    void uploadTo(folder, label);
-  }, [view, uploadTo, uploadTarget, showToast]);
+    // 족보 폴더는 기출 원문(PDF·스캔 사진·타이핑 텍스트)을 형태 구분 없이 받는다
+    void uploadTo(folder, label, isExamFolder ? "exam" : "material");
+  }, [view, uploadTo, uploadTarget, showToast, isExamFolder]);
 
   // ── 창 드래그&드롭 업로드 — 지금 열려 있는 폴더로 들어간다 ──
   const [dragOver, setDragOver] = useState(false);
@@ -2443,6 +2471,12 @@ export default function Home() {
 
   /** PdfViewer에 넘길 실제 URL (blob 우선, 준비 전엔 웹 URL) */
   const pdfViewUrl = pdfBlobUrl ?? activeDocPdf?.file ?? "";
+
+  /** 지금 보고 있는 자료의 전체 요약 (없으면 null — 구 분석본) */
+  const activeDocSummary = useMemo(
+    () => docSummaries.find((d) => d.doc === activeDocKey) ?? null,
+    [docSummaries, activeDocKey],
+  );
 
   const docSlides = useMemo(() => {
     if (!activeDocKey || !slides) return [];
@@ -4921,7 +4955,7 @@ export default function Home() {
                                   aria-hidden
                                 />,
                                 "기출 자료를 넣어주세요",
-                                "예상문제·기출 빈출 분석에 쓰여요. 족보(기출) 이미지·PDF를 이 폴더에 끌어다 놓으면 연도별로 정리해 드립니다.",
+                                "예상문제·기출 빈출 분석에 쓰여요. PDF·스캔 사진(png·jpg)·타이핑한 텍스트(txt·md) 어느 형태든 이 폴더에 넣으면 연도별로 정리해 드립니다.",
                                 <button
                                   onClick={handleUpload}
                                   className="press-scale rounded-xl bg-primary/10 px-6 py-2.5 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-primary/20"
@@ -5289,15 +5323,65 @@ export default function Home() {
                             data-testid="detail-note"
                           >
                             {docSlides.length > 0 ? (
-                              <div className="glass-card rounded-2xl px-10 py-9 lg:px-14">
+                              <div className="glass-card rounded-3xl px-10 py-9 lg:px-14">
                                 <header className="mb-7 border-b border-black/[0.06] pb-5">
                                   <h2 className="text-xl font-bold tracking-tight text-gray-900">
                                     {activeDocPdf?.title ?? activeDocKey}
                                   </h2>
                                   <p className="mt-1.5 text-sm text-gray-400">
-                                    이 자료 {docSlides.length}쪽을 순서대로 정리했어요
+                                    {docSlides.length}쪽 자료
                                   </p>
                                 </header>
+
+                                {/* 이 자료가 무엇을 다루나 — 쪽별 카드로는 알 수 없는 전체 그림 */}
+                                {activeDocSummary?.overview && (
+                                  <p className="mb-7 whitespace-pre-line text-[15px] leading-[1.9] text-gray-700">
+                                    {activeDocSummary.overview}
+                                  </p>
+                                )}
+
+                                {/* 주제별 묶음 — 흩어진 페이지를 주제로 모아 보여준다 */}
+                                {activeDocSummary && activeDocSummary.themes.length > 0 && (
+                                  <div className="mb-7">
+                                    <p className="mb-3 text-sm font-semibold text-gray-900">
+                                      이런 주제들을 다뤄요
+                                    </p>
+                                    <ul className="flex flex-col gap-3">
+                                      {activeDocSummary.themes.map((t) => (
+                                        <li
+                                          key={t.name}
+                                          className="rounded-2xl border border-black/[0.06] px-5 py-4"
+                                        >
+                                          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+                                            <span className="text-[14.5px] font-bold text-gray-900">
+                                              {t.name}
+                                            </span>
+                                            <span className="flex flex-wrap gap-1">
+                                              {t.pages.map((pg) => (
+                                                <button
+                                                  key={pg}
+                                                  onClick={() => {
+                                                    setDocPage(pg);
+                                                    setDetailTab("slides");
+                                                  }}
+                                                  title={`${pg}쪽으로 이동`}
+                                                  className="press-scale rounded-md bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-primary transition-colors duration-200 hover:bg-primary/20"
+                                                >
+                                                  {pg}
+                                                </button>
+                                              ))}
+                                            </span>
+                                          </div>
+                                          {t.point && (
+                                            <p className="mt-1.5 text-[13.5px] leading-relaxed text-gray-600">
+                                              {t.point}
+                                            </p>
+                                          )}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
 
                                 {/* 이 자료에서 시험 신호가 붙은 페이지 먼저 */}
                                 {docSlides.some((s) => s.exam_tip) && (
@@ -5323,7 +5407,18 @@ export default function Home() {
                                   </div>
                                 )}
 
-                                {/* 페이지 순서대로 요약 */}
+                                {/* 쪽별 상세 — 주제 요약이 있으면 접어둔다 (필요할 때만 펼쳐 본다) */}
+                                <details
+                                  className="group border-t border-black/[0.06] pt-5"
+                                  open={!activeDocSummary?.themes.length}
+                                >
+                                  <summary className="mb-5 flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-gray-700 hover:text-gray-900">
+                                    <ChevronRight
+                                      className="h-4 w-4 text-gray-400 transition-transform duration-200 group-open:rotate-90"
+                                      aria-hidden
+                                    />
+                                    쪽별 상세 ({docSlides.length}쪽)
+                                  </summary>
                                 <ol className="flex flex-col gap-6">
                                   {docSlides.map((s) => (
                                     <li key={s.slide_id} className="flex gap-4">
@@ -5361,6 +5456,7 @@ export default function Home() {
                                     </li>
                                   ))}
                                 </ol>
+                                </details>
                               </div>
                             ) : noteHtml ? (
                               /* 슬라이드별 설명이 아직 없으면 이 수업의 학습노트로 대체 */

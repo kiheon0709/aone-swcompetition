@@ -90,17 +90,26 @@ export function guideFilePath(subject: string, fallbackDir: string): string {
  *                            slides→{slidesDir}/{slug}.json  (outDir/slidesDir는 호출자가 넘김)
  */
 export function exportFilePath(
-  kind: "analysis" | "docs" | "slides",
+  kind: "analysis" | "docs" | "slides" | "docSummaries",
   key: UnitKey,
   fallbackDir: string,
 ): string {
   if (isNewLayout()) {
     const dir = unitAoneDir(key);
-    const name = kind === "analysis" ? "analysis.json" : kind === "docs" ? "docs.json" : "slides.json";
+    const name =
+      kind === "analysis"
+        ? "analysis.json"
+        : kind === "docs"
+          ? "docs.json"
+          : kind === "docSummaries"
+            ? "doc-summaries.json"
+            : "slides.json";
     return path.join(dir, name);
   }
   const slug = slugOf(key);
   if (kind === "slides") return path.join(fallbackDir, `${slug}.json`);
+  // 자료 단위 요약(overview·themes) — slides.json은 배열이라 담을 곳이 없어 따로 둔다.
+  if (kind === "docSummaries") return path.join(fallbackDir, `docsum_${slug}.json`);
   const prefix = kind === "docs" ? "docs_" : "";
   return path.join(fallbackDir, `${prefix}${slug}.json`);
 }

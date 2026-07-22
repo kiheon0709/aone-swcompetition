@@ -193,10 +193,10 @@ export const loadDocUrl = async (
 /**
  * 분석 산출물 스냅샷 로드 — 새 레이아웃(~/Aone/.../.aone/*.json)은 Tauri 커맨드로,
  * 브라우저(Vercel)·개발 폴백은 public 경로 fetch로. 없으면 null.
- * kind: "analysis" | "docs" | "slides" | "guide"
+ * kind: "analysis" | "docs" | "slides" | "guide" | "docSummaries"
  */
 export const loadSnapshot = async (
-  kind: "analysis" | "docs" | "slides" | "guide",
+  kind: "analysis" | "docs" | "slides" | "guide" | "docSummaries",
   subject: string,
   unit?: string,
   cacheBust?: string | number,
@@ -218,6 +218,8 @@ export const loadSnapshot = async (
   const url =
     kind === "slides"
       ? `/slides/${encodeURIComponent(slug)}.json${r}`
+      : kind === "docSummaries"
+        ? `/slides/${encodeURIComponent(`docsum_${slug}`)}.json${r}`
       : kind === "docs"
         ? `/snapshots/${encodeURIComponent(`docs_${slug}`)}.json${r}`
         : kind === "guide"

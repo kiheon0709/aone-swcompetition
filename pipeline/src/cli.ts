@@ -19,6 +19,7 @@ import {
   createEngine,
   buildPrompt,
   ComposeSlideSummariesOutput,
+  ComposeSlideSummariesOutputT,
   ComposeSlideSummariesPayload,
   EngineUsage,
   TimetableOutput,
@@ -239,6 +240,11 @@ function findDocPdf(goldsetDir: string, key: UnitKey, tag: string): string | nul
   return pdf ? path.join(unitDir, pdf) : null;
 }
 
+/** 실패 사유를 짧은 로그 문자열로 */
+function describeErr(reason: unknown): string {
+  return (reason instanceof Error ? reason.message : String(reason)).slice(0, 160);
+}
+
 async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
   const goldsetDir = opts.get("goldset") ?? DEFAULT_GOLDSET;
   const [key] = resolveTargetUnits(opts, goldsetDir);
@@ -261,60 +267,168 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
   if (pages.length === 0) throw new Error(`${folderKeyOf(key)} '${tag}': 추출된 페이지가 없음`);
 
   const engine = createEngine(engineName, { concurrency, model });
+
+  /**
+   * 한 번에 던질 수 있는 최대 페이지 수.
+   * 42쪽 자료가 1회 호출로 42개 카드를 온전히 내는 것은 실측으로 확인했다.
+   * 그 이상은 미검증이라, 출력이 잘려 뒷페이지가 통째로 사라지는 위험을 피해
+   * 처음부터 청크로 나눈다. 대학 강의자료 한 차시는 대부분 이 아래다.
+   */
+  const WHOLE_DOC_LIMIT = 60;
   const PAGES_PER_CALL = 15;
-  const chunks: SlidePage[][] = [];
-  for (let i = 0; i < pages.length; i += PAGES_PER_CALL) chunks.push(pages.slice(i, i + PAGES_PER_CALL));
+
+  /** 페이지 묶음 하나에 대한 요약 요청 (whole=true면 자료 전체 요약도 함께 받는다) */
+  const askSummaries = (chunk: SlidePage[], whole: boolean) => {
+    const payload: ComposeSlideSummariesPayload = { subject: key.subject, unit: key.unit, tag, pages: chunk };
+    const prompt = buildPrompt(
+      "compose_slide_summaries",
+      [
+        `아래는 대학 '${key.subject}' 강의 ${key.unit} 슬라이드 문서(${tag})의 페이지별 추출 텍스트다.`,
+        `각 페이지마다 학생용 복습 카드(한국어)를 만들어라. 입력의 모든 페이지를 누락 없이, 페이지 순서대로 출력하라.`,
+        `- slide_id: 정확히 "${tag}_p<2자리 페이지번호>" 형식 (예: "${tag}_p01") — 입력의 page 번호 사용`,
+        `- title_ko: 슬라이드 제목 (간결하게, 표지는 "표지: …" 형태 가능)`,
+        `- summary_ko: 2~5문장 요약. 항목 나열은 "- " 목록 줄로, 문단 구분은 빈 줄로. 교수의 강의 톤(예: "~다", 구어 인용)을 살려라`,
+        `- key_points_ko: 핵심 포인트 3~6개 (짧은 명사구/문장)`,
+        pdfPath
+          ? `- diagram_ko: 첨부된 PDF 원본을 보고 그림·다이어그램·그래프·표의 내용을 구체적으로 1~2문장 설명(무엇을 나타내는 도식인지). 없으면 빈 문자열 ""`
+          : `- diagram_ko: 페이지에 그림·다이어그램·코드 화면이 있으면 1문장 설명, 없으면 빈 문자열 ""`,
+        `- exam_tip: 텍스트에 실제 시험 단서(시험/출제/중요/암기/반드시 등)가 있을 때만 채우고, 없으면 빈 문자열 "" (지어내지 말 것)`,
+        `- lecture_ref: 근거를 특정할 수 없으면 빈 문자열 "" (녹음본 타임스탬프를 지어내지 말 것)`,
+        ...(whole
+          ? [
+              ``,
+              `또한 자료 전체를 놓고 두 가지를 더 만들어라 (쪽별 카드만으로는 알 수 없는 것이다):`,
+              `- overview: 이 자료가 무엇을 다루고 어떤 흐름으로 이어지는지 3~4문장`,
+              `- themes: 큰 주제 3~6개. 각 주제는 {name, pages:[해당 페이지 번호들], point:"한 줄 설명"}.`,
+              `  한 주제가 떨어진 페이지에 나뉘어 나오면 그 번호를 모두 담아라(예: 앞에서 소개하고 뒤에서 복습하는 경우).`,
+            ]
+          : [`- overview는 빈 문자열, themes는 빈 배열로 두어라 (이 호출은 자료 일부만 본다).`]),
+      ].join("\n"),
+      payload,
+      whole
+        ? `{"slides":[{"slide_id":"${tag}_p01","title_ko":"...","summary_ko":"...","key_points_ko":["..."],"diagram_ko":"","exam_tip":"","lecture_ref":""}],"overview":"...","themes":[{"name":"...","pages":[1,2],"point":"..."}]}`
+        : `{"slides":[{"slide_id":"${tag}_p01","title_ko":"...","summary_ko":"...","key_points_ko":["..."],"diagram_ko":"","exam_tip":"","lecture_ref":""}],"overview":"","themes":[]}`,
+    );
+    return engine.call({
+      task: "compose_slide_summaries",
+      prompt: pdfPath
+        ? `${prompt}\n\n첨부된 PDF 원본 파일이 있다. 텍스트만으로 부족한 그림·도식·그래프·표는 PDF를 직접 보고 반영하라.`
+        : prompt,
+      payload,
+      schema: ComposeSlideSummariesOutput,
+      ...(pdfPath ? { pdfPath } : {}),
+    });
+  };
+
+  /** 응답에서 페이지 번호를 뽑는다 — slide_id가 "<tag>_p07" 형식이라 코드로 판별된다 */
+  const pageOf = (slideId: string): number | null => {
+    const m = slideId.normalize("NFC").match(/_p(\d+)$/);
+    return m ? parseInt(m[1], 10) : null;
+  };
+
+  const collected = new Map<number, ComposeSlideSummariesOutputT["slides"][number]>();
+  const take = (out: ComposeSlideSummariesOutputT): void => {
+    for (const s of out.slides ?? []) {
+      const page = pageOf(s.slide_id);
+      if (page !== null) collected.set(page, s);
+    }
+  };
+  const missingPages = (): SlidePage[] => pages.filter((p) => !collected.has(p.page));
+
+  let overview = "";
+  let themes: ComposeSlideSummariesOutputT["themes"] = [];
+  const whole = pages.length <= WHOLE_DOC_LIMIT;
+
   console.log(
-    `summarize-slides — ${folderKeyOf(key)} doc=${tag}: ${pages.length}페이지 → ${chunks.length}회 호출 (engine=${engineName}${model ? `, model=${model}` : ""}${pdfPath ? ", PDF첨부(그림·도식)" : ""})`,
+    `summarize-slides — ${folderKeyOf(key)} doc=${tag}: ${pages.length}페이지 → ${
+      whole ? "1회(자료 전체)" : `${Math.ceil(pages.length / PAGES_PER_CALL)}회(분할)`
+    } (engine=${engineName}${model ? `, model=${model}` : ""}${pdfPath ? ", PDF첨부(그림·도식)" : ""})`,
   );
 
-  const settled = await Promise.allSettled(
-    chunks.map((chunk) => {
-      const payload: ComposeSlideSummariesPayload = { subject: key.subject, unit: key.unit, tag, pages: chunk };
-      const prompt = buildPrompt(
-        "compose_slide_summaries",
-        [
-          `아래는 대학 '${key.subject}' 강의 ${key.unit} 슬라이드 문서(${tag})의 페이지별 추출 텍스트다.`,
-          `각 페이지마다 학생용 복습 카드(한국어)를 만들어라. 입력의 모든 페이지를 누락 없이, 페이지 순서대로 출력하라.`,
-          `- slide_id: 정확히 "${tag}_p<2자리 페이지번호>" 형식 (예: "${tag}_p01") — 입력의 page 번호 사용`,
-          `- title_ko: 슬라이드 제목 (간결하게, 표지는 "표지: …" 형태 가능)`,
-          `- summary_ko: 2~5문장 요약. 항목 나열은 "- " 목록 줄로, 문단 구분은 빈 줄로. 교수의 강의 톤(예: "~다", 구어 인용)을 살려라`,
-          `- key_points_ko: 핵심 포인트 3~6개 (짧은 명사구/문장)`,
-          pdfPath
-            ? `- diagram_ko: 첨부된 PDF 원본을 보고 그림·다이어그램·그래프·표의 내용을 구체적으로 1~2문장 설명(무엇을 나타내는 도식인지). 없으면 빈 문자열 ""`
-            : `- diagram_ko: 페이지에 그림·다이어그램·코드 화면이 있으면 1문장 설명, 없으면 빈 문자열 ""`,
-          `- exam_tip: 텍스트에 실제 시험 단서(시험/출제/중요/암기/반드시 등)가 있을 때만 채우고, 없으면 빈 문자열 "" (지어내지 말 것)`,
-          `- lecture_ref: 근거를 특정할 수 없으면 빈 문자열 "" (녹음본 타임스탬프를 지어내지 말 것)`,
-        ].join("\n"),
-        payload,
-        `{"slides":[{"slide_id":"${tag}_p01","title_ko":"...","summary_ko":"...","key_points_ko":["..."],"diagram_ko":"","exam_tip":"","lecture_ref":""}]}`,
-      );
-      return engine.call({
+  if (whole) {
+    // 자료를 통째로 한 번에. 전체를 봐야 overview·themes가 정확하다.
+    try {
+      const out = await askSummaries(pages, true);
+      take(out);
+      overview = out.overview ?? "";
+      themes = out.themes ?? [];
+    } catch (e) {
+      console.warn(`  경고: 자료 전체 요약 실패 — 분할 요약으로 넘어갑니다 (${describeErr(e)}).`);
+    }
+
+    // 누락 보완 1회 — 빠진 페이지만 다시 묻는다 (전체 재시도가 아니라 저렴하다)
+    const missed = missingPages();
+    if (missed.length > 0 && collected.size > 0) {
+      console.log(`  ${missed.length}쪽 누락 — 빠진 쪽만 다시 요청합니다 (${missed.map((m) => m.page).join(", ")}).`);
+      try {
+        take(await askSummaries(missed, false));
+      } catch (e) {
+        console.warn(`  경고: 누락 보완 실패 (${describeErr(e)}).`);
+      }
+    }
+  }
+
+  // 통짜가 실패했거나 아직 상당수가 비면 분할 요약으로 채운다.
+  if (missingPages().length > 0) {
+    const rest = missingPages();
+    const chunks: SlidePage[][] = [];
+    for (let i = 0; i < rest.length; i += PAGES_PER_CALL) chunks.push(rest.slice(i, i + PAGES_PER_CALL));
+    if (whole) console.log(`  분할 요약으로 ${rest.length}쪽을 ${chunks.length}회에 나눠 처리합니다.`);
+
+    const settled = await Promise.allSettled(chunks.map((c) => askSummaries(c, false)));
+    settled.forEach((r, i) => {
+      if (r.status === "fulfilled") take(r.value);
+      else
+        console.warn(
+          `  경고: 슬라이드 요약 청크 ${i + 1}/${chunks.length} 실패 — 건너뜁니다 (${describeErr(r.reason)}).`,
+        );
+    });
+  }
+
+  // 분할로 처리한 경우 overview·themes가 없다 — 모인 요약으로 1회 조립한다.
+  // 입력이 원문이 아니라 요약본이라 가볍고, 그래도 자료 전체를 보고 쓰는 것이다.
+  if (!overview && collected.size > 0) {
+    try {
+      const digest = [...collected.entries()]
+        .sort((a, b) => a[0] - b[0])
+        .map(([page, s]) => `p.${page} ${s.title_ko} — ${s.summary_ko}`)
+        .join("\n");
+      const payload = { subject: key.subject, unit: key.unit, tag, pages: [] as SlidePage[] };
+      const out = await engine.call({
         task: "compose_slide_summaries",
-        prompt: pdfPath
-          ? `${prompt}\n\n첨부된 PDF 원본 파일이 있다. 텍스트만으로 부족한 그림·도식·그래프·표는 PDF를 직접 보고 반영하라.`
-          : prompt,
         payload,
         schema: ComposeSlideSummariesOutput,
-        ...(pdfPath ? { pdfPath } : {}),
+        prompt: buildPrompt(
+          "compose_slide_summaries",
+          [
+            `아래는 대학 '${key.subject}' ${key.unit} 자료(${tag})의 쪽별 요약이다.`,
+            `이 자료 전체를 놓고 두 가지만 만들어라. slides는 빈 배열로 두어라.`,
+            `- overview: 이 자료가 무엇을 다루고 어떤 흐름으로 이어지는지 3~4문장`,
+            `- themes: 큰 주제 3~6개. {name, pages:[페이지 번호들], point:"한 줄 설명"}.`,
+            `  한 주제가 떨어진 페이지에 나뉘어 나오면 번호를 모두 담아라.`,
+            ``,
+            digest,
+          ].join("\n"),
+          payload,
+          `{"slides":[],"overview":"...","themes":[{"name":"...","pages":[1,2],"point":"..."}]}`,
+        ),
       });
-    }),
-  );
+      overview = out.overview ?? "";
+      themes = out.themes ?? [];
+    } catch (e) {
+      console.warn(`  경고: 자료 전체 요약 조립 실패 — overview 없이 저장합니다 (${describeErr(e)}).`);
+    }
+  }
+
+  const results: ComposeSlideSummariesOutputT[] = [
+    { slides: [...collected.values()], overview, themes },
+  ];
 
   // slide_id → 앱 항목 변환 (doc/page 부여, 원본 페이지 순서 유지)
   // macOS 한글 파일명은 NFD, LLM 응답은 NFC — 정규화해서 매칭하고 저장 ID는 입력 tag 기준으로 재조립
   const validIds = new Map(
     pages.map((p) => [`${tag}_p${String(p.page).padStart(2, "0")}`.normalize("NFC"), p.page]),
   );
-  // allSettled: 일부 청크가 실패해도 성공한 청크의 슬라이드는 살린다.
-  const results = settled.flatMap((s, i) => {
-    if (s.status === "rejected") {
-      const msg = s.reason instanceof Error ? s.reason.message : String(s.reason);
-      console.warn(`  경고: 슬라이드 요약 청크 ${i + 1}/${chunks.length} 실패 — 건너뜁니다 (${msg.slice(0, 160)}).`);
-      return [];
-    }
-    return [s.value];
-  });
   const entries: AppSlideEntry[] = [];
   for (const r of results) {
     for (const s of r.slides ?? []) {
@@ -363,6 +477,32 @@ async function cmdSummarizeSlides(opts: Map<string, string>): Promise<void> {
   console.log(
     `병합 완료 → ${outFile} (신규/교체 ${entries.length}개, 보존 ${merged.length - entries.length}개, 총 ${merged.length}개 항목)`,
   );
+
+  // 자료 단위 요약(overview·themes) 저장 — 자료별로 병합한다.
+  // slides.json은 카드 배열이라 자료 전체 정보를 담을 곳이 없어 별도 파일을 쓴다.
+  if (overview || themes.length > 0) {
+    const sumFile = exportFilePath("docSummaries", key, appSlidesDir());
+    type DocSummary = { doc: string; overview: string; themes: typeof themes; pages: number; generatedAt: string };
+    let sums: DocSummary[] = [];
+    if (fs.existsSync(sumFile)) {
+      try {
+        sums = JSON.parse(fs.readFileSync(sumFile, "utf8")) as DocSummary[];
+      } catch (e) {
+        console.warn(`  경고: 기존 자료 요약 파일이 손상돼 새로 작성합니다 (${describeErr(e)}).`);
+      }
+    }
+    const next: DocSummary = {
+      doc: tag,
+      overview,
+      themes,
+      pages: pages.length,
+      generatedAt: new Date().toISOString(),
+    };
+    sums = [...sums.filter((x) => x.doc !== tag), next].sort((a, b) => a.doc.localeCompare(b.doc));
+    fs.mkdirSync(path.dirname(sumFile), { recursive: true });
+    fs.writeFileSync(sumFile, JSON.stringify(sums, null, 1));
+    console.log(`자료 요약 저장 → ${sumFile} (주제 ${themes.length}개)`);
+  }
 
   if (engine.usage) recordUsageLog(engineName, [folderKeyOf(key)], engine.usage);
 }
