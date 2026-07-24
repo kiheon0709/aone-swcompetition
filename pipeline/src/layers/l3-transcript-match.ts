@@ -379,3 +379,180 @@ export function matchSlidesToUtterances(
   // 입력 순서를 복원해서 반환한다
   return slides.map((s) => byId.get(s.slideId)!);
 }
+
+// ─────────────────────────────────────────────────────────────
+// 순서 정렬 매칭 (6차 실험 이후의 기본 방식)
+//
+// 강의는 슬라이드를 순서대로 넘기며 진행되고 전사본은 시간 순이다.
+// 그러므로 이것은 검색이 아니라 두 순차열의 정렬 문제다. 위의
+// matchSlidesToUtterances(독립 검색)는 매칭 순서가 19→12→11→30→…처럼
+// 뒤죽박죽이 되는 구조적 결함이 있었다 — 실험 기록 32절 참조.
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * 개념명이 "파일 연산과 시스템 콜" 같은 복합 구문이면 발화에 그대로 등장하지 않는다
+ * (교수는 "파일 연산"·"시스템 콜"로 끊어 말한다). 전체 구문이 안 맞으면
+ * 구성 토큰으로도 찾되 가중치를 낮춘다. 실험에서 File_Management 자료가
+ * 이 문제로 점수 0.17에 그쳤다.
+ */
+function strongKeywordScore(text: string, keyword: string): { score: number; label: string | null } {
+  const n = countOccurrences(text, keyword);
+  if (n > 0) return { score: STRONG_WEIGHT * (1 + Math.log2(n)) * Math.min(keyword.length, 8) / 4, label: keyword };
+  for (const tr of transliterationsOf(keyword)) {
+    const m = countOccurrences(text, tr);
+    if (m > 0) return { score: STRONG_WEIGHT * (1 + Math.log2(m)) * Math.min(tr.length, 8) / 4, label: tr };
+  }
+  // 토큰 분해 폴백 — 조사·접속어를 떼고 2자 이상 토큰만
+  const tokens = keyword.split(/[\s과와의·,]+/).filter((t) => t.length >= 2 && !NOISE.has(t));
+  if (tokens.length >= 2) {
+    let hit = 0;
+    for (const t of tokens) if (countOccurrences(text, t) > 0) hit++;
+    if (hit >= 2) {
+      // 토큰 절반 이상 등장 시에만, 전체 구문의 절반 가중치
+      return hit / tokens.length >= 0.5
+        ? { score: (STRONG_WEIGHT / 2) * hit, label: tokens.slice(0, 2).join("+") }
+        : { score: 0, label: null };
+    }
+  }
+  return { score: 0, label: null };
+}
+
+/** 발화 하나에 대한 슬라이드 키워드 점수 (정렬용 — 개념 없으면 0으로 잡담 배제) */
+function alignPairScore(
+  u: Utterance,
+  strong: string[],
+  weak: string[],
+): { score: number; hits: string[] } {
+  let score = 0;
+  const hits: string[] = [];
+  let strongHits = 0;
+  for (const k of strong) {
+    const r = strongKeywordScore(u.text, k);
+    if (r.score > 0) {
+      score += r.score;
+      if (r.label) hits.push(r.label);
+      strongHits++;
+    }
+  }
+  for (const k of weak) {
+    const n = countOccurrences(u.text, k);
+    if (n > 0) {
+      score += WEAK_WEIGHT * (1 + Math.log2(n)) * Math.min(k.length, 8) / 4;
+      hits.push(k);
+    }
+  }
+  if (strongHits === 0) return { score: 0, hits: [] };
+  return { score: score / Math.max(1, Math.log2(u.text.length)), hits: [...new Set(hits)] };
+}
+
+export interface AlignResult {
+  /** 슬라이드별 결과 (입력 순서 유지) */
+  results: MatchResult[];
+  /**
+   * 자료 전체 정렬 점수 (경로 총점 / 슬라이드 수).
+   * 전사본이 이 자료의 수업 녹음이면 높고, 다른 수업(예: 실습) 자료면 0 근처다.
+   * 실측: 맞는 자료 1.2~6.8 vs 틀린 자료 0.0~0.2 — 자료 판별에 그대로 쓴다.
+   */
+  docScore: number;
+}
+
+/**
+ * 한 자료(doc)의 슬라이드들과 전사본을 단조 정렬한다.
+ *
+ * 발화를 시간 순으로 훑으며 슬라이드 포인터는 앞으로만 이동한다.
+ * 각 발화는 현재 슬라이드에 배정되거나(점수 임계 이상), 건너뛰어지거나(잡담),
+ * 포인터를 전진시킨다. DP로 전역 최적 배정을 찾는다.
+ *
+ * 순서 제약이 오배정을 막아 주므로 임계는 독립 검색(1.1)보다 낮은 0.5가 기본이다.
+ * docScore가 minDocScore 미만이면 자료 전체를 거부한다 — 전사본이 이 자료의
+ * 수업이 아니라는 뜻이다(예: 이론 수업 녹음 vs 실습 자료).
+ */
+export function alignSlidesToUtterances(
+  slides: SlideKeywords[],
+  utterances: Utterance[],
+  opts: { minScore?: number; minDocScore?: number } = {},
+): AlignResult {
+  const tau = opts.minScore ?? 0.5;
+  const minDoc = opts.minDocScore ?? 0.3;
+  const empty = (s: SlideKeywords, reason?: string): MatchResult => ({
+    slideId: s.slideId,
+    page: s.page,
+    utterance: null,
+    utterances: [],
+    score: 0,
+    hits: [],
+    ...(reason ? { skipReason: reason } : {}),
+  });
+
+  // 전사 분량 게이트 (독립 검색과 동일 원칙)
+  const totalChars = utterances.reduce((n, u) => n + u.text.length, 0);
+  if (slides.length === 0 || utterances.length === 0 ||
+      totalChars / slides.length < MIN_CHARS_PER_SLIDE) {
+    return { results: slides.map((s) => empty(s, "전사 분량이 부족해 매칭하지 않음")), docScore: 0 };
+  }
+
+  const usable = (k: string) => k.length >= 2 && !NOISE.has(k);
+  const sorted = [...slides].sort((a, b) => a.page - b.page);
+  const M = sorted.length;
+  const N = utterances.length;
+
+  const keys = sorted.map((s) => ({
+    strong: s.strong.map(normalizeKeyword).filter(usable),
+    weak: s.weak.map(normalizeKeyword).filter((k) => usable(k) && k.length >= 3),
+  }));
+  const pair: { score: number; hits: string[] }[][] = keys.map((k) =>
+    utterances.map((u) => alignPairScore(u, k.strong, k.weak)),
+  );
+
+  // DP — dp[i][j]: 포인터가 슬라이드 i, 발화 0..j-1 처리 완료일 때 최대 점수
+  const NEG = -1e15;
+  const dp: Float64Array[] = Array.from({ length: M }, () => new Float64Array(N + 1));
+  const choice: Int8Array[] = Array.from({ length: M }, () => new Int8Array(N + 1)); // 0 skip-utt, 1 assign, 2 advance
+  for (let j = 1; j <= N; j++) {
+    for (let i = 0; i < M; i++) {
+      const skip = dp[i][j - 1];
+      const sc = pair[i][j - 1].score;
+      const assign = sc >= tau ? dp[i][j - 1] + sc : NEG;
+      const adv = i > 0 ? dp[i - 1][j] : NEG;
+      if (assign >= skip && assign >= adv) { dp[i][j] = assign; choice[i][j] = 1; }
+      else if (skip >= adv) { dp[i][j] = skip; choice[i][j] = 0; }
+      else { dp[i][j] = adv; choice[i][j] = 2; }
+    }
+  }
+  let endI = 0;
+  for (let i = 1; i < M; i++) if (dp[i][N] > dp[endI][N]) endI = i;
+  const total = dp[endI][N];
+  const docScore = total / M;
+  if (docScore < minDoc) {
+    return { results: slides.map((s) => empty(s)), docScore: Number(docScore.toFixed(2)) };
+  }
+
+  // 경로 복원
+  const assigned: number[][] = Array.from({ length: M }, () => []);
+  let i = endI;
+  let j = N;
+  while (j > 0) {
+    const c = choice[i][j];
+    if (c === 2) { i--; continue; }
+    if (c === 1) assigned[i].push(j - 1);
+    j--;
+  }
+  for (const a of assigned) a.reverse();
+
+  const byId = new Map<string, MatchResult>();
+  sorted.forEach((s, idx) => {
+    const utts = assigned[idx];
+    if (utts.length === 0) { byId.set(s.slideId, empty(s)); return; }
+    let best = utts[0];
+    for (const u of utts) if (pair[idx][u].score > pair[idx][best].score) best = u;
+    byId.set(s.slideId, {
+      slideId: s.slideId,
+      page: s.page,
+      utterance: utterances[best],
+      utterances: utts.map((u) => utterances[u]),
+      score: Number(pair[idx][best].score.toFixed(2)),
+      hits: pair[idx][best].hits,
+    });
+  });
+  return { results: slides.map((s) => byId.get(s.slideId)!), docScore: Number(docScore.toFixed(2)) };
+}
