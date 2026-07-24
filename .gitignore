@@ -26,7 +26,8 @@ aone-app/src-tauri/resources/
 제출_최종/
 goldset/
 benchmark_tools/
-docs/
+docs/*
+!docs/experiments/
 *.pptx
 *.pdf
 에타시간표*.jpeg
@@ -36,7 +37,8 @@ docs/
 Aone_경진대회_방향정리_보고서_2026-07-14.pdf
 
 # public 데모 데이터 (교수 강의 자료 — 저작권). Vercel은 로컬 out/으로 배포.
-aone-app/public/docs/
+aone-app/public/docs/*
+!docs/experiments/
 aone-app/public/uploads/
 aone-app/public/lecture-pdfs/
 aone-app/public/exams/
