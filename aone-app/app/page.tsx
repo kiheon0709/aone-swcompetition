@@ -4773,15 +4773,24 @@ export default function Home() {
                                 {/* 펼침 — 개념별 상세 */}
                                 {showAllProactive && (
                                   <ul
-                                    className="mt-3 space-y-1.5 border-t border-white/10 pt-3"
+                                    className="mt-3 space-y-1.5 border-t border-black/[0.06] pt-3"
                                     data-testid="proactive-details"
                                   >
                                     {proactiveChips.map((c, i) => (
                                       <li
                                         key={i}
-                                        className="rounded-xl bg-white/[0.06] px-3 py-2"
+                                        className="rounded-xl border border-black/[0.06] bg-white/80 px-3 py-2"
                                       >
-                                        <p className="text-xs leading-relaxed text-white/80">
+                                        {/* 접힘 칩과 같은 형식 — 개념명 + 근거 뱃지 */}
+                                        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                                          <span className="text-xs font-medium text-gray-900">
+                                            {c.concept}
+                                          </span>
+                                          <span className="text-[11px] text-gray-400">
+                                            {c.evidence}
+                                          </span>
+                                        </div>
+                                        <p className="mt-1 text-xs leading-relaxed text-gray-600">
                                           {c.text}
                                         </p>
                                         {c.questionIds.length > 0 && (
