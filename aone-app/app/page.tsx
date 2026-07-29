@@ -3631,7 +3631,9 @@ export default function Home() {
                 title="Aone — 모든 문서"
                 aria-label="Aone — 모든 문서"
               >
-                <span className="text-base font-bold italic text-white">A</span>
+                <span className="translate-x-[0.5px] -translate-y-[0.5px] text-base font-bold italic leading-none text-white">
+                  A
+                </span>
               </button>
             </div>
             <div className="mx-3 my-2 h-px bg-black/[0.06]" />
@@ -3714,7 +3716,9 @@ export default function Home() {
                 className="press-scale flex min-w-0 items-center gap-2.5 rounded-2xl px-2 py-1.5 text-left transition-colors duration-200 hover:bg-black/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/25">
-                  <span className="text-xl font-bold italic text-white">A</span>
+                  <span className="translate-x-[0.5px] -translate-y-[0.5px] text-xl font-bold italic leading-none text-white">
+                    A
+                  </span>
                 </span>
                 <span className="truncate text-xl font-bold tracking-tight text-gray-900">
                   Aone
@@ -6169,7 +6173,9 @@ export default function Home() {
             {onboardStep === 1 && (
               <>
                 <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/25">
-                  <span className="text-2xl font-bold italic text-white">A</span>
+                  <span className="translate-x-[1px] -translate-y-[1px] text-2xl font-bold italic leading-none text-white">
+                    A
+                  </span>
                 </span>
                 <h2 className="text-lg font-bold tracking-tight text-gray-900">
                   Aone에 오신 걸 환영해요
