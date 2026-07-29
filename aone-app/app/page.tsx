@@ -615,12 +615,12 @@ const TABS: { id: Tab; label: string }[] = [
  * 자료 하나 중심 뷰지만 데이터·분석 단위는 여전히 폴더(folderKey).
  */
 type DetailTab = "slides" | "note" | "quiz" | "recording" | "chat";
-const DETAIL_TABS: { id: DetailTab; label: string }[] = [
+const DETAIL_TABS: { id: DetailTab; label: string; badge?: string }[] = [
   { id: "slides", label: "슬라이드 설명" },
   { id: "note", label: "강의 요약" },
   { id: "quiz", label: "퀴즈" },
   { id: "recording", label: "녹음·필기" },
-  { id: "chat", label: "AI 챗봇" },
+  { id: "chat", label: "AI 챗봇", badge: "준비 중" },
 ];
 
 /**
@@ -4396,6 +4396,17 @@ export default function Home() {
                           }`}
                         >
                           {t.label}
+                          {t.badge && (
+                            <span
+                              className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${
+                                detailTab === t.id
+                                  ? "bg-white/20 text-white"
+                                  : "bg-amber-500/10 text-amber-600"
+                              }`}
+                            >
+                              {t.badge}
+                            </span>
+                          )}
                         </button>
                       ))}
                     </div>
@@ -5719,19 +5730,17 @@ export default function Home() {
                               </div>
                             </div>
 
-                            {/* 목업 대화 */}
-                            <div className="glass-card min-h-0 flex-1 space-y-4 overflow-y-auto rounded-2xl p-6">
-                              <div className="flex justify-end">
-                                <p className="max-w-[75%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm text-white shadow-sm">
-                                  이 슬라이드에서 시험에 나올 핵심만 정리해줘
-                                </p>
-                              </div>
-                              <div className="flex justify-start">
-                                <p className="max-w-[75%] rounded-2xl rounded-bl-md bg-black/[0.04] px-4 py-2.5 text-sm leading-relaxed text-gray-400">
-                                  AI 챗봇은 준비 중입니다. 곧 이 자료의 슬라이드·전사·개념을
-                                  근거로 질문에 답해 드릴게요.
-                                </p>
-                              </div>
+                            {/* 준비 중 안내 — 대화 내역 없음 */}
+                            <div className="glass-card flex min-h-0 flex-1 flex-col items-center justify-center rounded-2xl p-6 text-center">
+                              <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-black/5 bg-white/70 shadow-sm">
+                                <MessageSquare
+                                  className="h-6 w-6 text-gray-300"
+                                  aria-hidden
+                                />
+                              </span>
+                              <p className="text-sm font-semibold text-gray-700">
+                                이 자료를 근거로 답하는 챗봇을 준비하고 있어요
+                              </p>
                             </div>
 
                             {/* 비활성 입력창 */}
