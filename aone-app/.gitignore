@@ -16,3 +16,4 @@ next-env.d.ts
 # 업로드 PDF 미러 — goldset이 원본, rescan_files가 재생성한다
 /public/uploads/
 .vercel
+캡처/
