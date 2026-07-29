@@ -5,6 +5,10 @@ import Link from "next/link";
 import { marked } from "marked";
 import NoteCards from "@/components/NoteCards";
 import { parseNoteCards } from "@/lib/note-cards";
+import TranscriptViewer, {
+  type TranscriptHighlight,
+} from "@/components/TranscriptViewer";
+import { locatorToAnchor, parseConceptSource } from "@/lib/transcript";
 import {
   Activity as ActivityIcon,
   AlertTriangle,
@@ -765,6 +769,15 @@ export default function Home() {
   /** 강의자료 세부 페이지 상단 네비바 활성 탭 (자료 열 때 항상 슬라이드 설명으로 시작) */
   const [detailTab, setDetailTab] = useState<DetailTab>("slides");
   /** [녹음·필기] 탭에서 펼쳐 본 전사/필기 파일명 + 원문 (탭 안에서만) */
+  /** 근거 클릭으로 넘어온 전사 블록 앵커 — 도착하면 스크롤 + 강조 (FIX 14) */
+  const [transcriptFocus, setTranscriptFocus] = useState<string | null>(null);
+  /** 수업 전환이 끝나면 전사본을 열어야 하는 대기 요청 (FIX 14) */
+  const [pendingTranscript, setPendingTranscript] = useState<{
+    folderKey: string;
+    anchor: string;
+  } | null>(null);
+  /** openFile 초기화가 끝난 뒤 열어야 하는 전사본 파일명 (FIX 14) */
+  const [pendingRecDoc, setPendingRecDoc] = useState<string | null>(null);
   const [recDoc, setRecDoc] = useState<{ name: string; text: string | null } | null>(
     null
   );
@@ -1345,10 +1358,57 @@ export default function Home() {
     [lectureEntries]
   );
 
+
   // 세부 페이지를 닫거나 다른 자료로 바꾸면 [녹음·필기] 펼침 상태 초기화
   useEffect(() => {
     setRecDoc(null);
   }, [openFile, lecture]);
+
+  // 위 초기화가 끝난 뒤 전사본을 연다 — 근거 클릭 경로 전용 (FIX 14)
+  useEffect(() => {
+    if (!pendingRecDoc) return;
+    setRecDoc({ name: pendingRecDoc, text: null });
+    setPendingRecDoc(null);
+  }, [pendingRecDoc, openFile]);
+
+  /**
+   * 근거 클릭 → 그 수업의 전사본을 열고 해당 발화로 이동 (FIX 14).
+   * 수업 전환 후 파일 목록이 준비되면 실행된다.
+   */
+  useEffect(() => {
+    if (!pendingTranscript) return;
+    // 수업 전환이 실제로 끝난 뒤에 연다 — 아니면 위의 "수업이 바뀌면 초기화"가
+    // openFile을 다시 비운다 (pendingDocOpen과 같은 규칙).
+    if (!lecture || lecture.folderKey !== pendingTranscript.folderKey) return;
+    // files.json에는 kind가 없어 매니페스트가 전부 "other"로 채운다 —
+    // 파일명으로 전사본을 찾는다 (recordingEntries도 확장자로 거른다).
+    const t =
+      recordingEntries.find((f) => f.kind === "transcript") ??
+      recordingEntries.find((f) => /transcript.*\.txt$/i.test(f.name)) ??
+      recordingEntries.find((f) => /\.txt$/i.test(f.name));
+    if (!t) {
+      setPendingTranscript(null); // 전사본이 없는 수업 — 조용히 취소
+      return;
+    }
+    // 전사본 파일을 직접 열면 단독 뷰어(fileView==="transcript")로 가므로,
+    // 5탭 세부 페이지를 열어 [녹음·필기] 탭 안에서 보여준다.
+    // 이론 슬라이드를 우선 — 없으면 아무 PDF나 (kind가 비어 있을 수 있어 파일명도 본다)
+    const pdf =
+      lectureEntries.find((f) => f.kind === "theory") ??
+      lectureEntries.find((f) => isPdfName(f.name) && /이론/.test(f.name)) ??
+      lectureEntries.find((f) => isPdfName(f.name));
+    if (!pdf) {
+      setPendingTranscript(null);
+      return;
+    }
+    setOpenFile(pdf);
+    setDetailTab("recording");
+    setTranscriptFocus(pendingTranscript.anchor);
+    // recDoc은 openFile 변경이 만드는 초기화(위 effect)에 지워지므로
+    // 그 커밋이 끝난 뒤 별도 요청으로 연다.
+    setPendingRecDoc(t.name);
+    setPendingTranscript(null);
+  }, [pendingTranscript, lecture, recordingEntries, lectureEntries]);
 
   // 펼친 전사/필기 원문 로드 (탭 안에서만 — 폴더 folderKey 기준)
   useEffect(() => {
@@ -2633,6 +2693,23 @@ export default function Home() {
   );
 
   const transcriptDetail = docs?.bySource.transcript ?? null;
+
+  /**
+   * 전사본 뷰어에 넘길 강조·시험언급 발화 (FIX 14).
+   * locator는 형식에 따라 시각("02:21") 또는 줄번호("#L75")로 저장돼 있고,
+   * locatorToAnchor가 둘 다 블록 앵커로 바꿔준다.
+   */
+  const transcriptHighlights = useMemo(() => {
+    if (!transcriptDetail) return [];
+    const out: TranscriptHighlight[] = [];
+    const push = (q: DocQuote, kind: "emphasis" | "exam") => {
+      const anchor = locatorToAnchor(q.locator ?? "");
+      if (anchor) out.push({ anchor, quote: q.quote ?? "", kind });
+    };
+    for (const q of transcriptDetail.emphasis ?? []) push(q, "emphasis");
+    for (const q of transcriptDetail.examHints ?? []) push(q, "exam");
+    return out;
+  }, [transcriptDetail]);
 
   /** 재생 중인 발화 블록 — 오디오가 없으면 -1 (하이라이트 없음) */
   const activeBlockIdx = useMemo(() => {
@@ -4212,6 +4289,14 @@ export default function Home() {
                 subjects={files?.subjects ?? null}
                 onGoHome={selectHome}
                 onGoUnit={(subject, unit) => selectUnit(subject, unit, "note")}
+                onGoEvidence={(subject, unit, anchor) => {
+                  // 그 수업의 전사본을 열고 해당 발화 블록으로 이동한다 (FIX 14)
+                  selectUnit(subject, unit, "files");
+                  setPendingTranscript({
+                    folderKey: folderKeyOf(subject, unit),
+                    anchor,
+                  });
+                }}
               />
             ) : view === "agent" ? (
               /* ── 전역 에이전트 화면 — 실행 상태 · 전체 이력 · 로그 ── */
@@ -5608,40 +5693,17 @@ export default function Home() {
                                     <p className="text-sm text-gray-400">
                                       원문 불러오는 중…
                                     </p>
-                                  ) : (() => {
-                                    const t = parseTranscript(recDoc.text);
-                                    if (t) {
-                                      return (
-                                        <div className="space-y-4">
-                                          {t.intro && (
-                                            <p className="whitespace-pre-wrap border-b border-black/5 pb-4 text-xs leading-relaxed text-gray-400">
-                                              {t.intro}
-                                            </p>
-                                          )}
-                                          {t.blocks.map((b, i) => (
-                                            <div key={i}>
-                                              <div className="mb-1.5 flex items-center gap-2">
-                                                <span className="rounded-md bg-primary/10 px-1.5 py-0.5 font-mono text-xs font-medium text-primary">
-                                                  {b.time}
-                                                </span>
-                                                <span className="text-xs text-gray-400">
-                                                  {b.speaker}
-                                                </span>
-                                              </div>
-                                              <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
-                                                {b.text}
-                                              </p>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      );
-                                    }
-                                    return (
-                                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
-                                        {recDoc.text || "(내용 없음)"}
-                                      </p>
-                                    );
-                                  })()}
+                                  ) : (
+                                    <TranscriptViewer
+                                      text={recDoc.text || ""}
+                                      unitName={lectureName}
+                                      highlights={transcriptHighlights}
+                                      focusAnchor={transcriptFocus}
+                                      onFocusHandled={() =>
+                                        setTranscriptFocus(null)
+                                      }
+                                    />
+                                  )}
                                 </div>
                               </div>
                             ) : recordingEntries.length > 0 ? (
