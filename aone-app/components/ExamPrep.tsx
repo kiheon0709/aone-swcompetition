@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from "react";
 import { marked } from "marked";
+import NoteCards from "./NoteCards";
+import { parseNoteCards } from "@/lib/note-cards";
 import {
   AlertTriangle,
   CalendarPlus,
@@ -954,6 +956,7 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
         ) : segment === "note" ? (
           <NoteSection
             html={fullNoteHtml}
+            markdown={fullMarkdown}
             conceptCount={merged.length}
             unitCount={scoped?.length ?? 0}
             scopeLabel={scopeLabel}
@@ -1454,6 +1457,7 @@ function GuideSection({
 // ── 학습노트 탭 — 수업별 노트 모아보기(누적 노트) ──
 function NoteSection({
   html,
+  markdown,
   conceptCount,
   unitCount,
   scopeLabel,
@@ -1462,6 +1466,8 @@ function NoteSection({
   exportMsg,
 }: {
   html: string;
+  /** 카드 렌더용 원문 — 파싱 실패 시 html 통짜 렌더로 폴백 */
+  markdown: string;
   conceptCount: number;
   unitCount: number;
   scopeLabel: string;
@@ -1469,6 +1475,7 @@ function NoteSection({
   exporting: boolean;
   exportMsg: string | null;
 }) {
+  const hasCards = parseNoteCards(markdown).cards.length > 0;
   if (!html) {
     return <p className="text-sm text-gray-400">학습노트가 아직 없습니다.</p>;
   }
@@ -1504,12 +1511,17 @@ function NoteSection({
           {exportMsg}
         </p>
       )}
-      <div className="glass-card rounded-2xl p-8">
-        <div
-          className="note-md note-md-wide"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      </div>
+      {/* 개념 카드 렌더 — 파싱 실패 시에만 기존 통짜 마크다운으로 폴백 */}
+      {hasCards ? (
+        <NoteCards markdown={markdown} />
+      ) : (
+        <div className="glass-card rounded-2xl p-8">
+          <div
+            className="note-md note-md-wide"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        </div>
+      )}
     </section>
   );
 }

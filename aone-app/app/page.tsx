@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { marked } from "marked";
+import NoteCards from "@/components/NoteCards";
+import { parseNoteCards } from "@/lib/note-cards";
 import {
   Activity as ActivityIcon,
   AlertTriangle,
@@ -1910,6 +1912,15 @@ export default function Home() {
     if (!snapshot?.note?.markdown) return null;
     return marked.parse(snapshot.note.markdown, { async: false }) as string;
   }, [snapshot]);
+
+  /** 카드 파싱이 되면 카드로, 안 되면 기존 통짜 마크다운으로 폴백한다 */
+  const noteHasCards = useMemo(
+    () =>
+      snapshot?.note?.markdown
+        ? parseNoteCards(snapshot.note.markdown).cards.length > 0
+        : false,
+    [snapshot]
+  );
 
   // 수업별 표시용 카드 (원본화 변환) — 개수·검색·목록이 모두 이 기준을 쓴다
   const displayFilesByKey = useMemo(() => {
@@ -5517,14 +5528,22 @@ export default function Home() {
                               </div>
                             ) : noteHtml ? (
                               /* 슬라이드별 설명이 아직 없으면 이 수업의 학습노트로 대체 */
-                              <div className="glass-card rounded-2xl px-10 py-9 lg:px-14">
-                                <p className="mb-5 text-sm text-gray-400">
+                              <div>
+                                <p className="mb-4 text-sm text-gray-400">
                                   이 자료의 쪽별 정리는 아직 없어서, 이 수업의 학습노트를 보여드려요.
                                 </p>
-                                <div
-                                  className="note-md note-md-wide"
-                                  dangerouslySetInnerHTML={{ __html: noteHtml }}
-                                />
+                                {noteHasCards ? (
+                                  <NoteCards
+                                    markdown={snapshot!.note!.markdown}
+                                  />
+                                ) : (
+                                  <div className="glass-card rounded-2xl px-10 py-9 lg:px-14">
+                                    <div
+                                      className="note-md note-md-wide"
+                                      dangerouslySetInnerHTML={{ __html: noteHtml }}
+                                    />
+                                  </div>
+                                )}
                               </div>
                             ) : (
                               emptyTabState(
@@ -5965,12 +5984,18 @@ export default function Home() {
                             data-testid="tab-note"
                           >
                             {noteHtml ? (
-                              <div className="glass-card rounded-2xl px-10 py-9 lg:px-14">
-                                <div
-                                  className="note-md note-md-wide"
-                                  dangerouslySetInnerHTML={{ __html: noteHtml }}
+                              noteHasCards ? (
+                                <NoteCards
+                                  markdown={snapshot!.note!.markdown}
                                 />
-                              </div>
+                              ) : (
+                                <div className="glass-card rounded-2xl px-10 py-9 lg:px-14">
+                                  <div
+                                    className="note-md note-md-wide"
+                                    dangerouslySetInnerHTML={{ __html: noteHtml }}
+                                  />
+                                </div>
+                              )
                             ) : (
                               emptyTabState(
                                 <FileText
