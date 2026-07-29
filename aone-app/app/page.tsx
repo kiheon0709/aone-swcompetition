@@ -699,7 +699,7 @@ interface Lecture {
 }
 
 export default function Home() {
-  const [view, setView] = useState<View>("all");
+  const [view, setView] = useState<View>("home");
   /** 과목 화면에서 열려 있는 과목 이름 (view === "subject") */
   const [activeSubject, setActiveSubject] = useState<string | null>(null);
   const [lecture, setLecture] = useState<Lecture | null>(null);
