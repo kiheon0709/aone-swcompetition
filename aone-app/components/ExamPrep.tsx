@@ -941,7 +941,7 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit }: Props)
         ) : segment === "guide" ? (
           <GuideSection
             guide={guide}
-
+            scopeConceptTotal={merged.length}
             guideGen={guideGen}
             guideLogTail={guideLogTail}
             canRebuild={desktop}
@@ -1177,6 +1177,7 @@ function SectionHead({
 
 function GuideSection({
   guide,
+  scopeConceptTotal,
   guideGen,
   guideLogTail,
   canRebuild,
@@ -1189,7 +1190,8 @@ function GuideSection({
   onGoUnit,
 }: {
   guide: GuideSnapshot | null;
-
+  /** 이 시험 범위의 전체 개념 수 — 배너 숫자와 같은 대상 (가이드 상위 N과 구분) */
+  scopeConceptTotal: number;
   guideGen: "idle" | "running" | "failed";
   guideLogTail: string;
   /** Tauri 데스크톱에서만 "다시 만들기" 노출 — 브라우저는 열람 전용 */
@@ -1231,7 +1233,12 @@ function GuideSection({
               {guideScopeText(guide)}
             </p>
             <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-gray-500">
-              <span>개념 <b className="font-semibold text-gray-700">{guide.concepts}</b>개</span>
+              <span>
+                핵심 개념 <b className="font-semibold text-gray-700">{guide.concepts}</b>개
+                {scopeConceptTotal > guide.concepts && (
+                  <span className="text-gray-400"> / 전체 {scopeConceptTotal}개</span>
+                )}
+              </span>
               <span className="text-gray-300">·</span>
               <span>기출 <b className="font-semibold text-gray-700">{guide.pastExams}</b>문항</span>
               <span className="text-gray-300">·</span>
@@ -1310,7 +1317,11 @@ function GuideSection({
           <div>
             <SectionHead
               icon={<MapIcon className="h-4 w-4" aria-hidden />}
-              title={`핵심 개념 ${guide.guide.concepts.length}개`}
+              title={
+                scopeConceptTotal > guide.guide.concepts.length
+                  ? `이번 시험 핵심 ${guide.guide.concepts.length}개 (전체 ${scopeConceptTotal}개 중)`
+                  : `이번 시험 핵심 ${guide.guide.concepts.length}개`
+              }
               sub="이름을 보고 떠올려본 뒤 펼쳐보세요"
             />
             <ol className="space-y-2.5">
@@ -1833,8 +1844,14 @@ function ExamPicker({
   subjects: ManifestSubject[] | null;
   onSelect: (id: string) => void;
 }) {
-  /** 과목별 가이드 스냅샷 — 카드의 분석 현황 한 줄에 개념 수를 얹는다 */
+  /** 과목별 가이드 스냅샷 — 가이드 존재 여부 판단용 */
   const [guides, setGuides] = useState<Record<string, GuideSnapshot>>({});
+  /**
+   * 과목별 "전체 개념 수".
+   * guide.concepts는 가이드에 싣는 상위 N 고정값(20)이라 과목 지표가 될 수 없다.
+   * 주차 스냅샷의 concepts[]는 누적본이므로 가장 큰 값이 그 과목의 전체 개념 수다.
+   */
+  const [conceptTotals, setConceptTotals] = useState<Record<string, number>>({});
 
   useEffect(() => {
     let cancelled = false;
@@ -1855,6 +1872,36 @@ function ExamPicker({
       cancelled = true;
     };
   }, [exams]);
+
+  // 과목별 전체 개념 수 — 그 과목의 모든 주차 스냅샷을 읽어 최댓값을 취한다
+  useEffect(() => {
+    let cancelled = false;
+    const names = [...new Set(exams.map((e) => e.subject))];
+    Promise.all(
+      names.map(async (s) => {
+        const units = subjects?.find((x) => x.name === s)?.units ?? [];
+        const counts = await Promise.all(
+          units.map((u) =>
+            loadSnapshot("analysis", s, u.name)
+              .then((d) => {
+                const c = (d as { concepts?: unknown[] } | null)?.concepts;
+                return Array.isArray(c) ? c.length : 0;
+              })
+              .catch(() => 0)
+          )
+        );
+        return [s, counts.length > 0 ? Math.max(...counts) : 0] as const;
+      })
+    ).then((rows) => {
+      if (cancelled) return;
+      const next: Record<string, number> = {};
+      for (const [s, n] of rows) if (n > 0) next[s] = n;
+      setConceptTotals(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [exams, subjects]);
 
   return (
     <div
@@ -1877,12 +1924,15 @@ function ExamPicker({
           const d = dday(e.date);
           const units = subjects?.find((s) => s.name === e.subject)?.units ?? [];
           const g = guides[e.subject];
+          const total = conceptTotals[e.subject];
           const status =
             units.length === 0
               ? "아직 분석된 수업이 없어요"
-              : g
-                ? `${units.length}개 수업 분석됨 · 개념 ${g.concepts}개`
-                : `${units.length}개 수업`;
+              : total
+                ? `${units.length}개 수업 분석됨 · 개념 ${total}개`
+                : g
+                  ? `${units.length}개 수업 분석됨`
+                  : `${units.length}개 수업`;
           return (
             <li key={e.id}>
               <button
