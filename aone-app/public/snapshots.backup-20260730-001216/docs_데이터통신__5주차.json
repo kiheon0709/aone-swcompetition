@@ -1,0 +1,718 @@
+{
+  "subject": "데이터통신",
+  "unit": "5주차",
+  "unitOrder": 5,
+  "bySource": {
+    "transcript": {
+      "concepts": [
+        {
+          "name": "주파수",
+          "importance": 99,
+          "examSignal": 100
+        },
+        {
+          "name": "IP 주소",
+          "importance": 89,
+          "examSignal": 100
+        },
+        {
+          "name": "QAM",
+          "importance": 61,
+          "examSignal": 81
+        },
+        {
+          "name": "나이퀴스트 샘플링 정리",
+          "importance": 48,
+          "examSignal": 60
+        },
+        {
+          "name": "다중화(Multiplexing)",
+          "importance": 23,
+          "examSignal": 32
+        },
+        {
+          "name": "시분할다중화(TDM)",
+          "importance": 23,
+          "examSignal": 32
+        },
+        {
+          "name": "섀넌 공식(채널 용량)",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "비동기(Asynchronous)",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "클럭 동기화",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "압축 알고리즘",
+          "importance": 18,
+          "examSignal": 14
+        },
+        {
+          "name": "나이퀴스트 최대 전송률 공식",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "신호대잡음비(SNR)",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "프레임",
+          "importance": 32,
+          "examSignal": 7
+        },
+        {
+          "name": "맨체스터 인코딩",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "2B1Q",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "등시성(Isochronous)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "라인 코딩",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "블록 코딩",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "NRZ-I",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "NRZ(Non-Return-to-Zero)",
+          "importance": 10,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [
+        {
+          "quote": "여러분들 와이파이 속도가 어떻게 발전이 됐고 그 발전한 속도의 그 근원 기술이 뭐였을까 그걸 여러분들이 설명할 수 있어야 됩니다.",
+          "locator": "#L36",
+          "concept": "QAM"
+        },
+        {
+          "quote": "여러분들이 설명할 수 있어야 여러분 지식입니다.",
+          "locator": "#L151",
+          "concept": "압축 알고리즘"
+        },
+        {
+          "quote": "저 숫자를 가지고 압축을 시키면 인풋이 1.5기가 BPS가 들어왔을 때 mp4 알고리즘을 딱 거치면 출력이 몇 메가 BPS가 나올까 이런 걸 여러분들이 공부해서 설명할 수 있으면 훌륭한 사람이 됩니다.",
+          "locator": "#L188",
+          "concept": "압축 알고리즘"
+        },
+        {
+          "quote": "동기화 동기화가 굉장히 중요한 용어입니다.",
+          "locator": "#L337",
+          "concept": "클럭 동기화"
+        },
+        {
+          "quote": "맨체스터 인코딩 여러분들 해석할 줄 알아야 됩니다.",
+          "locator": "#L385",
+          "concept": "맨체스터 인코딩"
+        },
+        {
+          "quote": "그러니까 내가 이렇게 중요합니다.",
+          "locator": "#L461",
+          "concept": "비동기(Asynchronous)"
+        },
+        {
+          "quote": "이런 것도 중요합니다.",
+          "locator": "#L492",
+          "concept": "프레임"
+        },
+        {
+          "quote": "이거 꽤 중요한 질문입니다.",
+          "locator": "#L575",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "이거는 외워야 됩니다.",
+          "locator": "#L593",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "여러분들 제가 이거 외우라고 한 거는 진짜 중요하기 때문에 하는 거예요.",
+          "locator": "#L601",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "안 되면 큰일 났는데 오늘 2시간 열심히 떨어지는 거 의미가 없는데 이게 오늘 하이라이트입니다.",
+          "locator": "#L676",
+          "concept": "QAM"
+        },
+        {
+          "quote": "여러분들 16함이 왜 이 위치에 들어왔을까를 이해를 못하면 집에 가면 안 됩니다.",
+          "locator": "#L677",
+          "concept": "QAM"
+        },
+        {
+          "quote": "이걸 정확하게 이해해야 오늘 학교 온 보람이 있습니다.",
+          "locator": "#L697",
+          "concept": "QAM"
+        }
+      ],
+      "examHints": [],
+      "questionIds": [
+        "w5-c-데이터통신-ip주소-q1",
+        "w5-c-데이터통신-ip주소-q2"
+      ]
+    },
+    "slide": {
+      "concepts": [
+        {
+          "name": "QAM",
+          "importance": 61,
+          "examSignal": 81
+        },
+        {
+          "name": "비동기(Asynchronous)",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "등시성(Isochronous)",
+          "importance": 10,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": []
+    },
+    "exam": {
+      "concepts": [
+        {
+          "name": "대역폭",
+          "importance": 100,
+          "examSignal": 100
+        },
+        {
+          "name": "아날로그-디지털 변환",
+          "importance": 100,
+          "examSignal": 100
+        },
+        {
+          "name": "주파수",
+          "importance": 99,
+          "examSignal": 100
+        },
+        {
+          "name": "IP 주소",
+          "importance": 89,
+          "examSignal": 100
+        },
+        {
+          "name": "변조/복조",
+          "importance": 64,
+          "examSignal": 86
+        },
+        {
+          "name": "QAM",
+          "importance": 61,
+          "examSignal": 81
+        },
+        {
+          "name": "OSI 7계층",
+          "importance": 57,
+          "examSignal": 72
+        },
+        {
+          "name": "헤르츠",
+          "importance": 59,
+          "examSignal": 63
+        },
+        {
+          "name": "PCM(펄스 코드 변조)",
+          "importance": 53,
+          "examSignal": 63
+        },
+        {
+          "name": "도커(Docker)",
+          "importance": 57,
+          "examSignal": 60
+        },
+        {
+          "name": "나이퀴스트 샘플링 정리",
+          "importance": 48,
+          "examSignal": 60
+        },
+        {
+          "name": "TCP/IP",
+          "importance": 54,
+          "examSignal": 56
+        },
+        {
+          "name": "모스 부호",
+          "importance": 49,
+          "examSignal": 56
+        },
+        {
+          "name": "네트워크 계층 구조",
+          "importance": 52,
+          "examSignal": 55
+        },
+        {
+          "name": "오류 탐지와 복구",
+          "importance": 51,
+          "examSignal": 52
+        },
+        {
+          "name": "이더넷",
+          "importance": 51,
+          "examSignal": 40
+        },
+        {
+          "name": "DNS",
+          "importance": 51,
+          "examSignal": 40
+        },
+        {
+          "name": "UDP",
+          "importance": 49,
+          "examSignal": 40
+        },
+        {
+          "name": "도커 네트워킹",
+          "importance": 45,
+          "examSignal": 40
+        },
+        {
+          "name": "ping/traceroute",
+          "importance": 42,
+          "examSignal": 40
+        },
+        {
+          "name": "네트워크 인터페이스(ifconfig/ipconfig)",
+          "importance": 45,
+          "examSignal": 39
+        },
+        {
+          "name": "계층별 식별자",
+          "importance": 48,
+          "examSignal": 38
+        },
+        {
+          "name": "광케이블/파장",
+          "importance": 35,
+          "examSignal": 32
+        },
+        {
+          "name": "다중화(Multiplexing)",
+          "importance": 23,
+          "examSignal": 32
+        },
+        {
+          "name": "시분할다중화(TDM)",
+          "importance": 23,
+          "examSignal": 32
+        },
+        {
+          "name": "디지털 신호",
+          "importance": 36,
+          "examSignal": 31
+        },
+        {
+          "name": "양자화",
+          "importance": 35,
+          "examSignal": 24
+        },
+        {
+          "name": "리드-솔로몬 코드",
+          "importance": 34,
+          "examSignal": 24
+        },
+        {
+          "name": "라우팅 테이블",
+          "importance": 32,
+          "examSignal": 24
+        },
+        {
+          "name": "아날로그 신호",
+          "importance": 32,
+          "examSignal": 24
+        },
+        {
+          "name": "인코딩(부호화 약속)",
+          "importance": 26,
+          "examSignal": 24
+        },
+        {
+          "name": "샘플링(샘플)",
+          "importance": 36,
+          "examSignal": 23
+        },
+        {
+          "name": "심볼당 비트수(변조 차수)",
+          "importance": 26,
+          "examSignal": 23
+        },
+        {
+          "name": "코덱(CODEC)",
+          "importance": 21,
+          "examSignal": 16
+        },
+        {
+          "name": "섀넌 공식(채널 용량)",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "비동기(Asynchronous)",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "클럭 동기화",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "나이퀴스트 최대 전송률 공식",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "신호대잡음비(SNR)",
+          "importance": 13,
+          "examSignal": 8
+        }
+      ],
+      "emphasis": [],
+      "examHints": [
+        {
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층",
+          "locator": "2025-Q1",
+          "concept": "라우팅 테이블"
+        },
+        {
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층",
+          "locator": "2025-Q1",
+          "concept": "계층별 식별자"
+        },
+        {
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층",
+          "locator": "2025-Q1",
+          "concept": "OSI 7계층"
+        },
+        {
+          "quote": "시간당 전송된 비트 수 = 대역폭",
+          "locator": "2025-Q2",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "대역폭을 이용한 계산 문제",
+          "locator": "2025-Q3",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "대역폭을 이용한 계산 문제",
+          "locator": "2025-Q3",
+          "concept": "나이퀴스트 최대 전송률 공식"
+        },
+        {
+          "quote": "대역폭을 이용한 계산 문제",
+          "locator": "2025-Q3",
+          "concept": "섀넌 공식(채널 용량)"
+        },
+        {
+          "quote": "전화 다중화는 T1 ~ T4",
+          "locator": "2025-Q4",
+          "concept": "다중화(Multiplexing)"
+        },
+        {
+          "quote": "전화 다중화는 T1 ~ T4",
+          "locator": "2025-Q4",
+          "concept": "시분할다중화(TDM)"
+        },
+        {
+          "quote": "해저 케이블로 이동하는 시간은 전파 지연 시간(거리)",
+          "locator": "2025-Q5",
+          "concept": "광케이블/파장"
+        },
+        {
+          "quote": "CIDR 문제 꼭 풀어보기 (컴퓨터융합학부 할당, 인공지능 할당…)",
+          "locator": "2025-Q6",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "실습: THRESHOLD보다 커야 소리로 인식",
+          "locator": "2025-Q7",
+          "concept": "모스 부호"
+        },
+        {
+          "quote": "실습: THRESHOLD보다 커야 소리로 인식",
+          "locator": "2025-Q7",
+          "concept": "아날로그-디지털 변환"
+        },
+        {
+          "quote": "iperf는 bandwidth를 측정해 주는 것",
+          "locator": "2025-Q8",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "UDP는 연결 과정 필요 없음",
+          "locator": "2025-Q9",
+          "concept": "UDP"
+        },
+        {
+          "quote": "네트워크 5계층에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q1",
+          "concept": "OSI 7계층"
+        },
+        {
+          "quote": "네트워크 5계층에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q1",
+          "concept": "네트워크 계층 구조"
+        },
+        {
+          "quote": "네트워크 5계층에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q1",
+          "concept": "TCP/IP"
+        },
+        {
+          "quote": "아날로그와 디지털에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q2",
+          "concept": "아날로그 신호"
+        },
+        {
+          "quote": "아날로그와 디지털에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q2",
+          "concept": "디지털 신호"
+        },
+        {
+          "quote": "아날로그와 디지털에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q2",
+          "concept": "아날로그-디지털 변환"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "PCM(펄스 코드 변조)"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "나이퀴스트 샘플링 정리"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "샘플링(샘플)"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "양자화"
+        },
+        {
+          "quote": "TDM 계산 문제",
+          "locator": "2022-Q4",
+          "concept": "시분할다중화(TDM)"
+        },
+        {
+          "quote": "TDM 계산 문제",
+          "locator": "2022-Q4",
+          "concept": "다중화(Multiplexing)"
+        },
+        {
+          "quote": "OSI 7계층 나열 순서",
+          "locator": "2023-Q1",
+          "concept": "OSI 7계층"
+        },
+        {
+          "quote": "노이즈가 있는 신호에서 최대 비트 전송률",
+          "locator": "2023-Q2",
+          "concept": "섀넌 공식(채널 용량)"
+        },
+        {
+          "quote": "노이즈가 있는 신호에서 최대 비트 전송률",
+          "locator": "2023-Q2",
+          "concept": "신호대잡음비(SNR)"
+        },
+        {
+          "quote": "전화 연결 방식 T1에 대한 것으로 옳은 것",
+          "locator": "2023-Q3",
+          "concept": "다중화(Multiplexing)"
+        },
+        {
+          "quote": "전화 연결 방식 T1에 대한 것으로 옳은 것",
+          "locator": "2023-Q3",
+          "concept": "시분할다중화(TDM)"
+        },
+        {
+          "quote": "QAM에서 8개의 신호를 구분 가능할 때 1초에 N개의 신호를 보내고 있다면 최대 비트 전송률은?",
+          "locator": "2023-Q4",
+          "concept": "QAM"
+        },
+        {
+          "quote": "QAM에서 8개의 신호를 구분 가능할 때 1초에 N개의 신호를 보내고 있다면 최대 비트 전송률은?",
+          "locator": "2023-Q4",
+          "concept": "심볼당 비트수(변조 차수)"
+        },
+        {
+          "quote": "학과 순서대로 서브넷 주소 할당을 위한 IP의 CIDR 표기",
+          "locator": "2023-Q5",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "도커 연결 실습 빈 칸",
+          "locator": "2023-Q6",
+          "concept": "도커(Docker)"
+        },
+        {
+          "quote": "도커 연결 실습 빈 칸",
+          "locator": "2023-Q6",
+          "concept": "도커 네트워킹"
+        },
+        {
+          "quote": "모스 부호 전송 실습 빈 칸",
+          "locator": "2023-Q7",
+          "concept": "모스 부호"
+        },
+        {
+          "quote": "다중화(multiplexing) 시간을 나누어서 다중화하는 TDM은 이더넷에서 사용되지 않는다(다음 중 옳은 것은? 문제 정답)",
+          "locator": "2023-Q1",
+          "concept": "다중화(Multiplexing)"
+        },
+        {
+          "quote": "다중화(multiplexing) 시간을 나누어서 다중화하는 TDM은 이더넷에서 사용되지 않는다(다음 중 옳은 것은? 문제 정답)",
+          "locator": "2023-Q1",
+          "concept": "시분할다중화(TDM)"
+        },
+        {
+          "quote": "다중화(multiplexing) 시간을 나누어서 다중화하는 TDM은 이더넷에서 사용되지 않는다(다음 중 옳은 것은? 문제 정답)",
+          "locator": "2023-Q1",
+          "concept": "이더넷"
+        },
+        {
+          "quote": "요구 조건을 만족하는 IP 주소범위를 CIDR로 표기",
+          "locator": "2023-Q2",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)",
+          "locator": "2025-Q1",
+          "concept": "네트워크 인터페이스(ifconfig/ipconfig)"
+        },
+        {
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)",
+          "locator": "2025-Q1",
+          "concept": "DNS"
+        },
+        {
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)",
+          "locator": "2025-Q1",
+          "concept": "ping/traceroute"
+        },
+        {
+          "quote": "traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지",
+          "locator": "2025-Q2",
+          "concept": "ping/traceroute"
+        },
+        {
+          "quote": "블루투스의 특징과 활용되는 사례에 대한 설명으로 옳지 않은 것 고르기 (FHSS, 블루투스가 대역폭이 넓어 대역폭인지 등 알아야 함)",
+          "locator": "2025-Q3",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "블루투스의 특징과 활용되는 사례에 대한 설명으로 옳지 않은 것 고르기 (FHSS, 블루투스가 대역폭이 넓어 대역폭인지 등 알아야 함)",
+          "locator": "2025-Q3",
+          "concept": "주파수"
+        },
+        {
+          "quote": "음성 데이터 통신의 활용 사례에 대한 설명으로 옳지 않은 것 고르기, 스타벅스 사이렌 오더나 고무줄놀이 노래할 때 쓰는 거 고르기",
+          "locator": "2025-Q4",
+          "concept": "코덱(CODEC)"
+        },
+        {
+          "quote": "RF 주파수 대역별 활용사례에 대하여 옳지 않은 것 고르기 (라디오는 몇 대역폭을 쓰고, GPS는 몇 대역폭을 쓰고 등등)",
+          "locator": "2025-Q5",
+          "concept": "주파수"
+        },
+        {
+          "quote": "RF 주파수 대역별 활용사례에 대하여 옳지 않은 것 고르기 (라디오는 몇 대역폭을 쓰고, GPS는 몇 대역폭을 쓰고 등등)",
+          "locator": "2025-Q5",
+          "concept": "헤르츠"
+        },
+        {
+          "quote": "RF 주파수 대역별 활용사례에 대하여 옳지 않은 것 고르기 (라디오는 몇 대역폭을 쓰고, GPS는 몇 대역폭을 쓰고 등등)",
+          "locator": "2025-Q5",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함",
+          "locator": "2025-Q6",
+          "concept": "QAM"
+        },
+        {
+          "quote": "WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함",
+          "locator": "2025-Q6",
+          "concept": "변조/복조"
+        },
+        {
+          "quote": "WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함",
+          "locator": "2025-Q6",
+          "concept": "아날로그-디지털 변환"
+        },
+        {
+          "quote": "MFSK를 활용하여 16진수 유니코드를 전송하는 실습에 대하여 틀린 설명은?",
+          "locator": "2025-Q7",
+          "concept": "변조/복조"
+        },
+        {
+          "quote": "MFSK를 활용하여 16진수 유니코드를 전송하는 실습에 대하여 틀린 설명은?",
+          "locator": "2025-Q7",
+          "concept": "인코딩(부호화 약속)"
+        },
+        {
+          "quote": "모스코드 소리로 통신하는 실습과 유니코드 소리로 전송하는 실습을 비교한 것으로 틀린 설명은? 햇갈리 선지: 둘 다 송수신에 뭔들 사용해야만 정확히 송수신을 할 수 있다(x 모스코드 실습은 그렇지 않음). 두 실습의 두 비가비인데도 ...",
+          "locator": "2025-Q8",
+          "concept": "모스 부호"
+        },
+        {
+          "quote": "모스코드 소리로 통신하는 실습과 유니코드 소리로 전송하는 실습을 비교한 것으로 틀린 설명은? 햇갈리 선지: 둘 다 송수신에 뭔들 사용해야만 정확히 송수신을 할 수 있다(x 모스코드 실습은 그렇지 않음). 두 실습의 두 비가비인데도 ...",
+          "locator": "2025-Q8",
+          "concept": "클럭 동기화"
+        },
+        {
+          "quote": "모스코드 소리로 통신하는 실습과 유니코드 소리로 전송하는 실습을 비교한 것으로 틀린 설명은? 햇갈리 선지: 둘 다 송수신에 뭔들 사용해야만 정확히 송수신을 할 수 있다(x 모스코드 실습은 그렇지 않음). 두 실습의 두 비가비인데도 ...",
+          "locator": "2025-Q8",
+          "concept": "비동기(Asynchronous)"
+        },
+        {
+          "quote": "pied piper 프로젝트에 대한 설명으로 옳지 않은 것은? RSC 복구기술이 사용된 것이 아니라 FEC 솔로몬이 사용되었음",
+          "locator": "2025-Q9",
+          "concept": "리드-솔로몬 코드"
+        },
+        {
+          "quote": "pied piper 프로젝트에 대한 설명으로 옳지 않은 것은? RSC 복구기술이 사용된 것이 아니라 FEC 솔로몬이 사용되었음",
+          "locator": "2025-Q9",
+          "concept": "오류 탐지와 복구"
+        }
+      ],
+      "questionIds": []
+    }
+  }
+}

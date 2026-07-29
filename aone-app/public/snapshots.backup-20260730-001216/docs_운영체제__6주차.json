@@ -1,0 +1,240 @@
+{
+  "subject": "운영체제",
+  "unit": "6주차",
+  "unitOrder": 6,
+  "bySource": {
+    "transcript": {
+      "concepts": [
+        {
+          "name": "상호 배제(Mutual Exclusion)",
+          "importance": 39,
+          "examSignal": 35
+        },
+        {
+          "name": "세마포어와 SEM wait·signal",
+          "importance": 26,
+          "examSignal": 28
+        },
+        {
+          "name": "동기화",
+          "importance": 27,
+          "examSignal": 14
+        },
+        {
+          "name": "Test-and-Set 명령",
+          "importance": 18,
+          "examSignal": 14
+        },
+        {
+          "name": "원자적 연산(Atomic Operation)",
+          "importance": 23,
+          "examSignal": 7
+        },
+        {
+          "name": "임계 구역 문제의 요구사항",
+          "importance": 22,
+          "examSignal": 7
+        },
+        {
+          "name": "임계 구역(Critical Section)",
+          "importance": 22,
+          "examSignal": 7
+        },
+        {
+          "name": "세마포어(Semaphore)",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "교착 상태(Deadlock)",
+          "importance": 19,
+          "examSignal": 0
+        },
+        {
+          "name": "바쁜 대기(Busy Waiting)",
+          "importance": 19,
+          "examSignal": 0
+        },
+        {
+          "name": "생산자-소비자 문제",
+          "importance": 19,
+          "examSignal": 0
+        },
+        {
+          "name": "모니터와 조건 변수",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "바이너리 세마포어(뮤텍스)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "블록 상태와 대기 큐",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "Readers-Writers 문제",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "semWait와 semSignal",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "독자-작성자 문제",
+          "importance": 8,
+          "examSignal": 0
+        },
+        {
+          "name": "진입 구역과 퇴출 구역",
+          "importance": 8,
+          "examSignal": 0
+        },
+        {
+          "name": "한정 대기(Bounded Waiting)",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [
+        {
+          "quote": "자 그걸 여러분들 주의해서 잊지 말아야 되겠습니다.",
+          "locator": "#L37",
+          "concept": "Test-and-Set 명령"
+        },
+        {
+          "quote": "네, 중요한 것이라 다시 한번 강조를 합니다.",
+          "locator": "#L47",
+          "concept": "Test-and-Set 명령"
+        },
+        {
+          "quote": "중요한 것은 러닝 상태에서 계속 기다리면서 CPU를 갚고 비즈 웨이팅을 하는 것이 아니라 들어갈 수 없는 상황, Critical Section을 들어갈 수 없는 상황, 즉 다리를 건너갈 수 없는 상황이 되면 아예 Cpu를 놓고서 그냥 자면서 기다린다는 것입니다.",
+          "locator": "#L123",
+          "concept": "세마포어(Semaphore)"
+        },
+        {
+          "quote": "여러분들은 샘웨이트 함수 안에 이 구현된 코드를 기억해 두는 것이 좋습니다.",
+          "locator": "#L141",
+          "concept": "세마포어와 SEM wait·signal"
+        },
+        {
+          "quote": "기억을 해야지만 샘마포를 정확하게 이해할 수 있습니다.",
+          "locator": "#L141",
+          "concept": "세마포어와 SEM wait·signal"
+        },
+        {
+          "quote": "지금까지는 계속 atomic으로 실행돼야 된다라고 강조를 했는데 만약에 이게 atomic이 아니었을 경우 어떤 문제가 생길까?",
+          "locator": "#L165",
+          "concept": "원자적 연산(Atomic Operation)"
+        },
+        {
+          "quote": "이렇게 미추얼 익스클루션을 위해서 사용할 때 세마포 값은 반드시 S값이 1이어야 된다는 것을 꼭 기억합시다.",
+          "locator": "#L193",
+          "concept": "상호 배제(Mutual Exclusion)"
+        },
+        {
+          "quote": "그래서 여러분들의 경우는 꼭 뮤텍스라는 이름으로 세마포를 이름을 붙여줄 때는 초기값이 1이어야 된다.",
+          "locator": "#L207",
+          "concept": "상호 배제(Mutual Exclusion)"
+        },
+        {
+          "quote": "자 우리가 Semaphore를 사용할 때 주의할 점은 SEM Weight 함수가 불려지는 횟수하고 SEM Signal 함수가 불려지는 횟수가 서로 일치해야 된다는 점입니다.",
+          "locator": "#L233",
+          "concept": "세마포어와 SEM wait·signal"
+        },
+        {
+          "quote": "그러나 횟수는 일치해야 됩니다.",
+          "locator": "#L233",
+          "concept": "세마포어와 SEM wait·signal"
+        },
+        {
+          "quote": "반드시 A가 먼저 실행되고 난 후에 그다음에 B가 실행되어야만 되는 경우가 그런 경우가 자주 있습니다.",
+          "locator": "#L237",
+          "concept": "동기화"
+        },
+        {
+          "quote": "뭔가 이게 스케줄링 결과와 상관없이 프로그래머의 의도대로 반드시 A가 먼저 실행되고 난 후에 B가 실행되도록 하려면 프로세스들 사이에 동기화 방법을 써가지고 즉 순서를 제어해주는 메커니즘을 써서 언제나 이런 식으로 A 다음에 B가 실행되도록 강제로 그렇게 동작하도록 만들어줘야 됩니다.",
+          "locator": "#L245",
+          "concept": "동기화"
+        }
+      ],
+      "examHints": [],
+      "questionIds": [
+        "w6-c-운영체제-동기화-q1",
+        "w6-c-운영체제-동기화-q2",
+        "w6-c-운영체제-상호배제mutualexclusion-q1",
+        "w6-c-운영체제-상호배제mutualexclusion-q2",
+        "w6-c-운영체제-세마포어와semwaitsignal-q1",
+        "w6-c-운영체제-세마포어와semwaitsignal-q2"
+      ]
+    },
+    "slide": {
+      "concepts": [
+        {
+          "name": "Test-and-Set 명령",
+          "importance": 18,
+          "examSignal": 14
+        },
+        {
+          "name": "원자적 연산(Atomic Operation)",
+          "importance": 23,
+          "examSignal": 7
+        },
+        {
+          "name": "임계 구역 문제의 요구사항",
+          "importance": 22,
+          "examSignal": 7
+        },
+        {
+          "name": "임계 구역(Critical Section)",
+          "importance": 22,
+          "examSignal": 7
+        },
+        {
+          "name": "세마포어(Semaphore)",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "교착 상태(Deadlock)",
+          "importance": 19,
+          "examSignal": 0
+        },
+        {
+          "name": "바쁜 대기(Busy Waiting)",
+          "importance": 19,
+          "examSignal": 0
+        },
+        {
+          "name": "블록 상태와 대기 큐",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "semWait와 semSignal",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "진입 구역과 퇴출 구역",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": []
+    },
+    "exam": {
+      "concepts": [],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": []
+    }
+  }
+}

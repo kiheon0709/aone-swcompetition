@@ -1,0 +1,577 @@
+{
+  "subject": "운영체제",
+  "unit": "1주차",
+  "unitOrder": 1,
+  "concepts": [
+    {
+      "id": "c-운영체제-부팅과종료",
+      "name": "부팅과 종료",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-운영체제의효율성과편의성",
+      "name": "운영체제의 효율성과 편의성",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-처리량과응답시간",
+      "name": "처리량과 응답 시간",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-컴퓨터자원과accounting",
+      "name": "컴퓨터 자원과 Accounting",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스관리",
+      "name": "프로세스 관리",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-단일프로그래밍과단순배치",
+      "name": "단일 프로그래밍과 단순 배치",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-멀티프로그래밍",
+      "name": "멀티프로그래밍",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-멀티프로세싱smp",
+      "name": "멀티프로세싱(SMP)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-시스템콜과명령해석기",
+      "name": "시스템 콜과 명령 해석기",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-운영체제os",
+      "name": "운영체제(OS)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-커널",
+      "name": "커널",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-타임셰어링과타임퀀텀",
+      "name": "타임셰어링과 타임 퀀텀",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스스케줄링",
+      "name": "프로세스 스케줄링",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-메모리관리",
+      "name": "메모리 관리",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        }
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "ts": "2026-07-21T06:55:59.694Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "orchestrator",
+      "text": "이벤트 수신: 운영체제/1주차 자료 투입 (engine=codex-cli, tier=standard)"
+    },
+    {
+      "ts": "2026-07-21T06:55:59.694Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "orchestrator",
+      "text": "태스크 DAG 구성 — L0.extract → L1.normalize → L2L3.extract → L3.scores → L4.questions → L4.note → L4.proactive"
+    },
+    {
+      "ts": "2026-07-21T06:56:00.247Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "L0",
+      "text": "PDF 텍스트 추출 — 신규 1건, 캐시 스킵 0건 (01_Operating_System_overview.pdf)"
+    },
+    {
+      "ts": "2026-07-21T06:56:00.249Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "L1",
+      "text": "1주차 자료 정규화 — 전사 발화 292건, 슬라이드 2종 67페이지"
+    },
+    {
+      "ts": "2026-07-21T06:56:54.090Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "L2",
+      "text": "개념+신호 통합 추출(호출 1회) — 신규 개념 14개, 기존 병합 0개, 근거 41건 연결 (누적 개념 14개), 강조 5건, 시험 언급 0건"
+    },
+    {
+      "ts": "2026-07-21T06:56:54.092Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "L3",
+      "text": "unit 점수 산출 — 개념 14개 importance/examSignal 갱신 (결정적 가중 함수)"
+    },
+    {
+      "ts": "2026-07-21T06:57:50.613Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "L4",
+      "text": "예상문제 생성 — 10문항 생성, 검증 통과 10건, 반려 0건 (tier=standard)"
+    },
+    {
+      "ts": "2026-07-21T06:58:46.059Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "L4",
+      "text": "통합 학습노트 증분 조립 — 반영 개념 12개, 마크다운 5096자 (1주차까지 누적)"
+    },
+    {
+      "ts": "2026-07-21T06:58:46.059Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "L4",
+      "text": "능동 제안 조건 미충족 (임계·상승 조건 미달)"
+    },
+    {
+      "ts": "2026-07-21T06:58:46.059Z",
+      "unit": "1주차",
+      "unitOrder": 1,
+      "layer": "orchestrator",
+      "text": "1주차 처리 완료 — 누적 개념 14개, 이번 unit 신호 5건, 검증 통과 문항 10건"
+    }
+  ],
+  "proactive": [],
+  "note": {
+    "markdown": "# 운영체제 학습노트 — 1주차까지\n\n⚠️ 시험 대비 경고 개념: 없음\n\n## 1. 부팅과 종료\n\n부팅(Booting)은 운영체제를 컴퓨터 시스템에 설치하여 운영체제가 동작하도록 만드는 과정이다. 종료(Shutting down)는 부팅의 반대 과정이다. 컴퓨터라는 가게를 열고 닫는 일에 비유할 수 있다.\n\n> Booting(OS을 컴퓨터 시스템에 설치해서 OS가 동작하도록 만들어주는게 Booting임 (OS: Operating System)\n>\n> — (1주차 강의 #L12)\n\n> Booting의 반대되는게 Shutting down.\n>\n> — (1주차 강의 #L19)\n\n**왜 중요한가:** 운영체제가 언제부터 동작하기 시작하고 언제 동작을 마치는지 이해하는 출발점이기 때문이다.\n\n## 2. 운영체제의 효율성과 편의성\n\n운영체제에서는 효율성(Efficiency)이 중요하며, 사용자가 편리하게 사용할 수 있게 하는 성질을 편의성(Convenience)이라고 한다. 즉, 컴퓨터를 잘 활용하는 것과 사람이 쉽게 사용하는 것이라는 두 목표를 함께 생각해야 한다.\n\n> Efficiency가 중요하다.\n>\n> — (1주차 강의 #L53)\n\n> 사용자가 사용하기 편리한게 Convenience\n>\n> — (1주차 강의 #L54)\n\n**왜 중요한가:** 운영체제가 무엇을 목표로 설계되는지 판단하는 기본 기준이기 때문이다.\n\n## 3. 처리량과 응답 시간\n\n처리량(Throughput)은 단위 시간 동안 완료한 작업의 수이다. 응답 시간(Response time)은 사용자가 명령을 내린 순간부터 그 명령의 실행이 시작될 때까지 걸린 시간이다. 식당에 비유하면 처리량은 한 시간에 완성한 요리 수이고, 응답 시간은 주문 후 조리를 시작할 때까지 기다린 시간이다.\n\n> throughput과 response time 꼮 알아둘것!\n>\n> — (1주차 강의 #L145)\n\n> Throughput : number of jobs completed in a unit time\n>\n> — (1주차 01_Operating_System_overview p.13)\n\n> Response time : time since a user gives a command until the command is begun execution\n>\n> — (1주차 01_Operating_System_overview p.13)\n\n**왜 중요한가:** 컴퓨터가 많은 일을 처리하는지, 사용자의 명령에 빨리 반응하는지를 구분해 평가할 수 있기 때문이다.\n\n## 4. 컴퓨터 자원과 Accounting\n\n메모리, CPU, 입출력 장치(I/O), 저장장치의 데이터는 모두 컴퓨터 자원(Resource)이다. Accounting은 이러한 자원이 얼마나 사용되는지 통계를 모아 성능을 살피고, 그 사용량에 따라 과금하는 일이다.\n\n> 하드웨어의 메모리, CPU, I/O 모두 리소스고, 스토리지에 저장되는 데이터들도 리소스다.\n>\n> — (1주차 강의 #L60)\n\n> Accounting은 리소스들이 얼마만큼 사용되는지 사용 통계자료를 수집해서 어느정도 성능을 발휘하는지, 그거에 따라 과금을 한다.\n>\n> — (1주차 강의 #L64)\n\n**왜 중요한가:** 운영체제가 무엇을 관리하며, 자원 사용 기록이 성능 확인과 비용 계산에 어떻게 쓰이는지 보여주기 때문이다.\n\n## 5. 프로세스 관리\n\n프로세스 관리(Process Management)는 프로그램을 실행하고 창이 뜨게 하는 등의 일을 담당하는 운영체제 기능이다. 교수 설명에 따르면 운영체제 기능 중 분량이 가장 큰 부분이므로, 뒤의 내용을 이해하려면 먼저 잘 알아야 한다.\n\n> OS 안에 있는 Process Management라는 기능이 창이 뜨고, 실행시키고 하는것들을 하고\n>\n> — (1주차 강의 #L15)\n\n> Process Management 가 가장 덩치가 크고 양이 많으니까 이걸 잘 알아야 뒤에것도 할만하다.\n>\n> — (1주차 강의 #L23)\n\n**왜 중요한가:** 프로그램 실행을 다루는 핵심 영역이자 이후 운영체제 학습의 기반이기 때문이다.\n\n## 6. 단일 프로그래밍과 단순 배치\n\n단일 프로그래밍(Uni-Programming)은 프로그램 하나를 실행하는 방식이며, 이를 단순 배치 시스템(Simple Batch System)이라고 한다. 이 방식에서는 입출력 명령이 끝날 때까지 프로세서가 기다려야 한다.\n\n> 이게 Uni-Programming 방법.\n>\n> — (1주차 강의 #L117)\n\n> 즉, 프로그램 하나를 실행하는 방식을 Simple Batch System이라고 한다.\n>\n> — (1주차 강의 #L119)\n\n> Processor must wait for I/O instruction to complete before proceeding\n>\n> — (1주차 01_Operating_System_overview p.8)\n\n**왜 중요한가:** 한 프로그램만 실행할 때 CPU가 입출력을 기다리는 문제를 이해해야 다음의 멀티프로그래밍이 필요한 이유를 알 수 있기 때문이다.\n\n## 7. 멀티프로그래밍\n\n멀티프로그래밍에서는 한 작업이 입출력을 기다리면 프로세서가 다른 작업으로 전환할 수 있다. CPU는 하나이며, 프로그램 A와 B가 실제로 동시에 겹쳐 실행되는 것은 아니다. 한 명의 요리사가 한 요리의 오븐 시간을 기다리는 동안 다른 요리를 손질하는 모습과 비슷하다.\n\n> 멀티프로그래밍은  CPU가 필요로 하는 만큼 시간을 계속 쓰는거임.\n>\n> — (1주차 강의 #L127)\n\n> 멀티프로그래밍에서는 A를 실행하면서 B도 동시에 겹쳐서 실행되지 않는다.\n>\n> — (1주차 강의 #L166)\n\n> When one job needs to wait for I/O, the processor can switch to the other job\n>\n> — (1주차 01_Operating_System_overview p.9)\n\n**왜 중요한가:** CPU 하나로 여러 프로그램을 다루면서 입출력 대기 시간을 활용하는 원리를 설명하기 때문이다.\n\n## 8. 멀티프로세싱(SMP)\n\n멀티프로세싱은 프로세서(CPU)가 여러 개인 구성을 뜻한다. CPU가 여러 개이므로 프로그램 A와 B가 동시에 실행될 수 있으며, 관련 방식으로 대칭형 멀티프로세싱(SMP)이 제시된다.\n\n> 멀티 프로그래밍은 CPU 하나가 프로그램 A,B,C를  실행하는거고,    멀티 프로세싱은 프로세서(CPU)가 여러개 있는것을 의미한다.\n>\n> — (1주차 강의 #L151)\n\n> 근데 멀티프로세싱을 보면 CPU가 여러개인거니까 A,B가 동시에 실행될 수 있다 이거야.\n>\n> — (1주차 강의 #L167)\n\n> Symmetric multiprocessing (SMP)\n>\n> — (1주차 01_Operating_System_overview p.14)\n\n**왜 중요한가:** CPU 하나가 작업을 바꾸어 가며 실행하는 멀티프로그래밍과, 여러 CPU가 동시에 실행하는 멀티프로세싱을 구별할 수 있기 때문이다.\n\n## 9. 시스템 콜과 명령 해석기\n\n시스템 콜(System call)은 함수들의 집합이며, 실행 중인 프로그램과 운영체제 사이의 인터페이스이다. 명령 해석기(Command interpreter)는 사용자의 명령을 받아 시스템 콜을 호출함으로써 그 명령을 운영체제에 전달하는 프로그램이다.\n\n> 시스템콜은 Fuction들의 집합임.\n>\n> — (1주차 강의 #L186)\n\n> Command interpreter는 프로그램이고 프로그램의 역할이 사용자가 입력한 명령을 받아서 시스템콜을 부름으로써 OS에 전달하는거니까.\n>\n> — (1주차 강의 #L195)\n\n> System calls are the interface between a running program and the operating system.\n>\n> — (1주차 01_Operating_System_overview p.17)\n\n**왜 중요한가:** 사용자 명령과 프로그램의 요청이 어떤 통로를 거쳐 운영체제에 전달되는지 보여주기 때문이다.\n\n## 10. 운영체제(OS)\n\n운영체제(OS)는 응용 프로그램의 실행을 제어하는 소프트웨어이다. 한마디로 프로그램과 하드웨어 사이를 이어 주는 인터페이스로, 둘 사이의 중간 안내자처럼 볼 수 있다.\n\n> OS는 어플리케이션(응용) 프로그램의 실행을 제어하는 소프트웨어.\n>\n> — (1주차 강의 #L25)\n\n> 한마디로 정의하자면 프로그램과 하드웨어 사이의 인터페이스이다!\n>\n> — (1주차 강의 #L37)\n\n**왜 중요한가:** 운영체제 과목 전체에서 다루는 대상이 무엇인지 가장 짧게 설명하는 핵심 정의이기 때문이다.\n\n## 11. 커널\n\n커널(Kernel)은 ‘핵심(core)’이라는 뜻으로, 운영체제 중에서도 전통적이고 핵심적인 기능을 가리킨다. 슬라이드에서는 주기억장치에 상주하는 운영체제의 일부로 설명한다.\n\n> Kernel = 핵심(core)라는것.\n>\n> — (1주차 강의 #L93)\n\n> OS 중에서도 정통적인 핵심적인 기능을 의미함.\n>\n> — (1주차 강의 #L97)\n\n> Portion of operating system that resides in the main memory\n>\n> — (1주차 01_Operating_System_overview p.6)\n\n**왜 중요한가:** 운영체제 전체와 그 안의 핵심 부분인 커널을 구분하는 기준이기 때문이다.\n\n## 12. 타임셰어링과 타임 퀀텀\n\n타임셰어링(Time sharing)은 CPU 시간을 타임 퀀텀(Time quantum)이라는 단위로 잘게 나누어 여러 프로그램에 번갈아 주는 방식이다. 여러 프로그램이 CPU 시간을 공유하는 모습은 한 사람이 제한된 시간씩 여러 사람의 요청을 차례로 처리하는 것과 비슷하다.\n\n> 타임쉐어링은 타임퀀텀이라는 단위로 쪼개서 교대로 프로그램들에 시간을 주는거임.\n>\n> — (1주차 강의 #L128)\n\n> CPU타임을 여러개의 프로그램들이 공유한다.\n>\n> — (1주차 강의 #L128)\n\n> A time unit called a time slice (also called time quantum) is given to a program at a time\n>\n> — (1주차 01_Operating_System_overview p.12)\n\n**왜 중요한가:** 하나의 CPU 시간을 여러 프로그램이 어떤 기준으로 나누어 사용하는지 이해하게 해 주기 때문이다."
+  },
+  "questions": [
+    {
+      "id": "w1-c-운영체제-부팅과종료-q1",
+      "q": "컴퓨터에 운영체제를 설치하여 운영체제가 동작하도록 만드는 과정을 무엇이라고 하는가? 또한 그 반대 과정은 무엇인가?",
+      "a": "운영체제가 동작하도록 만드는 과정은 부팅(Booting)이고, 그 반대는 종료(Shutting down)이다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "강의에서 부팅의 의미와 그 반대 과정을 명시적으로 설명했다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.4",
+          "quote": "Booting the computer"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L19",
+          "quote": "Booting의 반대되는게 Shutting down."
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L12",
+          "quote": "Booting(OS을 컴퓨터 시스템에 설치해서 OS가 동작하도록 만들어주는게 Booting임 (OS: Operating System)"
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-부팅과종료-q2",
+      "q": "다음 중 강의에서 설명한 부팅과 종료의 관계를 올바르게 적용한 것은? ① OS가 동작하도록 만드는 것은 Shutting down이다. ② Booting과 Shutting down은 같은 과정이다. ③ OS가 동작하도록 만드는 것은 Booting이며, 그 반대는 Shutting down이다. ④ Booting은 컴퓨터 자원의 사용 통계를 수집하는 과정이다.",
+      "a": "③",
+      "difficulty": "easy",
+      "cognitiveLevel": "apply",
+      "reasoning": "부팅의 기능과 Shutting down과의 반대 관계를 구별할 수 있는지 확인하는 핵심 문항이다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.4",
+          "quote": "Booting the computer"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L19",
+          "quote": "Booting의 반대되는게 Shutting down."
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L12",
+          "quote": "Booting(OS을 컴퓨터 시스템에 설치해서 OS가 동작하도록 만들어주는게 Booting임 (OS: Operating System)"
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-운영체제의효율성과편의성-q1",
+      "q": "운영체제의 목표와 관련하여 Efficiency와 Convenience는 각각 무엇을 중시하는가?",
+      "a": "Efficiency는 효율성을 중시하고, Convenience는 사용자가 편리하게 사용할 수 있도록 하는 것을 중시한다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "슬라이드의 Objectives와 강의에서 각각 언급된 Efficiency와 Convenience의 의미를 연결하는 문항이다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.5",
+          "quote": "Objectives"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L54",
+          "quote": "사용자가 사용하기 편리한게 Convenience"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L53",
+          "quote": "Efficiency가 중요하다."
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-운영체제의효율성과편의성-q2",
+      "q": "어떤 운영체제 개선안이 사용자가 기능을 더 편리하게 이용하도록 만드는 데 초점을 맞췄다. 강의에서 제시한 목표 중 이 개선안과 가장 직접적으로 연결되는 것은 무엇이며, Efficiency와는 어떻게 구별되는가?",
+      "a": "Convenience와 직접 연결된다. Convenience는 사용자의 사용 편리성에 초점을 두고, Efficiency는 효율성에 초점을 둔다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "apply",
+      "reasoning": "운영체제의 두 목표를 실제 개선 상황에 적용하고 서로 구별하게 하는 문항이다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.5",
+          "quote": "Objectives"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L54",
+          "quote": "사용자가 사용하기 편리한게 Convenience"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L53",
+          "quote": "Efficiency가 중요하다."
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-처리량과응답시간-q1",
+      "q": "다음 중 Throughput과 Response time의 설명으로 옳지 않은 것은? ① Throughput은 단위 시간에 완료된 작업 수이다. ② Response time은 사용자가 명령을 내린 때부터 그 명령의 실행이 시작될 때까지의 시간이다. ③ Throughput은 작업 완료 개수와 관련된다. ④ Response time은 명령이 시작된 뒤 완전히 종료될 때까지의 시간이다.",
+      "a": "④. 강의에서 Response time은 명령을 내린 시점부터 실행이 시작될 때까지의 시간으로 정의되었다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "analyze",
+      "reasoning": "강의에서 두 지표를 반드시 알아두라고 강조했으므로 정의의 경계를 구별하는 문제가 출제될 가능성이 높다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.13",
+          "quote": "Response time : time since a user gives a command until the command is begun execution"
+        },
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.13",
+          "quote": "Throughput : number of jobs completed in a unit time"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L145",
+          "quote": "throughput과 response time 꼮 알아둘것!"
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-처리량과응답시간-q2",
+      "q": "한 시스템이 5분 동안 40개의 작업을 완료했다. 이 시스템의 분당 Throughput은 얼마인가? 같은 시스템에서 사용자가 명령을 내린 뒤 3초 후 실행이 시작되었다면 Response time은 얼마인가?",
+      "a": "Throughput은 40÷5=분당 8개이고, Response time은 3초이다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "apply",
+      "reasoning": "단위 시간당 완료 작업 수와 명령 후 실행 시작까지의 시간을 계산에 적용하게 하는 문항이다. 강의에서 두 개념을 꼭 알아두라고 강조했으며 signalSummary상 강조 1회, 시험언급·기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.13",
+          "quote": "Response time : time since a user gives a command until the command is begun execution"
+        },
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.13",
+          "quote": "Throughput : number of jobs completed in a unit time"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L145",
+          "quote": "throughput과 response time 꼮 알아둘것!"
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-컴퓨터자원과accounting-q1",
+      "q": "강의에서 컴퓨터의 리소스로 제시된 항목을 모두 쓰고, Accounting이 이 리소스들에 대해 수행하는 일을 설명하라.",
+      "a": "리소스에는 메모리, CPU, I/O, 스토리지에 저장된 데이터가 있다. Accounting은 리소스 사용 통계를 수집하여 성능을 파악하고 그에 따라 과금한다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "understand",
+      "reasoning": "컴퓨터 자원의 범위와 Accounting의 역할을 연결해야 운영체제의 자원 관리 목적을 이해할 수 있다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.5",
+          "quote": "Accounting"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L64",
+          "quote": "Accounting은 리소스들이 얼마만큼 사용되는지 사용 통계자료를 수집해서 어느정도 성능을 발휘하는지, 그거에 따라 과금을 한다."
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L60",
+          "quote": "하드웨어의 메모리, CPU, I/O 모두 리소스고, 스토리지에 저장되는 데이터들도 리소스다."
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-컴퓨터자원과accounting-q2",
+      "q": "다음 중 강의의 Accounting을 가장 잘 적용한 사례는? ① 사용자가 명령한 프로그램의 실행을 시작한다. ② CPU와 메모리 사용 통계를 모아 성능을 파악하고 사용량에 따라 과금한다. ③ 컴퓨터를 부팅한다. ④ 사용자가 기능을 편리하게 이용하도록 한다.",
+      "a": "②",
+      "difficulty": "medium",
+      "cognitiveLevel": "apply",
+      "reasoning": "Accounting을 단순 용어 암기가 아니라 자원 사용 통계, 성능 파악, 과금이 결합된 사례로 식별하게 한다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.5",
+          "quote": "Accounting"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L64",
+          "quote": "Accounting은 리소스들이 얼마만큼 사용되는지 사용 통계자료를 수집해서 어느정도 성능을 발휘하는지, 그거에 따라 과금을 한다."
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L60",
+          "quote": "하드웨어의 메모리, CPU, I/O 모두 리소스고, 스토리지에 저장되는 데이터들도 리소스다."
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-프로세스관리-q1",
+      "q": "사용자가 프로그램을 실행해 창이 뜨는 상황은 강의에서 설명한 운영체제의 어떤 기능과 관련되는가? 이 기능의 다른 명칭도 함께 쓰라.",
+      "a": "Process Management와 관련되며, CPU management 또는 processor management라고도 한다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "apply",
+      "reasoning": "강의가 프로그램 실행과 창 표시를 Process Management의 기능으로 연결하고 다른 명칭도 제시했다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.16",
+          "quote": "Process Management (CPU management, processor management)"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L23",
+          "quote": "Process Management 가 가장 덩치가 크고 양이 많으니까 이걸 잘 알아야 뒤에것도 할만하다."
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L15",
+          "quote": "OS 안에 있는 Process Management라는 기능이 창이 뜨고, 실행시키고 하는것들을 하고"
+        }
+      ]
+    },
+    {
+      "id": "w1-c-운영체제-프로세스관리-q2",
+      "q": "강의자가 Process Management를 먼저 잘 이해해야 뒤의 내용을 학습하기 수월하다고 설명한 이유는 무엇인가?",
+      "a": "Process Management가 운영체제 내용 가운데 가장 규모가 크고 다룰 양이 많기 때문이다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "analyze",
+      "reasoning": "강의에서 Process Management의 학습 우선순위를 그 규모와 분량에 근거해 직접 강조했다. signalSummary상 강조 1회이며 시험언급과 기출매칭은 없다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "01_Operating_System_overview p.16",
+          "quote": "Process Management (CPU management, processor management)"
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L23",
+          "quote": "Process Management 가 가장 덩치가 크고 양이 많으니까 이걸 잘 알아야 뒤에것도 할만하다."
+        },
+        {
+          "type": "transcript",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "#L15",
+          "quote": "OS 안에 있는 Process Management라는 기능이 창이 뜨고, 실행시키고 하는것들을 하고"
+        }
+      ]
+    }
+  ]
+}

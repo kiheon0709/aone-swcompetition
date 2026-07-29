@@ -1,0 +1,2187 @@
+{
+  "subject": "데이터통신",
+  "unit": "5주차",
+  "unitOrder": 5,
+  "concepts": [
+    {
+      "id": "c-데이터통신-대역폭",
+      "name": "대역폭",
+      "importance": 100,
+      "examSignal": 100,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 40
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 80
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 100
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 100
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-아날로그디지털변환",
+      "name": "아날로그-디지털 변환",
+      "importance": 100,
+      "examSignal": 100,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 47
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 87
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 100
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 100
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-주파수",
+      "name": "주파수",
+      "importance": 99,
+      "examSignal": 100,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 32
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 64
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 100
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 100
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-ip주소",
+      "name": "IP 주소",
+      "importance": 89,
+      "examSignal": 100,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 31
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 55
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 79
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 100
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-변조복조",
+      "name": "변조/복조",
+      "importance": 64,
+      "examSignal": 86,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 40
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 70
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 86
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-qam",
+      "name": "QAM",
+      "importance": 61,
+      "examSignal": 81,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 37
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 81
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-osi7계층",
+      "name": "OSI 7계층",
+      "importance": 57,
+      "examSignal": 72,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 24
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 40
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 48
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 72
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-푸리에변환",
+      "name": "푸리에 변환",
+      "importance": 65,
+      "examSignal": 63,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 21
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 21
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 42
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 63
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 63
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-헤르츠",
+      "name": "헤르츠",
+      "importance": 59,
+      "examSignal": 63,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 8
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 47
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 55
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 63
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-pcm펄스코드변조",
+      "name": "PCM(펄스 코드 변조)",
+      "importance": 53,
+      "examSignal": 63,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 47
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 55
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 63
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-도커docker",
+      "name": "도커(Docker)",
+      "importance": 57,
+      "examSignal": 60,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 36
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 44
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 52
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 60
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-나이퀴스트샘플링정리",
+      "name": "나이퀴스트 샘플링 정리",
+      "importance": 48,
+      "examSignal": 60,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 32
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 52
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 60
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-tcpip",
+      "name": "TCP/IP",
+      "importance": 54,
+      "examSignal": 56,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 40
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 40
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 40
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 48
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 56
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-모스부호",
+      "name": "모스 부호",
+      "importance": 49,
+      "examSignal": 56,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 16
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 32
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 56
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-네트워크계층구조",
+      "name": "네트워크 계층 구조",
+      "importance": 52,
+      "examSignal": 55,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 23
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 39
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 47
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 55
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-오류탐지와복구",
+      "name": "오류 탐지와 복구",
+      "importance": 51,
+      "examSignal": 52,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 15
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 44
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 52
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-dns",
+      "name": "DNS",
+      "importance": 51,
+      "examSignal": 40,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 8
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 16
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 24
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 32
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 40
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-이더넷",
+      "name": "이더넷",
+      "importance": 51,
+      "examSignal": 40,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 8
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 16
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 24
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 32
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 40
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-udp",
+      "name": "UDP",
+      "importance": 49,
+      "examSignal": 40,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 8
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 16
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 24
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 32
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 40
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-도커네트워킹",
+      "name": "도커 네트워킹",
+      "importance": 45,
+      "examSignal": 40,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 8
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 16
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 32
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 40
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-pingtraceroute",
+      "name": "ping/traceroute",
+      "importance": 42,
+      "examSignal": 40,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 8
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 16
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 24
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 40
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-네트워크인터페이스ifconfigipconfig",
+      "name": "네트워크 인터페이스(ifconfig/ipconfig)",
+      "importance": 45,
+      "examSignal": 39,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 15
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 23
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 31
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 39
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-계층별식별자",
+      "name": "계층별 식별자",
+      "importance": 48,
+      "examSignal": 38,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 22
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 30
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 38
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-프로토콜",
+      "name": "프로토콜",
+      "importance": 37,
+      "examSignal": 38,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 38
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 38
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 38
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 38
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 38
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-광케이블파장",
+      "name": "광케이블/파장",
+      "importance": 35,
+      "examSignal": 32,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 16
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 24
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 32
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-다중화multiplexing",
+      "name": "다중화(Multiplexing)",
+      "importance": 23,
+      "examSignal": 32,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 32
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-시분할다중화tdm",
+      "name": "시분할다중화(TDM)",
+      "importance": 23,
+      "examSignal": 32,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 32
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-디지털신호",
+      "name": "디지털 신호",
+      "importance": 36,
+      "examSignal": 31,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 15
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 23
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 31
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-포트번호",
+      "name": "포트 번호",
+      "importance": 31,
+      "examSignal": 31,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 15
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 31
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 31
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 31
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-진폭크기",
+      "name": "진폭(크기)",
+      "importance": 34,
+      "examSignal": 30,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 30
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 30
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-가상화virtualization",
+      "name": "가상화(Virtualization)",
+      "importance": 31,
+      "examSignal": 29,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 21
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 29
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 29
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 29
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-양자화",
+      "name": "양자화",
+      "importance": 35,
+      "examSignal": 24,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 16
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 24
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-리드솔로몬코드",
+      "name": "리드-솔로몬 코드",
+      "importance": 34,
+      "examSignal": 24,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 16
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 24
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-라우팅테이블",
+      "name": "라우팅 테이블",
+      "importance": 32,
+      "examSignal": 24,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 16
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 16
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 24
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-아날로그신호",
+      "name": "아날로그 신호",
+      "importance": 32,
+      "examSignal": 24,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 16
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 24
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-인코딩부호화약속",
+      "name": "인코딩(부호화 약속)",
+      "importance": 26,
+      "examSignal": 24,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 16
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 24
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-샘플링샘플",
+      "name": "샘플링(샘플)",
+      "importance": 36,
+      "examSignal": 23,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 15
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 23
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-심볼당비트수변조차수",
+      "name": "심볼당 비트수(변조 차수)",
+      "importance": 26,
+      "examSignal": 23,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 15
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 23
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-아스키코드",
+      "name": "아스키 코드",
+      "importance": 26,
+      "examSignal": 16,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 16
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 16
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 16
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-코덱codec",
+      "name": "코덱(CODEC)",
+      "importance": 21,
+      "examSignal": 16,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 8
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 16
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-섀넌공식채널용량",
+      "name": "섀넌 공식(채널 용량)",
+      "importance": 16,
+      "examSignal": 16,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 16
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-비동기asynchronous",
+      "name": "비동기(Asynchronous)",
+      "importance": 17,
+      "examSignal": 15,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 15
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-클럭동기화",
+      "name": "클럭 동기화",
+      "importance": 17,
+      "examSignal": 15,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 15
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-사인파",
+      "name": "사인파",
+      "importance": 27,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 14
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 14
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-압축알고리즘",
+      "name": "압축 알고리즘",
+      "importance": 18,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-유닉스리눅스unixlinux",
+      "name": "유닉스/리눅스(Unix/Linux)",
+      "importance": 18,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 14
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 14
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 14
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-트랜스포머transformer",
+      "name": "트랜스포머(Transformer)",
+      "importance": 18,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 14
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 14
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 14
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 14
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-패킷캡처packetcapture",
+      "name": "패킷 캡처(Packet Capture)",
+      "importance": 32,
+      "examSignal": 8,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 8
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 8
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 8
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 8
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-패킷",
+      "name": "패킷",
+      "importance": 21,
+      "examSignal": 8,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 8
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 8
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 8
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 8
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-wav파일포맷",
+      "name": "WAV 파일 포맷",
+      "importance": 13,
+      "examSignal": 8,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 8
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 8
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 8
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-나이퀴스트최대전송률공식",
+      "name": "나이퀴스트 최대 전송률 공식",
+      "importance": 13,
+      "examSignal": 8,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 8
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-신호대잡음비snr",
+      "name": "신호대잡음비(SNR)",
+      "importance": 13,
+      "examSignal": 8,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 8
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-프레임",
+      "name": "프레임",
+      "importance": 32,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-위상",
+      "name": "위상",
+      "importance": 23,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-mac주소",
+      "name": "MAC 주소",
+      "importance": 22,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-디폴트게이트웨이",
+      "name": "디폴트 게이트웨이",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-맨체스터인코딩",
+      "name": "맨체스터 인코딩",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-사인함수",
+      "name": "사인 함수",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-http",
+      "name": "HTTP",
+      "importance": 19,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-소켓프로그래밍",
+      "name": "소켓 프로그래밍",
+      "importance": 18,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-2b1q",
+      "name": "2B1Q",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-dockerfile",
+      "name": "Dockerfile",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-nrzi",
+      "name": "NRZ-I",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-nrznonreturntozero",
+      "name": "NRZ(Non-Return-to-Zero)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-도커이미지dockerimage",
+      "name": "도커 이미지(Docker Image)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-등시성isochronous",
+      "name": "등시성(Isochronous)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-라인코딩",
+      "name": "라인 코딩",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-블록코딩",
+      "name": "블록 코딩",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-캡슐화",
+      "name": "캡슐화",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-물리계층",
+      "name": "물리 계층",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-컨테이너container",
+      "name": "컨테이너(Container)",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-데이터통신-웹접속도구curlwget",
+      "name": "웹 접속 도구(curl/wget)",
+      "importance": 7,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        }
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "ts": "2026-07-21T09:40:44.635Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "orchestrator",
+      "text": "이벤트 수신: 데이터통신/5주차 자료 투입 (engine=claude-cli, tier=standard)"
+    },
+    {
+      "ts": "2026-07-21T09:40:44.636Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "orchestrator",
+      "text": "태스크 DAG 구성 — L0.extract → L1.normalize → L2L3.extract → L3.examIngest → L3.scores → L4.questions → L4.note → L4.proactive"
+    },
+    {
+      "ts": "2026-07-21T09:40:44.636Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L0",
+      "text": "PDF 텍스트 추출 — 신규 0건, 캐시 스킵 3건"
+    },
+    {
+      "ts": "2026-07-21T09:40:44.639Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L1",
+      "text": "5주차 자료 정규화 — 전사 발화 854건, 슬라이드 3종 71페이지, 기출 문항 36건"
+    },
+    {
+      "ts": "2026-07-21T09:44:43.786Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L2",
+      "text": "개념+신호 통합 추출(호출 2회) — 신규 개념 15개, 기존 병합 8개, 근거 60건 연결 (누적 개념 72개), 강조 13건, 시험 언급 0건"
+    },
+    {
+      "ts": "2026-07-21T09:45:55.325Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L3",
+      "text": "기출 투입 처리 — 문항 36건 저장, 개념 매칭 62건 (39개 개념 시험신호 상승)"
+    },
+    {
+      "ts": "2026-07-21T09:45:55.332Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L3",
+      "text": "unit 점수 산출 — 개념 72개 importance/examSignal 갱신 (결정적 가중 함수)"
+    },
+    {
+      "ts": "2026-07-21T09:48:42.651Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L4",
+      "text": "예상문제 생성 — 10문항 생성, 검증 통과 10건, 반려 0건 (tier=standard)"
+    },
+    {
+      "ts": "2026-07-21T09:58:12.518Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L4",
+      "text": "통합 학습노트 증분 조립 — 반영 개념 48개, 마크다운 42133자 (5주차까지 누적)"
+    },
+    {
+      "ts": "2026-07-21T09:58:12.520Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "L4",
+      "text": "능동 제안 16건 발동 — ping/traceroute, QAM, 네트워크 인터페이스(ifconfig/ipconfig), 오류 탐지와 복구, 광케이블/파장, 다중화(Multiplexing), 시분할다중화(TDM), 계층별 식별자, 디지털 신호, 양자화, 리드-솔로몬 코드, 라우팅 테이블, 아날로그 신호, 인코딩(부호화 약속), 샘플링(샘플), 심볼당 비트수(변조 차수)"
+    },
+    {
+      "ts": "2026-07-21T09:58:12.520Z",
+      "unit": "5주차",
+      "unitOrder": 5,
+      "layer": "orchestrator",
+      "text": "5주차 처리 완료 — 누적 개념 72개, 이번 unit 신호 75건, 검증 통과 문항 10건"
+    }
+  ],
+  "proactive": [
+    {
+      "text": "'ping/traceroute' 시험신호가 78→100로 상승했습니다. 기출 5회 매칭, 시험 언급 0회, 강조 0회 감지 — 예상문제 2개를 준비했어요. 지금 풀어보시겠어요?",
+      "questionIds": [
+        "w5-c-데이터통신-pingtraceroute-q1",
+        "w5-c-데이터통신-pingtraceroute-q2"
+      ]
+    },
+    {
+      "text": "'QAM' 시험신호가 82→100로 상승했습니다. 기출 4회 매칭, 시험 언급 0회, 강조 7회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'네트워크 인터페이스(ifconfig/ipconfig)' 시험신호가 88→100로 상승했습니다. 기출 4회 매칭, 시험 언급 0회, 강조 1회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'오류 탐지와 복구' 시험신호가 92→100로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 4회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'광케이블/파장' 시험신호가 78→100로 상승했습니다. 기출 4회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'다중화(Multiplexing)' 시험신호가 0→100로 상승했습니다. 기출 4회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'시분할다중화(TDM)' 시험신호가 0→100로 상승했습니다. 기출 4회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'계층별 식별자' 시험신호가 72→98로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 2회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'디지털 신호' 시험신호가 62→88로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 1회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'양자화' 시험신호가 52→78로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'리드-솔로몬 코드' 시험신호가 52→78로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'라우팅 테이블' 시험신호가 52→78로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'아날로그 신호' 시험신호가 52→78로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'인코딩(부호화 약속)' 시험신호가 52→78로 상승했습니다. 기출 3회 매칭, 시험 언급 0회, 강조 0회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'샘플링(샘플)' 시험신호가 36→62로 상승했습니다. 기출 2회 매칭, 시험 언급 0회, 강조 1회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    },
+    {
+      "text": "'심볼당 비트수(변조 차수)' 시험신호가 36→62로 상승했습니다. 기출 2회 매칭, 시험 언급 0회, 강조 1회 감지 — 다음 주기에 예상문제를 준비할게요.",
+      "questionIds": []
+    }
+  ],
+  "note": {
+    "markdown": "# 데이터통신 학습노트 — 5주차까지\n\n> ⚠️ **시험 대비 경고**: 아날로그-디지털 변환, TCP/IP, 대역폭, 프로토콜, 주파수 — 이 5개 개념은 기출 신호가 강하게 잡히는 핵심 개념이니 반드시 확실히 이해하고 넘어가세요.\n\n---\n\n## 1. 아날로그-디지털 변환 ⚠️\n\n**정의 요약:** 아날로그(연속적으로 이어지는 소리·신호)를 디지털(0과 1로 끊어진 신호)로 바꾸고, 다시 디지털을 아날로그로 되돌리는 과정이다. 예를 들어 우리가 실제로 말하는 목소리는 순수한 아날로그지만, 전화나 스마트폰을 거치면 아날로그→디지털→아날로그 변환이 일어난다. 비유하자면 손글씨 편지(아날로그)를 타자로 쳐서 파일(디지털)로 만들었다가 다시 프린트해서 읽는 과정과 비슷하다. 우리가 쓰는 거의 모든 통신기기가 이 변환을 거치기 때문에 데이터통신의 가장 기본이 되는 개념이다.\n\n**교수님 설명:**\n> \"우리가 지금 아는 건 제가 막 떠들고 여러분 듣고 하는 아날로그 순전히 근데 똑같은 걸 전화 스마트폰으로 하면 아날로그 디지털 디지털 아날로그 변환이 돼요.\" — (1주차 강의 14:58)\n>\n> \"어떻게 변하는가 이거 그대로 여러분들이 실습 숙제 할 겁니다.\" — (1주차 강의 14:58)\n>\n> \"디지털이 디지털 디지털을 아날로그로 변환하고 이런 기술들이 모델입니다.\" — (1주차 강의 02:21)\n>\n> \"그래서 디아 디지털 로그 얘기를 할 거예요.\" — (3주차 강의 04:50)\n\n> \"실습: THRESHOLD보다 커야 소리로 인식\" — (1주차 2025-Q7)\n\n---\n\n## 2. TCP/IP ⚠️\n\n**정의 요약:** TCP/IP는 인터넷에서 데이터를 주고받을 때 쓰는 대표적인 통신 규칙 묶음으로, 유선 통신의 기본인 이더넷을 기반으로 동작한다. 실습에서 와이어샤크로 패킷을 열어보면 실제로 송수신 IP 주소와 포트 번호, 그 사이를 오가는 응용 메시지, 그리고 연결을 끝내는 신호까지 순서대로 확인할 수 있다. 예전에는 여러 통신 방식이 따로 있었지만 지금은 대부분 TCP/IP로 통합되어, 현재 거의 모든 이동통신 기술이 이 위에서 웹과 인터넷을 지원하기 때문에 반드시 이해해야 하는 개념이다.\n\n**교수님 설명:**\n> \"그리고 우리 tcpip를 쓸 때 무조건 이더넷 기반입니다.\" — (1주차 강의 08:04)\n>\n> \"옛날에 여러 가지가 있었지만 지금은 다 통합돼서 tcpip를 이해를 해야 됩니다.\" — (1주차 강의 09:16)\n>\n> \"커맨드 그런 거 하면 이렇게 송수신하는 IP 주소 포트 번호 안에 내용 이렇게 쭉 보여주면 이 내용이 그대로 여기 TCP 연결 응용 메시지 왔다 갔다 끝 그다음에 여기 핀 핀 이런 게 연결 종료 이 내려 볼 수가\" — (2주차 강의 35:31)\n\n> \"-tn은 전송계층, -rn은 네트워크 계층\" — (1주차 2025-Q1)\n\n---\n\n## 3. 대역폭 ⚠️\n\n**정의 요약:** 대역폭은 일정 시간 동안 전달할 수 있는 신호(소리·데이터)의 범위 또는 양을 뜻한다. 사람 목소리는 성대가 울려서 20Hz~2만Hz라는 대역폭을 내고, 우리 귀는 그 범위 안의 소리를 듣는다. 비유하자면 대역폭은 도로의 차선 수와 같아서, 차선(대역폭)이 넓을수록 한 번에 더 많은 데이터(차)가 지나갈 수 있다. 실제로 전화망에서는 사람 목소리 대역을 약 3,100Hz 정도로 잘라서 쓰는데, 대역폭을 좁혀야 그만큼 보내야 할 데이터 양도 줄어들기 때문이다. 시험에서 \"시간당 전송된 비트 수 = 대역폭\" 형태의 계산 문제로 자주 나오는 만큼 확실히 짚고 넘어가야 한다.\n\n**교수님 설명:**\n> \"주파수 사람이 듣는 주파수 돌고래가 내는 주파수가 아니고 그렇죠 사람 목소리가 이 성대를 울려서 내는 주파수가 20에서 2만 헤지라는 대어 폭이 있습니다.\" — (1주차 강의 03:38)\n>\n> \"그 대역폭을 제가 내고 여러분들 귀는 그 소리를 듣습니다.\" — (1주차 강의 03:38)\n>\n> \"전화는 일단 저렇게 잘라야 데이터 용량이 줄어듭니다.\" — (4주차 강의 23:25)\n>\n> \"그러면 여기 전화 같으면 한 3100 정도 3천 정도로 잘라서 다 이유가 있어요.\" — (4주차 강의 23:25)\n\n> \"시간당 전송된 비트 수 = 대역폭\" — (1주차 2025-Q2)\n>\n> \"대역폭을 이용한 계산 문제\" — (1주차 2025-Q3)\n\n---\n\n## 4. 프로토콜 ⚠️\n\n**정의 요약:** 프로토콜은 통신하는 두 장치(혹은 사람)가 데이터를 주고받기 위해 미리 정해놓은 약속이며, 여러 프로토콜을 묶어서 부를 때는 \"스위트(suite)\"라고 부른다. 예를 들어 우리가 GPT나 웹에서 질의응답을 할 때도 서버와 오고 가는 약속이 있고, 그런 프로토콜의 이름은 흔히 \"~P\"로 끝난다. 비유하자면 프로토콜은 서로 다른 사람이 대화하기 위해 미리 맞춰둔 공용어 같은 것이며, 웹·채팅·AI 질의응답 등 오늘날 쓰는 거의 모든 통신 서비스의 바탕이 되는 개념이라 중요하다.\n\n**교수님 설명:**\n> \"그걸 알려면 우선 프로토콜이 어떻게 생겼는지 당장 여러분들 GPT 웹 들어와서 열심히 질의응답하는데 웹에서 왔다 갔다 하는 약속이 있잖아요.\" — (1주차 강의 00:00)\n>\n> \"프로토콜 통신은 많은 경우 약속인데 d의 p로 끝나요.\" — (1주차 강의 14:58)\n>\n> \"그다음에 얘네들을 묶어서 스위트라고 불러요.\" — (2주차 강의 02:03)\n\n> \"-tn은 전송계층, -rn은 네트워크 계층\" — (1주차 2025-Q1)\n\n---\n\n## 5. 주파수 ⚠️\n\n**정의 요약:** 주파수는 공기 중 소리나 무선 신호가 1초에 몇 번 진동하는지를 나타내는 값이다. 사람은 가청 주파수 대역만 듣고 낼 수 있는 반면, 와이파이는 2.4기가헤르츠·5기가헤르츠처럼 사람이 들을 수 없는 훨씬 높은 주파수를 쓴다. 비유하자면 주파수는 라디오 채널과 같아서, 채널(주파수)이 다르면 같은 공간에서도 서로 다른 신호를 주고받을 수 있다. 블루투스·와이파이 같은 무선 통신 기술의 특성을 이해하는 기초가 되기 때문에 기출에도 자주 등장한다.\n\n**교수님 설명:**\n> \"공기 물리적으로 공기인데 공기 안에 제가 떠드는 거는 특정 주파수예요.\" — (1주차 강의 03:38)\n>\n> \"주파수 지금 우리가 쓰는 주파수는 사람이 내고 들을 수 있는 가청 주파수 대형이고 여러분 우선 레는 예를 들어서 2.4 기가헤르츠 지금 여러분들 교회에서 들리나요?\" — (1주차 강의 04:40)\n>\n> \"병원 가야 돼 5기가 LH 2.4기가 LH가 무선 레이너스는 주파수 약트입니다.\" — (1주차 강의 04:40)\n>\n> \"이 손이 왔다 갔다 하는 대어 폭은 가점 주파수 가점 주파수는 다 어렵겠지만\" — (3주차 강의 11:22)\n\n> \"블루투스의 특징과 활용되는 사례에 대한 설명으로 옳지 않은 것 고르기 (FHSS, 블루투스가 대역폭이 넓어 대역폭인지 등 알아야 함)\" — (1주차 2025-Q3)\n\n---\n\n## 6. 푸리에 변환 ⚠️\n\n**정의 요약:** 푸리에 변환은 복잡한 신호를 여러 개의 단순한 주파수 성분으로 쪼개서 분석하는 수학적 도구로, 교수님은 이를 통신 모델의 핵심 지식이라고 강조했다. 비유하자면 여러 악기가 섞인 오케스트라 연주(복잡한 신호)를 악기별 소리(개별 주파수)로 나눠 듣는 것과 비슷하다. 3주차에도 교수님이 가장 관심 있는 기능이라고 다시 언급할 만큼, 아날로그-디지털 변환 같은 신호 처리 기술 전반의 이론적 배경이 되는 개념이라 꼭 알아둬야 한다.\n\n**교수님 설명:**\n> \"모델 여기의 핵심 지식이 풀의 변환이라는 케이스 두리 두리 들어봤죠 기억 안 나나요?\" — (1주차 강의 02:21)\n>\n> \"여러분 후대 변화 기억해야 됩니다.\" — (1주차 강의 02:21)\n>\n> \"하지만 내가 가장 관심을 주는 기능은 풀리에 변환이다.\" — (3주차 강의 1:04:24)\n\n---\n\n## 7. 트랜스포머(Transformer)\n\n**정의 요약:** 트랜스포머는 오늘날 GPT 같은 언어모델(LLM)의 기본이 되는 인공지능 모델 구조이며, 실제로 GPT라는 이름의 \"T\"가 바로 트랜스포머(Transform)를 뜻한다. 비유하자면 CNN·RNN이 문장을 한 단어씩 순서대로 훑어보는 방식이라면, 트랜스포머는 문장 전체를 한 번에 놓고 단어들 사이의 관계를 파악하는 방식에 가깝다. 우리가 매일 쓰는 GPT 같은 AI 도구가 어떤 구조 위에서 동작하는지 배경지식을 준다는 점에서 알아둘 만하다.\n\n**교수님 설명:**\n> \"단어 하나가 이렇게 트랜스포머라고 딱 떠 있는데 여러분 쓰는 LM의 기본 형식적인 GPT의 약자가 제너레이티 프리 트랜스 트랜스폼이에요.\" — (1주차 강의 28:24)\n>\n> \"트랜스 트랜스포머 드디어 나왔죠.\" — (1주차 강의 26:50)\n\n> \"CNN, RNN, Transformer\" — (1주차 (이론) week1_1-0-데이터통신-overview-공개 p.16)\n\n---\n\n## 8. 이더넷 ⚠️\n\n**정의 요약:** 이더넷은 유선 인터넷 연결에 쓰이는 기본 기술로, 교수님은 이를 통신의 \"디폴트\"라고 표현했다. TCP/IP 같은 상위 기술은 이 이더넷을 기반으로 동작한다. 비유하자면 이더넷은 건물의 기본 전기 배선과 같아서, 그 위에 어떤 서비스(TCP/IP, 인터넷)를 올리든 이 배선이 먼저 깔려 있어야 한다. TCP/IP를 이해하기 위한 하부 기반 기술이라 함께 알아둘 필요가 있다.\n\n**교수님 설명:**\n> \"일단 디폴트가 이더넷입니다.\" — (1주차 강의 08:04)\n>\n> \"이더넷 어떻게 생겼을까 그래서 우리는 현재 모든 이동 통신 기술을 밑에서 지원하고 있기 때문에 위에서는 웹 tcpip 인터넷 이거 바로 씁니다.\" — (1주차 강의 09:16)\n\n> \"○ 이더넷 : 유선 인터넷\" — (1주차 (실습) week1_WireShark.pptx p.9)\n> \"다중화(multiplexing) 시간을 나누어서 다중화하는 TDM은 이더넷에서 사용되지 않는다(다음 중 옳은 것은? 문제 정답)\" — (1주차 2023-Q1)\n\n---\n\n## 9. 패킷\n\n**정의 요약:** 패킷은 네트워크로 데이터를 보낼 때 잘게 쪼개어 전송하는 기본 단위이며, 이를 들여다보는 작업을 \"패킷 캡쳐\"라고 부른다. 비유하자면 큰 소포를 한 번에 보내지 않고 여러 개의 작은 상자(패킷)로 나눠 부치는 택배와 비슷하다. 네트워크에서 지연이 어디서 발생했는지 진단할 때(traceroute 등) 패킷의 흐름을 확인하는 것이 실습·기출 모두에서 중요하게 다뤄진다.\n\n**교수님 설명:** (이 개념은 강의 발화 인용 대신 슬라이드·기출 근거를 사용)\n> \"패킷이란?\" — (1주차 (실습) week1_WireShark.pptx p.2)\n> \"패킷 캡쳐 (Packet capture)\" — (1주차 (실습) week1_WireShark.pptx p.3)\n> \"traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지\" — (1주차 2025-Q2)\n\n---\n\n## 10. 패킷 캡처(Packet Capture)\n\n**정의 요약:** 패킷 캡처란 네트워크 인터페이스를 오고 가는 데이터(패킷)들을 들여다보는 동작이며, TCP덤프나 와이어샤크, 그리고 와이어샤크의 텍스트 버전인 티샤크(tshark) 같은 프로그램으로 수행한다. 비유하자면 우체국을 오가는 편지들을 열어서 내용물을 확인하듯, 네트워크를 오가는 데이터를 직접 들여다보는 작업이다. 네트워크 지연이나 문제의 원인을 파악하는 실습 도구이며, traceroute 결과 해석 같은 문제로 기출에도 나온다.\n\n**교수님 설명:**\n> \"그리고 패킷 캡처라고 함은 네트워크 인터페이스를 오고 가는 데이터들을 살펴보는 동작들을 말하고 있고요.\" — (1주차 강의 39:20)\n>\n> \"네 그래서 키 캡처를 위한 프로그램에는 TCP 덤프와 와이어 셔터가 있고요.\" — (1주차 강의 41:05)\n>\n> \"캡처는 와이 샤크가 좀 많이 입을 테고 TCP 글티다 깔아야 되고 와이 샤크의 텍스트 버전 티샤크라는 게 있습니다.\" — (2주차 강의 34:26)\n>\n> \"이런 것도 한번 연습해 보고 얘 TCP 함수로 캡처한 화면입니다.\" — (2주차 강의 36:46)\n\n> \"traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지\" — (1주차 2025-Q2)\n\n---\n\n## 11. DNS ⚠️\n\n**정의 요약:** DNS(Domain Name System)는 웹사이트 주소를 실제 서버의 위치로 찾아주는 시스템으로, 실습에서는 DNS Query와 Response 패킷을 직접 캡쳐해 확인했다. 비유하자면 DNS는 전화번호부와 같아서, 이름(도메인)만 알면 실제 번호(IP주소)를 찾아준다. ipconfig·netstat·nslookup 같은 네트워크 분석 명령어와 함께 기출에서 다뤄지는 개념이다.\n\n**교수님 설명:** (이 개념은 강의 발화 인용 대신 슬라이드·기출 근거를 사용)\n> \"DNS (Domain Name System)\" — (1주차 (실습) week1_WireShark.pptx p.7)\n> \"실습2) DNS Query 패킷 캡쳐\" — (1주차 (실습) week1_WireShark.pptx p.13)\n> \"3. DNS Query와 Response 화면 캡쳐(실습2내용)\" — (1주차 (실습) week1_WireShark.pptx p.14)\n> \"네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)\" — (1주차 2025-Q1)\n\n---\n\n## 12. UDP ⚠️\n\n**정의 요약:** UDP는 전송계층 프로토콜 중 하나로, 연결 과정 없이 데이터를 보내는 방식이다. 비유하자면 상대가 받을 준비가 됐는지 확인하지 않고 바로 우체통에 편지를 넣는 것과 비슷하다. 프로토콜, 포트 번호, 헤더 구조와 함께 네트워크의 기본 지식을 쌓는 핵심 개념 중 하나다.\n\n**교수님 설명:**\n> \"또한 프로토콜이 무엇이고 TCP가 무엇인지, UDP가 무엇인지 포트 번호 및 헤더 구조 등을 확인해 보면서 네트워크에 대한 기본적인 지식들을 쌓는 데 도움이 됩니다.\" — (1주차 강의 40:23)\n\n> \"전송계층: UDP\" — (1주차 (이론) week1_1-0-데이터통신-overview-공개 p.6)\n> \"UDP는 연결 과정 필요 없음\" — (1주차 2025-Q9)\n> \"UDP는 연결 과정 필요 없음\" — (2주차 2025-Q9)\n\n---\n\n## 13. IP 주소 ⚠️\n\n**정의 요약:** IP 주소는 인터넷에 연결된 각 장치를 구별해주는 식별자로, 마치 각 네트워크마다 부여되는 주민번호·학번 같은 것이다. 지금 쓰고 있는 스마트폰이나 노트북 같은 단말기에는 이미 이 IP 주소가 하나씩 배정되어 있다. 어떤 장치와 통신하려면 먼저 상대의 IP 주소를 알아야 하기 때문에, 네트워크에서 무언가를 주고받는 모든 일의 출발점이 되는 개념이다. 5주차에는 이 IP 주소가 정확히 4바이트로 이루어져 있다는 점이 다시 짚어졌다.\n\n**교수님 설명:**\n> \"그래서 네트웍크마다 집결자 별 주민번호 학본처럼 식별자 우리가 쓰는 인터넷은 인터넷 식별자 즉 IP 주소가 부여됩.\" — (2주차 강의 03:20)\n>\n> \"여러분 단말기 지금 쓰는 게 다 IP 주소가 구현돼 있는 상태입니다.\" — (2주차 강의 03:20)\n>\n> \"여러분들 그다음 네트워크 인터넷 쪽에서는 연결되면 인터넷 주소 결자가 있다 그래서 여러분들이 쓰는 모든 인터넷 장비는 IP 주소가 있다\" — (3주차 강의 02:07)\n>\n> \"정답은 4 바이트 여러분들 4바이트만 알면 끝이에요.\" — (5주차 강의 #L580)\n\n> \"container 내부 링크 IP 주소 확인: ifconfig\" — (2주차 (이론)1-3-lab-introduction-docker p.22)\n> \"CIDR 문제 꼭 풀어보기 (컴퓨터융합학부 할당, 인공지능 할당…)\" — (2주차 2025-Q6)\n\n---\n\n## 14. 도커(Docker) ⚠️\n\n**정의 요약:** 도커는 실제 컴퓨터 전체를 새로 쓰지 않고도 소프트웨어가 돌아가는 환경을 통째로 담아 옮길 수 있게 해주는 가상화 도구로, 리눅스 커널 위에서 동작한다. 무언가를 만들어서 배포할 때는 그 실행 환경을 '이미지'로 만들어 전달하고, 그 이미지를 실행하면 '컨테이너'가 된다. 비유하자면 이사할 때 짐을 통째로 컨테이너 박스에 담아 옮기듯 프로그램이 돌아가는 환경 자체를 포장해서 다른 컴퓨터로 그대로 옮기는 것이라, 실습에서 서버·클라이언트 환경을 똑같이 맞추는 데 꼭 필요한 개념이다.\n\n**교수님 설명:**\n> \"그러니까 도커라는 게 가상화 도구인데 얘가 사실상 리눅스 커널링 누굴지 모르면 안 되는 누룩을 모르면 여러분들이 뭔가 소프트 만들어서 배포한다 그러면 도커 이미지를 만들어서 보내줘 이런 용어를 써요.\" — (2주차 강의 29:39)\n>\n> \"컨테이너가 실행돼 이런 용어를 씁니다.\" — (2주차 강의 44:56)\n>\n> \"그래서 이미지 배포하고 실행하면 컨테이너가 된다 프로세스입니다.\" — (2주차 강의 46:11)\n\n> \"도커 연결 실습 빈 칸\" — (2주차 2023-Q6)\n\n---\n\n## 15. OSI 7계층 ⚠️\n\n**정의 요약:** OSI 7계층은 네트워크 통신 과정을 일곱 개의 층으로 나눠서 설명하는 표준 모델로, 각 계층마다 하는 역할과 그 계층에서 쓰는 식별자가 다르다. 비유하자면 편지 한 통이 오고 가는 과정을 봉투 포장, 우체국 분류, 배달원 배송처럼 여러 단계로 나눠 보는 것과 비슷하다. 시험에서 \"이 계층은 무슨 역할을 하는가\"를 묻는 문제가 꾸준히 나오기 때문에 반드시 계층별 역할을 구분해서 외워야 한다.\n\n**교수님 설명:** (이 개념은 강의 발화 인용 대신 슬라이드·기출 근거를 사용)\n> \"OSI 계층 / OSI 7 Model\" — (2주차 (이론) 1-1-데이터통신-layer-packet-signal-공개 p.6)\n> \"정리 / 통신에서 계층 / 계층별 역할, 식별자\" — (2주차 (이론) 1-1-데이터통신-layer-packet-signal-공개 p.23)\n> \"-tn은 전송계층, -rn은 네트워크 계층\" — (2주차 2025-Q1)\n> \"네트워크 5계층에 대한 설명으로 틀린 것은?\" — (2주차 2022-Q1)\n\n---\n\n## 16. 네트워크 계층 구조 ⚠️\n\n**정의 요약:** 네트워크 계층 구조는 데이터가 오갈 때 거치는 단계들을 순서대로 쌓아놓은 것으로, 예를 들어 가운데에 네트워크 계층이 있고 그 아래에는 이더넷 주소를 쓰는 링크 계층, 맨 아래에는 실제 신호를 실어 나르는 물리 계층이 있다. 공유기가 등장하면서 공유기까지는 네트워크 계층이 존재하지만 그 위의 응용 계층 같은 것은 공유기에 없다는 식으로, 장비마다 어디까지 계층을 갖추고 있는지가 다르다. 시험에서 계층별 역할(예: 전송계층 vs 네트워크 계층)을 구분하는 문제가 나오기 때문에 정확히 이해해야 한다.\n\n**교수님 설명:**\n> \"구층 여러분들 한번 기억하실 게 브레이크 가운데는 네트워크입니다.\" — (2주차 강의 11:38)\n>\n> \"공유기 나오기 시작하니까 네트워크 계층이 여기까지고 공유기는 수요 계층이 없습니다.\" — (2주차 강의 11:38)\n>\n> \"그다음 링크 계층 이더넷 주소 그다음에 로메 그 다음 물류 계층은 신용입니다.\" — (2주차 강의 11:38)\n\n> \"-tn은 전송계층, -rn은 네트워크 계층\" — (2주차 2025-Q1)\n\n---\n\n## 17. HTTP\n\n**정의 요약:** HTTP는 우리가 웹사이트에 접속할 때 브라우저와 서버가 데이터를 주고받는 데 쓰는 대표적인 프로토콜로, 패킷을 열어보면 \"GET\" 같은 요청과 함께 접속하려는 주소가 그대로 찍혀 있는 것을 볼 수 있다. 비유하자면 가게에 가서 \"이 물건 주세요\"라고 요청하고 물건을 받는 것처럼, 브라우저가 서버에 페이지를 요청하고 응답을 받는 대화 방식이다. 우리가 매일 쓰는 웹 브라우징의 기본 동작 원리이기 때문에 알아두면 좋다.\n\n**교수님 설명:**\n> \"뒤에 보면 HDP 1.1 겟 여기 보면 주소가 찍혀져 있죠.\" — (2주차 강의 35:31)\n\n> \"웹 통신\" — (1주차 (실습) week1_WireShark.pptx p.6)\n> \"실습) HTTP 패킷 캡쳐\" — (1주차 (실습) week1_WireShark.pptx p.10)\n\n---\n\n## 18. 가상화(Virtualization) ⚠️\n\n**정의 요약:** 가상화는 하나의 실제 컴퓨터 위에서 마치 여러 대의 컴퓨터가 있는 것처럼 운영체제나 실행 환경을 나눠 쓰는 기술이다. 예를 들어 운영체제 전체를 통째로 가상화하는 방식은 완벽하지만 그만큼 무겁게 동작한다. 비유하자면 건물 하나를 여러 개의 독립된 사무실로 나눠 쓰는 것과 비슷하며, 도커 같은 가상화 도구/플랫폼의 핵심 개념이라 실습에서 계속 마주치게 된다.\n\n**교수님 설명:**\n> \"어쨌건 내 목적은 가상화 조라는 관점입니다.\" — (2주차 강의 37:10)\n>\n> \"얘는 전 가상화라고 해서 운영 체제 전체 다 가상화 완벽 얘는 엄청 무거워요.\" — (2주차 강의 39:26)\n>\n> \"그래서 핵심은 어쨌건 가상화 도구 플랫폼입니다.\" — (2주차 강의 43:11)\n\n> \"영화 매트릭스 관련 문제 2개 나옴\" — (3주차 2023-Q3)\n\n---\n\n## 19. 네트워크 인터페이스(ifconfig/ipconfig) ⚠️\n\n**정의 요약:** 네트워크 인터페이스는 컴퓨터가 네트워크와 연결되는 접점으로, ifconfig(리눅스/맥)나 ipconfig(윈도우) 같은 명령어로 확인할 수 있다. 도커 같은 가상화 환경에서는 '조파' 같은 가상 인터페이스가 별도로 만들어지기도 한다. 비유하자면 인터페이스는 집의 현관문과 같아서 이 문을 통해서만 데이터가 안팎으로 드나들 수 있으며, 실습에서 인터페이스 구조와 라우팅 테이블을 직접 확인해보는 것이 네트워크를 이해하는 첫걸음이다.\n\n**교수님 설명:**\n> \"조파라는 인터페이스가 가상으로 또 만들어져요.\" — (2주차 강의 53:23)\n>\n> \"그래서 이걸 한 번씩 연습해 봐라 이런 뜻이 그래서 아까 설명 인터페이스 구조도 보고 라우팅 테이블도 보고 이런 거 그대로 하시면 그다음 컨테이너라는 내부에서 들어가면\" — (2주차 강의 53:23)\n\n> \"컴퓨터 네트워크 인터페이스 확인 • ifconfig • ipconfig\" — (2주차 (이론)1-2-명령어실습 p.4)\n> \"네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)\" — (2주차 2025-Q1)\n\n---\n\n## 20. 포트 번호 ⚠️\n\n**정의 요약:** 포트 번호는 같은 IP 주소를 쓰는 컴퓨터 안에서도 어떤 프로그램이 데이터를 받을지 구별해주는 전송 계층의 식별자다. 예를 들어 TCP 패킷을 열어보면 소스 포트와 목적지 포트가 각각 찍혀 있는 것을 볼 수 있다. 비유하자면 IP 주소가 건물 주소라면 포트 번호는 그 건물 안의 호실 번호 같은 것이라, 특정 프로그램(서비스)과 통신하려면 반드시 알아야 하는 값이다.\n\n**교수님 설명:**\n> \"얘를 식별하는 게 이 끝에 있는 전송 계층의 포트 번호라는 게 있어요.\" — (2주차 강의 03:20)\n>\n> \"그다음 PCP 하면 여기도 소스 포트, 리텐션 포트 이렇게 찍혀져 있습니다.\" — (2주차 강의 14:11)\n>\n> \"그래서 포트 번호판 식별자 그래서 계층마다 식별자가 있다 이런 얘기를 했습니다.\" — (3주차 강의 02:07)\n\n> \"tcp.port==포트숫자 (ex.54321)\" — (2주차 (실습) 20260310-실습2주차-파일 통신.pptx p.13)\n> \"네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)\" — (2주차 2025-Q1)\n\n---\n\n## 21. 유닉스/리눅스(Unix/Linux)\n\n**정의 요약:** 유닉스/리눅스는 오늘날 대부분의 운영체제(윈도우, 맥 등)의 뿌리가 된 운영체제 계열로, 버클리 대학교가 유닉스 소프트웨어를 공개하면서 여러 파생 버전이 만들어졌다. 비유하자면 여러 나라 언어가 하나의 공통 조상 언어에서 갈라져 나온 것과 비슷하다. 스마트폰, IoT 기기 등을 다루려면 리눅스 지식이 사실상 필수이기 때문에 도커 실습의 배경지식으로 알아둘 필요가 있다.\n\n**교수님 설명:**\n> \"칭찬하려고 그러는데 사실상 아까 잠깐 얘기했지만 VSD가 운영 체제의 원조입니다.\" — (2주차 강의 27:33)\n>\n> \"VSD 버클리 소프트웨어 디스루션 버클리 대학교가 유닉스 소프트웨어를 공개해서 만든 버전이 원조 원조 원조 마케팅테크 여기에서 다 뉴스도 만들어지고 윈드웨이도 만들어지고 맥도 만들어지고 그래서 사실상 여러분들이\" — (2주차 강의 28:22)\n>\n> \"그다음에 스마트폰 왓츠 IoT 등등 이런 거 배우려면 이런 리믹스가 사실상 필수입니다.\" — (2주차 강의 30:57)\n\n---\n\n## 22. 도커 네트워킹 ⚠️\n\n**정의 요약:** 도커 네트워킹은 도커 컨테이너가 내 컴퓨터(호스트) 및 바깥 네트워크와 어떻게 연결되는지를 다루는 구조로, 컨테이너는 도커가 만든 내부 브릿지를 거쳐 내 컴퓨터와 통신한다. 비유하자면 컨테이너는 아파트 각 세대, 도커 브릿지는 건물 공용 현관 같은 것이어서 세대(컨테이너)에서 밖으로 나가려면 반드시 공용 현관(브릿지)을 거쳐야 한다. 실습에서 컨테이너의 IP 주소 체계를 직접 확인하는 문제로도 다뤄지는 개념이다.\n\n**교수님 설명:** (이 개념은 강의 발화 인용 대신 슬라이드·기출 근거를 사용)\n> \"내 컴퓨터와 도커 컨테이너와의 관계\" — (2주차 (이론)1-3-lab-introduction-docker p.12)\n> \"도커 컨테이너(172.17.0.2) -> 도커 브릿지(172.17.0.1) -> 내 컴퓨터 ->\" — (2주차 (이론)1-3-lab-introduction-docker p.22)\n> \"도커 내부 IP 주소 연결 브릿지 구조\" — (2주차 (이론)1-3-lab-introduction-docker p.28)\n> \"도커 연결 실습 빈 칸\" — (2주차 2023-Q6)\n\n---\n\n## 23. 헤르츠 ⚠️\n\n**정의 요약:** 헤르츠(Hz)는 1초 동안 신호가 몇 번 진동(변화)하는지를 세는 단위로, 사람이 들을 수 있는 소리는 대략 20Hz에서 2만 Hz 사이이고 와이파이 같은 무선 신호는 이보다 훨씬 큰 '기가헤르츠' 단위를 쓴다. 비유하자면 헤르츠는 1초에 몇 번 흔들리는지를 세는 그네의 왕복 횟수 같은 것이다. 라디오·GPS 등 주파수 대역별 활용 사례를 구분하는 문제가 기출에 나오므로 단위 감각을 잡아두는 것이 중요하다.\n\n**교수님 설명:**\n> \"사람은 어디에서부터 어디까지 각종 주파수 20에서 2만 되는지 얘는 기가 헤르츠예요.\" — (2주차 강의 21:25)\n>\n> \"1초에 신호가 몇 개 있나 신호가 몇 개 했냐 지금 제가 떠드는 게 1초에 2만 번이 막 변하는 1초에 2만 번 얘는 10에 5승 곱하기 한 거니까\" — (2주차 강의 21:25)\n>\n> \"한 70% 정도는 2.4 기가헤르츠에서 신호가 왔다 갔다 하고 있고 한 30% 5기가헤르입니다.\" — (3주차 강의 11:22)\n\n> \"RF 주파수 대역별 활용사례에 대하여 옳지 않은 것 고르기 (라디오는 몇 대역폭을 쓰고, GPS는 몇 대역폭을 쓰고 등등)\" — (2주차 2025-Q5)\n\n---\n\n## 24. 계층별 식별자 ⚠️\n\n**정의 요약:** 계층별 식별자란 OSI 계층 하나하나마다 '이건 누구인지'를 구별해주는 값이 따로 있다는 개념으로, 예를 들어 링크 계층에는 MAC 주소, 네트워크 계층에는 IP 주소처럼 계층마다 고유한 식별 방식이 존재한다. 비유하자면 사람이 학교에서는 학번으로, 회사에서는 사번으로 불리는 것처럼, 같은 장치라도 어느 계층에서 보느냐에 따라 다른 이름표가 붙는다. 계층 구조를 이해하는 데 있어 핵심 뼈대가 되는 개념이라 짚고 넘어가야 한다.\n\n**교수님 설명:**\n> \"그다음 중요한 게 계층이라는 역할을 하는 역할도 있는데 계층별로 우리가 얘 누구 얘 누구 누구 누구 하는 식별자가 있어요.\" — (2주차 강의 02:03)\n>\n> \"얘가 식별자 식별 이 부분을 또 알아야 됩니다.\" — (2주차 강의 04:32)\n>\n> \"여러분들이 계층마다 이런 식별제가 필요하다.\" — (2주차 강의 05:42)\n>\n> \"그래서 계층마다 식별자가 있다 이 얘기도 했었죠.\" — (3주차 강의 02:07)\n\n---\n\n## 25. 디폴트 게이트웨이\n\n**정의 요약:** 디폴트 게이트웨이는 내가 보낸 데이터가 어디로 가야 할지 정확히 모를 때 일단 보내는 기본 통로로, 보통 우리가 쓰는 공유기가 이 역할을 한다. 우리가 인터넷에 접속할 때 대부분 이 공유기를 거쳐서 나가며, 같은 공유기에 연결된 다른 기기와 직접 통신하는 일은 드물다. 비유하자면 아파트 단지에서 외부로 나가는 정문 하나를 모두가 공유해서 쓰는 것과 같아서, 라우팅의 '기본 경로'를 이해하는 핵심 개념이다.\n\n**교수님 설명:**\n> \"얘가 디폴트고 이게 대부분 공유의 공유.\" — (2주차 강의 09:38)\n>\n> \"여러분들 공유기 접촉을 제한하고 가면 대부분은 공유를 타고 인터넷이 왔다 갔다 할 수 있어 공유기에 연결돼 있는 우리 쪽에 다른 노트북에 연결되는 일은 별로 없습니다.\" — (2주차 강의 09:38)\n\n> \"172.17.0.1은 누구? -> default gateway (즉, host)\" — (2주차 (이론)1-3-lab-introduction-docker p.27)\n\n---\n\n## 26. ping/traceroute ⚠️\n\n**정의 요약:** ping과 traceroute는 네트워크 상태를 확인하는 대표적인 명령어로, ping은 상대 장치까지 신호가 잘 도달하는지 확인하고 traceroute는 그 신호가 어떤 경로를 거쳐 가는지, 어디서 지연이 생기는지를 보여준다. 비유하자면 ping은 \"거기 있나요?\"라고 외쳐보는 것이고, traceroute는 편지가 목적지까지 거쳐가는 우체국들을 하나하나 나열해 보여주는 것과 같다. 실습·기출 모두에서 해외 사이트 접속 시 어디서 지연이 발생했는지 분석하는 문제로 자주 등장한다.\n\n**교수님 설명:** (이 개념은 강의 발화 인용 대신 슬라이드·기출 근거를 사용)\n> \"ping, traceroute • ping • traceroute\" — (2주차 (이론)1-2-명령어실습 p.6)\n> \"traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지\" — (2주차 2025-Q2)\n> \"traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지\" — (3주차 2025-Q2)\n> \"traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지\" — (4주차 2025-Q2)\n\n---\n\n## 27. MAC 주소\n\n**정의 요약:** MAC 주소는 랜카드(네트워크 인터페이스 카드)마다 공장에서 미리 찍어서 부여하는 48비트짜리 고유 번호로, 한 번 찍히면 고정되어 바뀌지 않는다. 비유하자면 태어날 때부터 몸에 새겨진 지문처럼, 장치마다 세상에 하나뿐인 번호를 갖는 것과 같다. IP 주소가 네트워크상의 '현재 주소'라면 MAC 주소는 장치 고유의 '주민등록번호' 같은 역할이라 계층별 식별자를 이해하는 데 필요하다.\n\n**교수님 설명:**\n> \"우선 맨 카드 얘가 우선 맨에 이런 번호가 적혀져 있습니다.\" — (2주차 강의 04:32)\n>\n> \"48비트 내에 얘가 누가 찍어 주느냐 얘는 공장에서 만들어줄 때 짠 하고 찍어주는 거 그러면 고정이 보다.\" — (2주차 강의 05:42)\n>\n> \"그래서 데이터 링크는 여기 여러분들이 물리적 주소라고 했을 때 이거예요.\" — (3주차 강의 03:44)\n>\n> \"이거 지난번에 여섯 바이트 위더넷 이더넷에 선이 있는 거고 여러분들이 와이파이를 써요.\" — (3주차 강의 03:44)\n\n---\n\n## 28. 도커 이미지(Docker Image)\n\n**정의 요약:** 도커 이미지는 프로그램이 실행되는 데 필요한 환경을 통째로 담아놓은 '설계도' 같은 파일로, 도커 허브 같은 저장소에서 원하는 이미지를 내려받아 실행하면 내 컴퓨터 안에 새로운 운영체제 환경 하나가 만들어진다. 비유하자면 이미지는 미리 조립해둔 레고 세트 설명서 같은 것이고, 그 설명서대로 실행하면(컨테이너로 실행하면) 실제 완성품이 만들어지는 것과 같다. 소프트웨어를 배포·실행하는 실습의 핵심 단계라 꼭 이해해야 하는 개념이다.\n\n**교수님 설명:**\n> \"도커 허브에서 우브트 이미지를 ISO 같은 걸 다운받아서 실행해 그다음에 여기에 배시실로 들어가 이렇게 하는 명령어를 실행하면 내 컴퓨터에서 오븐 층 운영 체제 하나가 나가 만들어지는\" — (2주차 강의 51:10)\n>\n> \"이게 뭐 되냐 보크가 시장에서 이번트 이미지를 따온다는 거요.\" — (2주차 강의 52:11)\n\n---\n\n## 29. 라우팅 테이블\n\n**정의 요약:** 라우팅 테이블은 데이터가 목적지까지 가는 경로 정보를 정리해둔 표로, 마치 '학교에서 집까지 어떻게 갔는지'에 대한 경로 기록과 비슷하다. 표에 딱 맞는 경로가 없으면 정해진 기본 경로(디폴트 게이트웨이)로 보내라는 규칙이 들어 있으며, netstat 같은 명령어로 이 정보를 확인할 수 있다. 데이터가 실제로 어떤 길을 거쳐 전달되는지 이해하는 데 필요한 실습 개념이다.\n\n**교수님 설명:**\n> \"경로 테이블로 경로 경로 여러분들 학교에서 집에까지 어떻게 갔지 하는 그 경로에 대한 정보예요.\" — (2주차 강의 08:13)\n>\n> \"그냥 디폴트 디폴트 디텍터 매칭되지 않으면 이쪽으로 가 이런 뜻입니다.\" — (2주차 강의 09:38)\n>\n> \"여기서 매스테트 명령어를 치면 네트워크 관련 정보 연수 매칭 정보라는 걸 알 수가 있다.\" — (2주차 강의 09:38)\n\n> \"-tn은 전송계층, -rn은 네트워크 계층\" — (3주차 2025-Q1)\n\n---\n\n## 30. 사인파\n\n**정의 요약:** 사인파는 값이 부드럽게 오르내리며 반복되는 물결 모양의 신호로, 고등학교 수학 시간에 배운 사인(sin) 곡선과 같은 형태다. 통신에서 신호를 표현하고 분석할 때 쓰는 기본적인 수학적 도구이며, 네모나게 딱딱 끊어지는 디지털 신호(정사각형 형태)와 대비되는 개념으로 볼 수 있다. 아날로그 신호나 주파수를 이해하는 기초가 되는 개념이라 알아두면 좋다.\n\n**교수님 설명:**\n> \"제일 쉬운 게 여러분들 고등학교 때 배운 사이다.\" — (2주차 강의 18:52)\n>\n> \"이 사이 기기적으로 이렇게 바뀌는 습 첫 번째 필요한 거 이건 수학적인 도구예요.\" — (2주차 강의 18:52)\n>\n> \"그래서 그 표현에 대한 여러 가지 이제 선지적인 수학 도구가 있는데 그중에 가장 높은 조각 사구가 하이 함수 이 그래서 사인 함수를 이용을 해서\" — (3주차 강의 05:30)\n\n---\n\n## 31. 캡슐화\n\n**정의 요약:** 캡슐화는 데이터를 보낼 때 각 계층의 규칙(프로토콜)에 따라 정해진 형식대로 헤더를 붙여 감싸는 과정으로, 이렇게 헤더를 겹겹이 붙이면서 계층별 채널이 만들어진다. 와이어샤크로 패킷을 열어보면 이렇게 붙은 프로토콜 헤더와 계층 식별 정보를 그대로 확인할 수 있다. 비유하자면 편지를 여러 겹의 봉투(계층별 헤더)로 감싸서 보내는 것과 같아서, 패킷 구조를 이해하는 핵심 개념이다.\n\n**교수님 설명:**\n> \"신용 신호는 이런 이거는 제가 설명을 안 드렸지만 이런 역할들이 헤더의 프로토콜 약속이 다 지켜져 있어서 그 약속대로 몇 바이트 몇 바이트 몇 바이트 약속에서 주고받고 역할을 구해서 보내 채널을 만들어주면 이제 캡슐화한다라고\" — (2주차 강의 12:51)\n>\n> \"그래서 y 샵을 보면 정확하게 여기에 프로트콜 헤더 계층 식별 제한 내용을 다 파악할 수가 있습니다.\" — (2주차 강의 12:51)\n\n> \"계층별 메시지 + 헤더: 캡슐화\" — (2주차 (이론) 1-1-데이터통신-layer-packet-signal-공개 p.15)\n\n---\n\n## 32. Dockerfile\n\n**정의 요약:** Dockerfile은 도커 이미지를 어떻게 만들지 순서대로 적어놓은 설계 파일로, 원하는 대로 자유롭게 작성할 수 있다. 이 파일을 작성하고 '빌드'라는 명령을 실행하면 그 내용대로 이미지가 만들어진다. 비유하자면 요리 레시피를 적어두면 그대로 따라 만들어 같은 요리(이미지)를 재현할 수 있는 것과 같아서, 도커 이미지를 직접 만드는 실습의 핵심 도구다.\n\n**교수님 설명:**\n> \"도커 파일 여러분 도커 조커 하는데 하나 둘 셋 넷 다섯 60 이거 설명하려고 제가 앞에서 있다가 어깨는 다 하나 둘 셋 넷 다섯 개 이게 도커 이미지 만든 파일이에요.\" — (2주차 강의 54:32)\n>\n> \"여기 도커 파일이라고 하는 게 다 공통 포 내가 도커 만드는 건 마음대로 각자 마음껏 만들 수가 있습니다.\" — (2주차 강의 55:55)\n>\n> \"이걸 이제 작성하고 이미지를 만들어 배포한다 이런 용어가 도커 빌드 빌 그러면 이제 is 같은 게 만들어지는 거예요.\" — (2주차 강의 55:55)\n\n---\n\n## 33. 소켓 프로그래밍\n\n**정의 요약:** 소켓 프로그래밍은 IP 주소와 포트 번호를 이용해서 프로그램끼리 직접 데이터를 주고받도록 코드를 짜는 방식이다. 실습에서는 파일을 주고받는 코드를 소켓 통신 방식으로 바꿔보는 과제를 통해 이 개념을 직접 다뤘고, 4주차 실습에서는 도커 컨테이너 두 개를 띄운 뒤 TCP로 소켓을 만들어 메시지를 직접 주고받아 보았다. 비유하자면 전화번호(IP+포트)만 알면 누구와도 직접 통화선을 열 수 있는 것처럼, 네트워크 통신 프로그램을 만드는 실전 기술이라 중요하다.\n\n**교수님 설명:**\n> \"이걸 이용해서 여러분들이 소켓 프로그래밍을 하고 이용하는 겁니다.\" — (2주차 강의 04:32)\n\n> \"실습(파일 통신) 코드를 → 소켓 통신으로 변환\" — (2주차 (실습) 20260310-실습2주차-파일 통신.pptx p.9)\n>\n> \"도커 컨테이너 2개를 띄워서, TCP로 메시지를 1회 전송해보기\" — (4주차 (실습)20260324-4주차.pptx p.13)\n>\n> \"1) 소켓 생성\" — (4주차 (실습)20260324-4주차.pptx p.16)\n\n---\n\n## 34. 컨테이너(Container)\n\n**정의 요약:** 컨테이너는 도커 이미지를 실제로 실행한 상태로, 그 안에 들어가면 기존 내 컴퓨터와는 별개의 새로운 환경이 만들어져 있다. 이 구조를 모르면 내가 만든 컨테이너와 어떻게 통신하는지 헷갈리기 쉽다. 비유하자면 이미지가 설계도라면 컨테이너는 그 설계도로 실제로 지어진 건물 같은 것이라, 실습에서 인터페이스·라우팅 구조를 확인하며 직접 들어가 보는 대상이 된다.\n\n**교수님 설명:**\n> \"그래서 이걸 한 번씩 연습해 봐라 이런 뜻이 그래서 아까 설명 인터페이스 구조도 보고 라우팅 테이블도 보고 이런 거 그대로 하시면 그다음 컨테이너라는 내부에서 들어가면\" — (2주차 강의 53:23)\n>\n> \"이걸 모르면 내가 어떻게 공격하지 내가 어떻게 공격하지 막 헷갈리 기존에 있던 애하고 다른 뭔가 새로운 구조가 만들어져서 내가 만든 브로커 컨테이너랑 통신을 상\" — (2주차 강의 54:32)\n\n---\n\n## 35. 프레임\n\n**정의 요약:** 프레임은 데이터를 비트 단위로 실어 나르기 위해 이더넷 등에서 사용하는 전송 단위로, 와이파이·블루투스 같은 유무선 통신에서 이 프레임 형태로 데이터를 감싸 주고받는다. 3주차에는 소리 통신 프로그램에서 '프레임'이 단위 시간당 보내는 소리 샘플의 개수를 뜻하는 말로도 쓰인다는 것을 배웠다. 비유하자면 네트워크의 프레임이 택배 상자라면, 오디오의 프레임은 연속 사진을 한 묶음씩 찍어내는 단위 같은 것이다. 같은 단어라도 계층·맥락에 따라 다른 의미로 쓰인다는 걸 구분해서 알아둬야 한다.\n\n**교수님 설명:**\n> \"여러분들 패킷 우리 프레임 프레임을 비트 단위로 여러분들이 인터넷 드라이브 또는 와이파이 블루투스 이용 통신 업체 프레임 그다음 유선 무선 인터넷 형태의 그림을 만들어서\" — (2주차 강의 12:51)\n>\n> \"이더넷 이더넷에서 제일 중요한 게 아까 식별자 얘기했어요.\" — (2주차 강의 12:51)\n>\n> \"그렇게 했을 때 송수신자 프로그램은 여기 보면 몇 가지 용어가 프레임 파일을 읽고 프레임 청구 아까 프레임은 단위 시간당 우리가 보내는 소리의 샘플 개수입니다.\" — (3주차 강의 1:23:38)\n>\n> \"필 단계 예은 이건 이제 이 프로그램 짤 때 정형 청크 소리 덩어리 모스5는 한 비트죠 한 비트 0 또는 1 근데 이걸 몇 비트로 할까?\" — (3주차 강의 1:23:38)\n\n---\n\n## 36. 웹 접속 도구(curl/wget)\n\n**정의 요약:** curl과 wget은 명령줄에서 웹 서버에 직접 접속해볼 수 있는 도구로, curl은 GET·POST·PUT·DELETE 같은 요청을 자유롭게 보낼 수 있는 클라이언트이고 wget은 HTTP를 이용해 파일을 다운로드할 때 쓴다. 비유하자면 브라우저 없이도 명령어 한 줄로 가게에 들어가 원하는 것을 요청하는 것과 같다. HTTP가 실제로 어떻게 요청·응답을 주고받는지 손으로 직접 체험해볼 수 있는 실습 도구라 알아두면 좋다.\n\n**교수님 설명:** (이 개념은 강의 발화 인용 대신 슬라이드·기출 근거를 사용)\n> \"웹 접속 도구 • curl • Client url • Get, post, put, delete 등 • wget • http 이용 파일 다운로드\" — (2주차 (이론)1-2-명령어실습 p.7)\n\n---\n\n## 37. PCM(펄스 코드 변조) ⚠️\n\n**정의 요약:** PCM은 소리(아날로그)를 숫자로 바꿔 저장하는 대표적인 방식으로, 이렇게 저장된 데이터가 담기는 파일 확장자가 바로 .wav다. 비유하자면 소리를 일정한 간격으로 사진 찍듯 찍어서 숫자로 남겨두는 것과 비슷하다. 멀티미디어처럼 용량이 큰 소리·영상 데이터를 다룰 때는 이런 저장 방식 위에 압축까지 얹어야 하기 때문에, 소리를 디지털로 전송하는 모든 작업의 기초가 되는 개념이다.\n\n**교수님 설명:**\n> \"그중에 하나 그중에 제일 대표 PCM이라고 하는 형태로 소리를 저장한다.\" — (3주차 강의 1:18:57)\n>\n> \"중에 제일 중요한 게 멀티미디어 비디오 오디오 다룰 때는 정보의 양이 너무 커서 압축을 합니다.\" — (3주차 강의 1:18:57)\n>\n> \"웨이브는 확장자 파일 형식을 이야기하는 그래서 PCM 데이터를 소리를 저장한 확장자가 이제 점 웨이브고 이 점 웨이브 파일이 우리가 소리 통신하는 인재입니다.\" — (3주차 강의 1:18:57)\n>\n> \"바로 그게 PCM 표준 PCM 퍼스 코디드 모듈레이션 지난주에 시스템 용어가 살짝 나왔는데 이제 실제 목소리에 대한 디지털 전송에 대한 표준 보시면 디지털 오디오 표준입니다.\" — (4주차 강의 06:29)\n\n> \"전화 다중화는 T1 ~ T4\" — (3주차 2025-Q4)\n\n---\n\n## 38. 변조/복조 ⚠️\n\n**정의 요약:** 변조(모듈레이션)는 데이터를 보낼 때 신호를 바꿔서 실어 보내는 과정이고, 복조(디모듈레이션)는 받은 신호를 원래 데이터로 되돌리는 과정이다. 비유하자면 변조는 말을 암호(신호)로 바꿔 부치는 것이고, 복조는 그 암호를 받아서 다시 원래 말로 해석하는 것과 같다. QAM처럼 한 번에 몇 개의 신호를 구분하느냐에 따라 실제 전송 속도(비트 전송률)가 달라지므로 계산 문제로도 자주 나오는 핵심 개념이다.\n\n**교수님 설명:**\n> \"그래서 보낼 때는 이렇게 소리를 바꿔서 보내기 때문에 변조 모듈레이션이고 없죠.\" — (3주차 강의 54:47)\n>\n> \"비모듈레이션이라고 얘는 이제 조금 어려운 용어가 또 하나가 있어요.\" — (3주차 강의 54:47)\n>\n> \"그래서 아까 변조는 보내는 거고 받는 거는 목적이다.\" — (3주차 강의 1:08:12)\n>\n> \"지난주에도 했던 게 모듈레이션 우리 말로 하면 변조입니다.\" — (4주차 강의 07:42)\n\n> \"QAM에서 8개의 신호를 구분 가능할 때 1초에 N개의 신호를 보내고 있다면 최대 비트 전송률은?\" — (3주차 2023-Q4)\n\n---\n\n## 39. 나이퀴스트 샘플링 정리 ⚠️\n\n**정의 요약:** 나이퀴스트 샘플링 정리는 아날로그 소리를 디지털로 정확히 담아내려면 그 소리에 들어있는 가장 높은 주파수의 최소 2배 속도로 값을 찍어야 한다는 규칙이다. 비유하자면 빠르게 움직이는 물체를 사진(샘플)으로 남기려면 그 움직임보다 최소 두 배 빠르게 셔터를 눌러야 끊김 없이 재현할 수 있는 것과 같다. 실제로 전화 시스템은 이 원리에 따라 100년 넘게 정해진 샘플링 속도로 동작해왔다. 샘플링 속도를 얼마로 정할지 계산하는 문제가 시험에 자주 나오므로 공식처럼 기억해둬야 하는 개념이다.\n\n**교수님 설명:**\n> \"여러 가지 이제 샘플을 가지고 공부하다 보니까 이 사람 나이피스트가 발견한 원리입니다.\" — (4주차 강의 15:53)\n>\n> \"방금 마이키스트 샘플링 이론에 의하면 제일 빠른 주파수의 2배 정도는 샘플링을 해야 원래 신호를 보급할 수가 있어요.\" — (4주차 강의 17:54)\n>\n> \"여러분들이 100년 넘게 쓰고 있는 전화의 기본 처리하는 데이터 단위가 바로 PCM 다른 소리를 디지털로 바꾼 거고 그게 바로 이 부분이 여기에 아까 이야기한 것처럼 왜 사천일까\" — (4주차 강의 22:05)\n>\n> \"나이 키이스트라는 사람이 샘플링 이론을 만들었는데 원래 신호를 복구를 하려면 최대 주파수의 최고 빠른 주파수의 2배 정도는 샘플을 해야 한다\" — (5주차 강의 #L98)\n\n> \"Nyquist sampling theorem\" — (3주차 (이론) 3-데이터통신-1-아날로그-소리-변환 p.9)\n> \"Nyquist’s Sampling Theorem\" — (3주차 (이론) 3-데이터통신-1-아날로그-소리-변환 p.10)\n> \"대역폭을 이용한 계산 문제\" — (3주차 2025-Q3)\n> \"사람 목소리 전송 비트레이트 계산 문제\" — (3주차 2022-Q3)\n\n---\n\n## 40. 광케이블/파장 ⚠️\n\n**정의 요약:** 광케이블은 구리선 대신 빛으로 신호를 보내는 통신선으로, 서로 다른 파장(빛의 길이)의 빛을 여러 개 동시에 쏴서 여러 신호를 함께 보낼 수 있다. 우리가 해외 웹사이트에 접속할 때도 실제로는 이 신호가 바다 밑에 깔린 광케이블을 타고 이동한다. 비유하자면 파장이 다른 빛은 서로 다른 색깔의 손전등 같아서, 색깔(파장)별로 나눠 보내면 한 줄의 케이블로도 여러 정보를 동시에 실어 나를 수 있다. 해저 케이블 구간에서 생기는 지연 시간을 묻는 문제로 기출에도 나오는 개념이다.\n\n**교수님 설명:**\n> \"그래서 여러분들이 구리선 말고 광 캡을 쓰면 여기에 파장이 다른 빛을 쏴요.\" — (3주차 강의 17:47)\n>\n> \"화장 빛의 길이가 되는 길이.\" — (3주차 강의 17:47)\n>\n> \"해저기 있어요 케브리 해저피 여러분들이 여러분들 있으면 최 GPT 클릭 클릭 클릭할 때 소가 데이트멘타는 바다 밑의 기구를 한 70% 정도 통과해서 오는\" — (3주차 강의 09:01)\n\n> \"해저 케이블로 이동하는 시간은 전파 지연 시간(거리)\" — (3주차 2025-Q5)\n\n---\n\n## 41. 모스 부호 ⚠️\n\n**정의 요약:** 모스 부호는 짧은 신호와 긴 신호를 조합해서 알파벳이나 숫자를 표현하는 가장 오래되고 단순한 디지털 통신 방식이다. 비유하자면 손전등을 짧게 껐다 켰다, 길게 껐다 켰다 하면서 글자를 전달하는 것과 같다. 다만 실제로 모스 부호로 알파벳을 표현해서 보내보면 속도가 매우 느리다는 한계가 있다. 소리·빛처럼 단순한 신호만으로도 정보를 주고받을 수 있다는 것을 보여주는 가장 기초적인 예시라서 디지털 신호를 이해하는 출발점이 된다.\n\n**교수님 설명:**\n> \"그래서 제일 쉬운 거 제일 쉬운 거 제일 쉬운 건 모스 부호 모스 부호 아나요?\" — (3주차 강의 31:34)\n>\n> \"우리 수업에서 영화 본다고 많이 안 보면 개인적으로 보거나 또는 각자 보거나 하면 수업 시간에 잠깐 볼 수도 있지만 이게 중요한 게 아니고 모스 부호 자체는\" — (3주차 강의 35:31)\n>\n> \"그걸 좀 넓게 생각하면 알파벳을 우리가 모스부어로만 표현할 수 있을까 모스코어라는 게 짧은 소리 긴 소리 있죠?\" — (4주차 강의 43:48)\n>\n> \"짧은 소리 긴 소리를 여러분들이 이 모습을 이제 실제 해보면 굉장히 느립니다.\" — (4주차 강의 43:48)\n\n> \"소리로 데이터 통신: 모스 부호\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.17)\n> \"모스 부호 전송 실습 빈 칸\" — (3주차 2023-Q7)\n\n---\n\n## 42. 아스키 코드\n\n**정의 요약:** 아스키 코드는 알파벳 한 글자를 7비트(0과 1의 조합)짜리 숫자로 표현하기로 정한 약속이다. 비유하자면 사람 이름 대신 학번을 쓰듯, 글자 하나하나에 미리 정해둔 번호(비트 조합)를 붙여 부르는 것과 같다. 문자를 디지털 신호로 바꿔 전송하는 모든 통신의 기본 단위이기 때문에 알아둬야 하는 개념이다.\n\n**교수님 설명:**\n> \"그래서 아스키 코드 진짜 알파벳입니다.\" — (3주차 강의 31:34)\n>\n> \"알파벳 아스키 7 비트 내용을 우리가 알파벳 문자열로 표현할 때 7 비트 디지털로 표현하긴 하는데 얘는 아날로그니까\" — (3주차 강의 38:16)\n>\n> \"그다음 디지털 정보는 아스키 코드예요.\" — (4주차 강의 1:15:40)\n>\n> \"그러면 아스키 코드 아스키 코드 여기 abcd처럼 이 문자를 약속을 이 프로젝트 다른 것도 마찬가지입니다.\" — (4주차 강의 1:18:08)\n\n> \"Input: 알파벳(ascii code: 7비트)\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.20)\n> \"MFSK를 활용하여 16진수 유니코드를 전송하는 실습에 대하여 틀린 설명은?\" — (3주차 2025-Q7)\n\n---\n\n## 43. 디지털 신호 ⚠️\n\n**정의 요약:** 디지털 신호는 0 또는 1처럼 딱 끊어진 값으로만 표현되는 신호로, 실제로는 사인함수 같은 아날로그 파형을 이용해서 0과 1을 구별해 만들어낸다. 비유하자면 아날로그가 오르내리는 언덕길이라면 디지털은 계단처럼 딱딱 끊어진 값만 갖는 것과 같다. 아날로그와 디지털을 구분하는 문제가 기출에도 반복되는 만큼, 통신에서 정보를 표현하는 두 방식 중 하나로 확실히 알아둬야 한다.\n\n**교수님 설명:**\n> \"그냥 디지털 알파벳 표현하는 실험 방법 아스키 코드처럼 어떤 약속이에요?\" — (3주차 강의 31:34)\n>\n> \"디지털 정보를 보냈죠?\" — (3주차 강의 42:46)\n\n> \"1비트 디지털 신호 = 0 또는 1 사인함수\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.13)\n> \"아날로그와 디지털에 대한 설명으로 틀린 것은?\" — (3주차 2022-Q2)\n\n---\n\n## 44. 오류 탐지와 복구 ⚠️\n\n**정의 요약:** 오류 탐지와 복구는 통신 중에 신호가 손실되거나 깨졌는지 확인(탐지)하고, 깨졌다면 원래대로 되돌리는(복구) 과정이다. 비유하자면 택배가 오는 도중 상자가 파손됐는지 확인하고, 파손됐으면 다시 만들어 보내는 것과 같다. 어떤 통신 방식이든 데이터가 온전히 도착했는지 보장하는 가장 기본적인 안전장치이기 때문에 중요하다.\n\n**교수님 설명:**\n> \"그래서 손실이 일어나면 통신의 가장 기본 도구가 오류가 있나 없나 확인하고 탐지 손실 탐지를 하고 있으면 복구하는 게 가장 기본적인 요구 사항인 거죠.\" — (3주차 강의 53:32)\n>\n> \"그래서 데이터 통신에서는 오류 탐지가 기본이다.\" — (3주차 강의 53:32)\n>\n> \"그래서 홍신에서는 오류 삼진 복구 이게 가장 기본입니다.\" — (3주차 강의 54:47)\n>\n> \"이 통신의 1 원칙 1 원칙 사실 오류가 있다 있을 수 있다.\" — (4주차 강의 1:16:50)\n\n> \"pied piper 프로젝트에 대한 설명으로 옳지 않은 것은? RSC 복구기술이 사용된 것이 아니라 FEC 솔로몬이 사용되었음\" — (3주차 2025-Q9)\n\n---\n\n## 45. 샘플링(샘플)\n\n**정의 요약:** 샘플링은 계속 이어지는 소리(아날로그)를 아주 짧은 시간 간격으로 끊어서 하나씩 값을 찍어내는 과정이고, 그렇게 찍힌 값 하나하나를 샘플이라고 부른다. 비유하자면 움직이는 대상을 연속 사진으로 찰칵찰칵 찍어서 각 사진(샘플) 한 장 한 장으로 움직임을 기록하는 것과 같다. 예를 들어 전화는 1초에 8천 개의 샘플을 찍는데, 이런 숫자 하나하나에도 나름의 이유가 있다. 1초에 몇 개의 샘플을 찍는지(예: 48000Hz)가 소리 전송에 필요한 비트 수를 계산하는 문제의 기초가 되므로 꼭 이해해야 한다.\n\n**교수님 설명:**\n> \"w 바이 약속 1초에 4만 8천 그다음에 여기 한 개 16비트 여기 핑클 이거는 긴 신호 짧으시면 약속이야 약속 이걸 조합해서 우리가 신호를\" — (3주차 강의 44:29)\n>\n> \"샘플은 갑자기 좀 어려운 얘기인데 샘플은 뭐냐 하면 시간을 쭉 이렇게 보면 마치 우리 소리를 사진으로 찰찰찰찰 찍으면 샘플이 한 개 사진이다라고 생각하면 돼.\" — (3주차 강의 45:36)\n>\n> \"그래서 1초에 8천 개의 샘플 이것도 이유가 있어요.\" — (4주차 강의 05:13)\n>\n> \"샘플링 샘플을 만드는 거예요.\" — (4주차 강의 08:56)\n\n> \"48000 Hz: 1초에 샘플 개수\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.22)\n> \"사람 목소리 전송 비트레이트 계산 문제\" — (3주차 2022-Q3)\n\n---\n\n## 46. 아날로그 신호\n\n**정의 요약:** 아날로그 신호는 사인함수(물결 모양 파동)들을 여러 개 조합해서 만들어지는, 끊김 없이 이어지는 신호다. 비유하자면 여러 파도가 겹쳐서 하나의 큰 물결을 만드는 것처럼, 다양한 사인파를 섞으면 우리가 듣는 목소리 같은 복잡한 아날로그 신호가 만들어진다. 이 사인파의 특성(크기·주파수·위상)을 조합하는 방식이 바로 디지털 신호(0과 1)를 만드는 기초가 되기 때문에 중요하다.\n\n**교수님 설명:**\n> \"아주 깊이 있게 내려가지 않더라도 한 비트 디지털로 만들 때 아날로그의 신호의 조합, 사인 함수의 속성을 잘 활용하면 만들어낼 수가 있다.\" — (3주차 강의 30:26)\n>\n> \"그래서 그 주파수 대역은 다르지만 아날로그라는 매체의 구성은 동일하고 그 위에서 디지털을 어떻게 표현하면 0 1 0 1 쓸 수가 있고\" — (3주차 강의 32:42)\n\n> \"아날로그 신호는 사인함수의 조합으로 구성\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.9)\n> \"아날로그와 디지털에 대한 설명으로 틀린 것은?\" — (3주차 2022-Q2)\n\n---\n\n## 47. 양자화\n\n**정의 요약:** 양자화는 샘플링으로 찍어낸 값을 정해진 몇 개의 전압 단계(레벨) 중 가장 가까운 값으로 반올림해서 숫자로 정리하는 과정이다. 비유하자면 눈금 없는 자 대신, 일정 간격의 눈금이 있는 자로 가장 가까운 눈금에 맞춰 길이를 읽는 것과 같다. 몇 비트로 양자화하느냐(예: 4비트, 10비트)에 따라 표현할 수 있는 소리의 세밀함과 데이터 양이 달라지므로 비트레이트 계산 문제의 핵심 재료가 된다.\n\n**교수님 설명:**\n> \"16개 아까 전에 모습 보는 소리가 짧은 시간 긴 시간 두 가지밖에 없었고 여기에는 저기 청크 네비트라고 했으면 네 비트의 서로 다른 소리를 만들겠다 이거예요.\" — (3주차 강의 51:12)\n>\n> \"그게 양자화라고 있어 양자 컨파이네이션 뭔가 이 실수 값을 점수로 만드는 겁니다.\" — (4주차 강의 08:56)\n>\n> \"양자화 그래서 2개짜리 4개짜리로 지금 소리를 표현하는 그게 인코딩이에요.\" — (4주차 강의 10:19)\n>\n> \"그러니까 양자화라는 게 아날로그 소리는 실수야 실수 실수 무한대 값인데 무한대로 표현하면 우리가 듣는 소리를 그대로 표현할 수가 있습니다.\" — (4주차 강의 14:30)\n\n> \"양자화(Quantization): 특정 전압 레벨로 구분, 10-bit ADC에서 5 V /\" — (3주차 (이론) 3-데이터통신-1-아날로그-소리-변환 p.7)\n> \"양자화와 오디오 신호 관계\" — (3주차 (이론) 3-데이터통신-1-아날로그-소리-변환 p.8)\n> \"사람 목소리 전송 비트레이트 계산 문제\" — (3주차 2022-Q3)\n\n---\n\n## 48. 진폭(크기) ⚠️\n\n**정의 요약:** 진폭(크기)은 사인파가 위아래로 얼마나 크게 흔들리는지를 나타내는 값으로, 소리에서는 이 크기가 클수록 더 크게 들린다. 비유하자면 그네를 크게 밀수록 더 높이 올라가는 것처럼, 진폭이 클수록 신호의 세기가 세다. 실습에서는 이 크기 값 하나만으로도 소리가 있으면 1, 없으면 0으로 구분하는 가장 단순한 디지털 부호화 방식을 다뤘다. 사인함수의 세 가지 속성(크기·주파수·위상) 중 가장 먼저 이해해야 할 개념이다.\n\n**교수님 설명:**\n> \"그렇죠 그래서 사인 함수의 속성 크기 주파수 위상 세 가지를 꼭 잘 기억해야 그래서 이 만드는 자체는 통신 이런 쪽에서 전문적으로 합니다.\" — (3주차 강의 29:13)\n>\n> \"그냥 쉽게 크기 소리가 있다 없다로 0 1 0을 구분하겠다는 뜻입니다.\" — (4주차 강의 44:52)\n>\n> \"크기는 아까 얘기한 대로 크기 소리가 크면 1 소리가 작으면 0 간단하게 해석할 수가 있는 겁니다.\" — (4주차 강의 48:40)\n\n> \"A = 크기(amplitude)\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.9)\n> \"크기가 다른 사인함수\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.10)\n> \"실습: THRESHOLD보다 커야 소리로 인식\" — (3주차 2025-Q7)\n\n---\n\n## 49. WAV 파일 포맷\n\n**정의 요약:** WAV(.wav)는 PCM으로 만든 소리 데이터를 압축하지 않고 그대로 저장하는 오디오 파일 형식으로, 파일 앞부분에 정해진 순서의 헤더(예: 16비트, 44.1kHz 같은 정보)가 붙어있다. 비유하자면 사진을 압축 없이 원본 그대로 저장하는 것처럼, 소리를 손실 없이 그대로 담아두는 방식이다. PCM으로 만든 소리 데이터가 실제로 담기는 그릇이라서, 소리 통신 실습에서 직접 다루게 되는 파일 형식이다.\n\n**교수님 설명:**\n> \"그래서 오디오 파일 포맷 점 웨이브 웨이브는 여러분들 쓰면 우리가 그냥 압축하지 않고 소리를 그대로 저장하는 파일 포맷입니다.\" — (3주차 강의 1:18:57)\n>\n> \"웨이브는 확장자 파일 형식을 이야기하는 그래서 PCM 데이터를 소리를 저장한 확장자가 이제 점 웨이브고 이 점 웨이브 파일이 우리가 소리 통신하는 인재입니다.\" — (3주차 강의 1:18:57)\n>\n> \"그래서 그 소리 왼발 안에 보면 헤더가 이렇게 생겼고 이렇게 순서대로 약속을 지키면 아까 얘기한 대로 웨인 파이 데이터가 16비트 44 이런 형태로 저장돼 있습니다.\" — (3주차 강의 1:20:06)\n\n> \"실습: THRESHOLD보다 커야 소리로 인식\" — (3주차 2025-Q7)\n\n---\n\n## 50. 리드-솔로몬 코드\n\n**정의 요약:** 리드-솔로몬 코드는 통신 중 손실되거나 깨진 데이터를 감지하고 복구하는 데 쓰이는 오류 정정 기술(FEC, 전진 오류 수정)의 한 종류다. 비유하자면 편지를 보낼 때 여분의 확인용 문장을 같이 적어 보내서, 일부가 얼룩져 안 보여도 나머지 내용으로 원래 문장을 복원할 수 있게 하는 것과 같다. 오류 탐지·복구가 통신의 기본 요구사항인 만큼, 그걸 실제로 구현하는 대표 기술로 기출에도 등장하는 개념이다.\n\n**교수님 설명:**\n> \"리즈 솔로몬 코드 이러면 이런 게 있구나.\" — (3주차 강의 54:47)\n>\n> \"기술 통신할 때 오류 탐지할 때 RS 코드를 써서 얘가 구현을 했고\" — (3주차 강의 57:07)\n>\n> \"그때 제일 많이 쓰는 기술 중에 하나가 비트 오류 복구 기술 중에 하나인데 미드 솔로몬이라는 게 있어요.\" — (4주차 강의 1:21:42)\n>\n> \"지금은 오류 탐지를 하고 복구할 수 있는데 그중에 대표 기술 중에 하나로 리드 솔루몬이라는 기술을 쓴다.\" — (4주차 강의 1:22:47)\n\n> \"pied piper 프로젝트에 대한 설명으로 옳지 않은 것은? RSC 복구기술이 사용된 것이 아니라 FEC 솔로몬이 사용되었음\" — (3주차 2025-Q9)\n\n---\n\n## 51. 사인 함수\n\n**정의 요약:** 사인 함수는 크기·주파수·위상이라는 세 가지 값으로 모양이 정해지는 물결 모양의 수학 곡선으로, 아날로그 신호는 이 사인함수들을 조합해서 만들어진다. 비유하자면 사인 함수는 그네가 흔들리는 모양을 그대로 수식으로 옮겨놓은 것과 같다. 고등학교 수학에서 배운 이 곡선을 실제로 코드로 만들어보는 것이 통신 신호를 이해하는 실습의 출발점이라 중요하다.\n\n**교수님 설명:**\n> \"이런 코드 만드는 자체는 이제 크게 부담이 없으니까 여러분들이 아까 사이나스의 특징 그러니까 속성 변수 중에 크기가 있고 주파수가 있고 위상 세 가지가 있다.\" — (3주차 강의 25:50)\n>\n> \"그러니까 여기 수식은 여러분들이 수학에서 이렇게 열심히 공부를 했는데 이렇게 코드 생성해서 사인 함수를 만드는 거 연습은 안 해봤을 겁니다.\" — (3주차 강의 26:57)\n\n> \"아날로그 신호 = 사인함수 조합\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.9)\n\n---\n\n## 52. 위상\n\n**정의 요약:** 위상은 사인파가 몇 도(0도, 90도, 180도...)에서부터 시작하는지를 나타내는 값이다. 비유하자면 같은 노래라도 시작 지점을 다르게 잡으면 다른 부분부터 들리는 것처럼, 위상이 다르면 같은 모양의 파동도 시작 위치가 달라 보인다. 4주차에는 이 시작 위치 차이(각도 차이)를 이용해 신호를 구분하는 변조 기법으로 이어졌다. 신호의 모양을 완전히 뒤집거나 다르게 만들고 싶을 때 조절하는 값이라서, 크기·주파수와 함께 사인함수를 이루는 세 가지 속성 중 하나로 알아둬야 한다.\n\n**교수님 설명:**\n> \"위상 위상의 의미가 뭐냐 하면 원래 사이나스는 시작 그러면 여기서부터 시작이에요.\" — (3주차 강의 26:57)\n>\n> \"그 시작을 예를 들어서 여기 90도 180도 270도 이렇게 어느 위치에서 시작할까 그 위치의 위치 그게 위상이 위상 위상이 어디에서 시작하는지 반대로 뒤집혀서 모양을 만들고 싶을 때 위성을 바꿔야 돼.\" — (3주차 강의 28:03)\n>\n> \"위성은 신호 시작 위치에 사인 하수가 그대로 시작되느냐 또는 뒤집혀서 180도 바뀌어서 시작하느냐 아니면 90도 늦게 출발하느냐 그 각도 차이\" — (4주차 강의 46:13)\n>\n> \"위상 위상은 신호의 시작 위치에 위치 어느 지점부터 시작을 할까?\" — (4주차 강의 49:51)\n\n> \"위상이 다른 사인함수\" — (3주차 (이론) 2-데이터통신-1비트만들기-사인함수 p.12)\n\n---\n\n## 53. 물리 계층\n\n**정의 요약:** 물리 계층은 OSI 7계층 중 가장 아래에서 실제 전기 신호·빛·전파를 이용해 0과 1(한 비트)을 실제로 만들어내고 주고받는 단계다. 비유하자면 편지의 내용(상위 계층)이 아니라, 그 편지를 실제로 실어 나르는 트럭과 도로에 해당하는 부분이다. 링크·네트워크 계층 같은 상위 계층이 동작하기 위한 가장 밑바탕이 되는 단계라서 반드시 짚어야 하는 개념이다.\n\n**교수님 설명:**\n> \"그래서 물리 계층까지 내려가서 실제 신호가 어떻게 왔다 갔다 하는지 좀 살펴보고 우리 목표는 한 비트가 어떻게 물리 계층에서 생성되나 살펴보는 겁니다.\" — (3주차 강의 00:00)\n>\n> \"근데 물리 전력이라고 얘기하면 여기 BC c 대칭 다 평가를 할 수 있어 요 물리 계층은 한 미트 안 되는 걸 이런 것들이 하는 분이고\" — (3주차 강의 04:50)\n\n---\n\n## 54. QAM ⚠️\n\n**정의 요약:** QAM(구파진폭변조)은 디지털 신호를 아날로그로 바꿔 보낼 때 신호의 크기(진폭)와 각도(위상)라는 두 가지 속성을 동시에 이용해서 한 번에 더 많은 종류의 신호를 구분해 보내는 변조 기술이다. 크기 하나만 쓰거나 위상 하나만 쓰는 방식보다 구분 가능한 신호 개수가 많아져서, 같은 시간에 더 많은 비트를 실어 보낼 수 있다. 비유하자면 손전등의 밝기(크기)와 색깔(각도)을 동시에 바꿔가며 신호를 보내면, 밝기만으로 신호를 보낼 때보다 훨씬 다양한 신호를 표현할 수 있는 것과 같다. 실제로 QAM은 64, 256, 1024, 4096처럼 구분하는 신호 개수를 점점 늘려가는 방향으로 발전해왔고, 그 발전이 곧 우리가 체감하는 와이파이 속도 향상으로 이어졌다. 1초에 몇 개의 신호를 구분해서 보낼 수 있는지가 곧 실제 전송 속도(비트 전송률)로 이어지기 때문에 계산 문제로 자주 나오는 핵심 개념이다.\n\n**교수님 설명:**\n> \"괌이라는 기술은 디지털 신호를 r로 변환시켜서 보낼 때 두 개의 속성을 동시에 이용하는 게 두 개가 뭐냐 크기랑 각도입니다.\" — (4주차 강의 48:40)\n>\n> \"여기 3개가 기본 1개만 이용하는 거 넣고 제일 마지막에 있는 코드로 점 필리튜드 모듈레이션이라고 하는 건 두 개를 동시에 이용하는 2개\" — (4주차 강의 46:13)\n>\n> \"여러분들 와이파이 속도가 어떻게 발전이 됐고 그 발전한 속도의 그 근원 기술이 뭐였을까 그걸 여러분들이 설명할 수 있어야 됩니다.\" — (5주차 강의 #L36)\n>\n> \"변조 기술이 여기 숫자가 64 25, 6 1024 4096 이렇게 코 기술이 발전했기 때문에 와이파이 속도가 올라간 겁니다.\" — (5주차 강의 #L51)\n\n> \"크기와 각도를 섞어서 보내는 QAM\" — (4주차 (이론) 3-데이터통신-2-pied-piper p.10)\n> \"QAM에서 8개의 신호를 구분 가능할 때 1초에 N개의 신호를 보내고 있다면 최대 비트 전송률은?\" — (4주차 2023-Q4)\n\n---\n\n## 55. 인코딩(부호화 약속)\n\n**정의 요약:** 인코딩은 문자(알파벳)를 특정 비트 조합으로 표현하기로 미리 정해둔 약속으로, 아스키 코드처럼 영어 알파벳을 위한 규칙도 있고 완성형 한글처럼 한글을 위한 별도의 규칙도 있다. 비유하자면 서로 다른 나라 말을 주고받을 때 미리 정해둔 사전(약속)이 있어야 뜻이 통하는 것처럼, 통신 장비들도 같은 인코딩 약속을 공유해야 문자를 제대로 주고받을 수 있다. 어떤 언어의 문자든 결국 이런 부호화 약속 위에서 디지털로 전송되기 때문에 반드시 알아둬야 하는 개념이다.\n\n**교수님 설명:**\n> \"이게 인코딩 인코딩 여러분들 통신할 때 아스키 코드 같은 이 인코딩 약속을 하죠.\" — (4주차 강의 1:16:50)\n>\n> \"완성형 한글 인코딩도 할 줄 알아야 됩니다.\" — (4주차 강의 1:16:50)\n>\n> \"그래서 어떤 알파벳 알파벳은 영어든 한글이든 그 알파벳에 대한 약속입니다.\" — (4주차 강의 1:16:50)\n\n> \"WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함\" — (4주차 2025-Q6)\n\n---\n\n## 56. 심볼당 비트수(변조 차수)\n\n**정의 요약:** 심볼당 비트수는 한 번의 신호(심볼)로 몇 비트의 정보를 실어 보낼 수 있는지를 나타내며, 구분 가능한 신호의 개수가 늘어날수록 한 번에 보낼 수 있는 정보량도 늘어난다(예: 4개를 구분하면 2비트, 16개를 구분하면 4비트). 비유하자면 신호등 색이 2가지뿐이면 한 번에 1비트짜리 정보만 전달할 수 있지만, 16가지 색을 구분할 수 있다면 한 번에 4비트를 전달할 수 있는 것과 같다. QAM 같은 변조 기술에서 실제 비트 전송률을 계산하는 핵심 재료가 되기 때문에 계산 문제에 직결되는 개념이다.\n\n**교수님 설명:**\n> \"16개 16개는 몇 피트죠?\" — (4주차 강의 51:02)\n>\n> \"4개가 있으면 몇 비트 2비트, 16개가 있으면\" — (4주차 강의 51:36)\n>\n> \"합의 이 정보의 양을 우리가 많이 구분하면 많이 보낼 수가 있죠.\" — (4주차 강의 52:00)\n\n> \"QAM에서 8개의 신호를 구분 가능할 때 1초에 N개의 신호를 보내고 있다면 최대 비트 전송률은?\" — (4주차 2023-Q4)\n\n---\n\n## 57. 코덱(CODEC)\n\n**정의 요약:** 코덱(CODEC)은 압축(compression)과 압축 해제(decompression)를 합쳐 부르는 말로, 소리나 영상처럼 용량이 큰 데이터를 압축해서 저장·전송하고, 재생할 때 다시 원래대로 풀어주는 기술이다. 비유하자면 짐을 압축팩에 넣어 부피를 줄여 옮겼다가(compression) 도착해서 다시 꺼내 펼치는(decompression) 것과 같다. 음성·영상 통신 서비스를 실제로 쓸 때 반드시 뒤에서 동작하는 실용 기술이라, 활용 사례를 구분하는 문제로 기출에도 나온다.\n\n**교수님 설명:**\n> \"비디오 재생할 때 코덱이 없어요 다운 받을 수 나오잖아 이 코덱이 뭐죠?\" — (4주차 강의 36:23)\n>\n> \"그걸 이름을 합해서 부르는 게 코덱이 코덱 컴프레션 디컴프레션 합쳐서 코덱이라 대상이 누굽니까?\" — (4주차 강의 36:23)\n\n> \"음성 데이터 통신의 활용 사례에 대한 설명으로 옳지 않은 것 고르기, 스타벅스 사이렌 오더나 고무줄놀이 노래할 때 쓰는 거 고르기\" — (4주차 2025-Q4)\n\n---\n\n## 58. 다중화(Multiplexing) ⚠️\n\n**정의 요약:** 다중화(멀티플렉싱)는 하나의 통신선 또는 하나의 주파수 대역을 여러 사람·여러 신호가 나누어 함께 쓸 수 있도록 쪼개는 기술이다. 비유하자면 큰 도로 하나를 여러 차선으로 나눠서 여러 대의 차가 동시에 다닐 수 있게 하는 것과 같다. 지금 우리가 쓰는 전화, 인터넷 등 대부분의 통신 인프라가 실제로 이 다중화 기술 위에서 돌아가고 있기 때문에 반드시 알아둬야 하는 개념이다.\n\n**교수님 설명:**\n> \"기 그래서 주파수를 나눠서 이야기하는 방식 멀티플렉싱이 다중화라는 용어입니다.\" — (5주차 강의 #L529)\n>\n> \"다중화 그래서 여러 사람이 나누어서 쓰는 기술이라고 생각하면 돼요.\" — (5주차 강의 #L530)\n>\n> \"그래서 이게 모두 다 다중화 기술이고 모두 다 현재 사용되고 있다.\" — (5주차 강의 #L566)\n\n> \"전화 다중화는 T1 ~ T4\" — (5주차 2025-Q4)\n\n---\n\n## 59. 시분할다중화(TDM) ⚠️\n\n**정의 요약:** TDM(시분할다중화)은 다중화 기술 중에서도 시간을 잘게 쪼개어, 여러 사람이 정해진 시간 구간마다 돌아가며 하나의 통신선을 나눠 쓰게 하는 방식이다. 비유하자면 회의실 하나를 10분 단위로 예약해서 여러 팀이 순서대로 돌아가며 쓰는 것과 비슷하다. 전화망 등급(T1~T4)처럼 실제 전화 통신 인프라에서 지금도 쓰이고 있는 핵심 기술이라 기출에도 자주 등장한다.\n\n**교수님 설명:**\n> \"이 시간 간격 나누는 게 TDM이 방금 이야기한 이 기술입니다.\" — (5주차 강의 #L537)\n>\n> \"10초씩 나누어서 이 채널을 나눠서 다중화를 하는 거예요.\" — (5주차 강의 #L538)\n>\n> \"그럼 4천 개의 이 주파수를 쓰는데 얘가 시간 간격 나누는 거 TDM 이거 굉장히 정밀하게 나눠서 쓸 수 있도록 해주는 게 TDM 전화 기술이 들어가 있어요.\" — (5주차 강의 #L560)\n\n> \"전화 다중화는 T1 ~ T4\" — (5주차 2025-Q4)\n\n---\n\n## 60. 섀넌 공식(채널 용량)\n\n**정의 요약:** 섀넌 공식은 나이퀴스트 공식과 달리, 통신선에 잡음(노이즈)이 섞여 있는 실제 상황까지 고려해서 대역폭이 주어졌을 때 최대로 보낼 수 있는 전송 속도를 계산하는 공식이다. 비유하자면 조용한 방(잡음 없음)에서 낼 수 있는 최대 목소리 크기가 아니라, 시끄러운 카페(잡음 있음) 안에서도 상대가 알아들을 수 있는 최대 전달 속도를 계산하는 것과 같다. 현실의 통신 환경은 항상 어느 정도 잡음이 섞여 있기 때문에, 잡음까지 반영한 이 공식이 실제 최대 전송 속도를 구하는 데 쓰이는 핵심 도구다.\n\n**교수님 설명:**\n> \"섀논이라는 다른 사람이 계산을 해봤습니다.\" — (5주차 강의 #L207)\n>\n> \"섀논의 공신 용량은 대포 곱하기 로우까지 취하는데 앞에 이는 이제 사라졌고 노이즈가 있다.\" — (5주차 강의 #L208)\n>\n> \"그런 노이즈 환경에 있을 때 대역폭이 있을 때 최대 점수는 얼마가 될까 계산하면 점점 곱하기 로그 클릭 하면 최대 접속률이 여기 14k BPS\" — (5주차 강의 #L215)\n\n> \"대역폭을 이용한 계산 문제\" — (5주차 2025-Q3)\n\n---\n\n## 61. 비동기(Asynchronous)\n\n**정의 요약:** 비동기 방식은 데이터를 보낼 때마다 \"지금부터 시작한다\"는 것을 알리는 별도의 시작 신호를 함께 보내서, 받는 쪽이 그 신호를 보고 데이터가 언제 시작되는지 알 수 있게 하는 통신 방식이다. 비유하자면 정해진 시간표 없이, 매번 \"지금부터 이야기 시작할게요\"라고 먼저 알린 뒤 말을 시작하는 것과 같다. 송신자와 수신자가 미리 정밀하게 시계를 맞춰두지 않아도 통신할 수 있게 해주는 방법이라, 실습에서 다룬 여러 통신 방식을 비교하는 문제의 핵심이 된다.\n\n**교수님 설명:**\n> \"이게 비동기입니다.\" — (5주차 강의 #L446)\n>\n> \"그 시작 플렉스라는 게 별도 신호가 있다.\" — (5주차 강의 #L509)\n\n> \"비동기(asynchronous): 데이터 + 클럭\" — (5주차 (이론) 4-new-데이터통신-1-라인코딩-블록코딩 p.28)\n> \"모스코드 소리로 통신하는 실습과 유니코드 소리로 전송하는 실습을 비교한 것으로 틀린 설명은? 햇갈리 선지: 둘 다 송수신에 뭔들 사용해야만 정확히 송수신을 할 수 있다(x 모스코드 실습은 그렇지 않음). 두 실습의 두 비가비인데도 ...\" — (5주차 2025-Q8)\n\n---\n\n## 62. 클럭 동기화\n\n**정의 요약:** 클럭 동기화는 데이터를 보내는 쪽과 받는 쪽이 \"지금이 몇 번째 비트를 읽어야 할 시간인지\"에 대한 시간 감각(클럭)을 서로 맞추는 것을 말한다. 비유하자면 두 사람이 함께 줄넘기를 하려면 박자를 맞춰야 하듯, 통신도 타이밍이 어긋나면 신호를 잘못 읽게 된다. 타이밍이 조금이라도 어긋나면 0과 1을 잘못 읽게 되므로, 비동기·등시성·라인 코딩 방식 모두 결국 이 동기화 문제를 해결하기 위한 방법들이다.\n\n**교수님 설명:**\n> \"정확하게 동기화 같은 걸 해야 돼요.\" — (5주차 강의 #L251)\n>\n> \"동기화 동기화가 굉장히 중요한 용어입니다.\" — (5주차 강의 #L337)\n>\n> \"그게 동기화입니다.\" — (5주차 강의 #L369)\n\n> \"모스코드 소리로 통신하는 실습과 유니코드 소리로 전송하는 실습을 비교한 것으로 틀린 설명은? 햇갈리 선지: 둘 다 송수신에 뭔들 사용해야만 정확히 송수신을 할 수 있다(x 모스코드 실습은 그렇지 않음). 두 실습의 두 비가비인데도 ...\" — (5주차 2025-Q8)\n\n---\n\n## 63. 압축 알고리즘\n\n**정의 요약:** 압축 알고리즘은 오디오·비디오·텍스트처럼 용량이 큰 데이터를 더 작은 크기로 줄여주는 기술이며, 그 대표적인 방법 중 하나로 허프만 인코딩이 언급되었다. 비유하자면 짐을 압축팩에 넣어 부피를 줄여서 옮기는 것과 같다. 데이터 용량을 줄여야 더 빠르고 효율적으로 전송할 수 있기 때문에, 멀티미디어 통신 전반에서 필수적인 기술이다.\n\n**교수님 설명:**\n> \"압축 기술 그래서 오디오 압축 비디오 압축 텍스트 압축 압축 알고리즘을 이용해서 만드는 겁니다.\" — (5주차 강의 #L142)\n>\n> \"그럼 당장 압축 알고리즘을 한번 설명해 볼까요?\" — (5주차 강의 #L151)\n>\n> \"허튼한 인코딩으로 허프만 인코딩으로 되어 있었어요.\" — (5주차 강의 #L166)\n\n---\n\n## 64. 나이퀴스트 최대 전송률 공식\n\n**정의 요약:** 나이퀴스트 최대 전송률 공식은 잡음이 전혀 없다고 가정했을 때, 주어진 대역폭과 신호 레벨(구분 가능한 신호 개수)만으로 최대로 보낼 수 있는 전송 속도를 계산하는 공식이다. 비유하자면 조용한 방에서 정확히 몇 마디까지 알아들을 수 있는지 계산하는 것과 같다. 대역폭 계산 문제에서 신호 레벨 수치가 주어졌을 때 최대 전송률을 구하는 핵심 공식이라 기출에 자주 나온다.\n\n**교수님 설명:**\n> \"나이키스에서 했던 거는 어떤 주어진 대어 폭이 있었고 거기에 최대 전송률을 계산하려고 할 때 이 사람이 만든 공식이 하나가 있습니다.\" — (5주차 강의 #L191)\n>\n> \"l 밴드스는 우리가 아까 얘기한 대형 폭이고 그래서 곱하기 2 해서 신호를 2로 값을 취하면 최대 전송률이 나온다.\" — (5주차 강의 #L198)\n>\n> \"대여 폭 어떤 숫자 3천 주어지고 신호 레벨 2 이런 거 주면 노이즈가 없다라고 가정했을 때 최대 6회 UPS 이렇게 계산할 수가 있다.\" — (5주차 강의 #L203)\n\n> \"대역폭을 이용한 계산 문제\" — (5주차 2025-Q3)\n\n---\n\n## 65. 신호대잡음비(SNR)\n\n**정의 요약:** 신호대잡음비(SNR)는 원하는 신호의 크기와 그 신호에 섞여 있는 잡음(노이즈)의 크기를 비교한 값으로, 섀넌 공식에서 이 값에 로그를 취해 잡음이 있는 환경에서의 최대 전송 속도를 계산하는 데 쓰인다. 비유하자면 시끄러운 카페에서 내 목소리가 주변 소음보다 얼마나 큰지 비교하는 값과 같다. 현실 통신 환경은 잡음을 피할 수 없기 때문에, 그 영향을 수치로 나타내는 이 값이 섀넌 공식 계산의 핵심 재료가 된다.\n\n**교수님 설명:**\n> \"그 노이즈를 어떻게 표현할까 고민하다가 신호대 자분비 있습니다.\" — (5주차 강의 #L209)\n>\n> \"신호대 자분비 시그널 2 노이즈 리쇼라는 값이 있어요.\" — (5주차 강의 #L210)\n>\n> \"SNR 록을 각 취하면 돼.\" — (5주차 강의 #L211)\n\n> \"노이즈가 있는 신호에서 최대 비트 전송률\" — (5주차 2023-Q2)\n\n---\n\n## 66. 맨체스터 인코딩\n\n**정의 요약:** 맨체스터 인코딩은 라인 코딩 방식 중 가장 대표적인 것으로, 신호 구간의 가운데에서 하이→로우로 바뀌면 1, 로우→하이로 바뀌면 0으로 정해서 0과 1을 표현하는 방식이다. 비유하자면 매 박자마다 손뼉을 한 번씩 치기로 약속해서, 손뼉 소리 자체로 박자(타이밍)를 놓치지 않게 하는 것과 같다. 신호가 매 비트마다 반드시 한 번씩 바뀌기 때문에 받는 쪽이 클럭(타이밍)을 놓치지 않고 동기화를 맞출 수 있게 해주는 핵심 기법이다.\n\n**교수님 설명:**\n> \"그래서 여러 신호 라인 코딩 격이 있는데 그중에 제일 대표가 맨체스 콜이에요.\" — (5주차 강의 #L330)\n>\n> \"그래서 1이면 하이에서도 로 약속을 하고 0이면 로에서 하이로 바뀌는 걸 약속을 해서 이 0 1 0 2를 우리가 표현을 하자.\" — (5주차 강의 #L332)\n>\n> \"그게 맨체스트 인코딩입니다. 굉장히 단순한데 클럽 동기화를 맞추기 위해서 가운데 변화를 준다 이게 핵심입니다.\" — (5주차 강의 #L391)\n\n---\n\n## 67. 2B1Q\n\n**정의 요약:** 2B1Q는 두 개의 비트(2Binary)를 한 번에 4가지 신호 레벨(1Quaternary) 중 하나로 묶어서 표현하는 라인 코딩 방식이다. 비유하자면 한 글자씩 따로 보내는 대신 두 글자를 묶어 하나의 기호로 한 번에 보내는 것과 같다. 한 번의 신호로 2비트씩 실어 보낼 수 있어 전송 속도를 높일 수 있는 방법이다.\n\n**교수님 설명:**\n> \"그다음에 또 하나가 여기 보면 맨체스터 맨체스터 맨체스터 인코딩 방식 그다음 밑에 내려가면 2b 1q라는 건 멀티 레벨 멀티 블록 여러 개를 동시에 보는 이런 방식입니다.\" — (5주차 강의 #L257)\n>\n> \"e b1 q라는 게 투 파이너리 1 퍼터너리라고 해서 두 개치를 4개의 레벨로 표현하는 000 1 1 0 1 2를 신호 약속을 이렇게 만들어서\" — (5주차 강의 #L406)\n>\n> \"속도 올리려고 합니다.\" — (5주차 강의 #L407)\n\n---\n\n## 68. 등시성(Isochronous)\n\n**정의 요약:** 등시성(isochronous) 방식은 데이터가 항상 일정한 시간 간격으로 도착한다고 미리 약속해두고, 그 일정한 간격 자체를 시간 정보로 활용하는 통신 방식이다. 비유하자면 기차가 정확히 매 10분마다 온다고 정해두면, 시계를 따로 보지 않아도 다음 기차가 언제 올지 알 수 있는 것과 같다. 비동기 방식처럼 매번 시작 신호를 따로 보내지 않아도 되기 때문에, 음성·영상처럼 일정한 속도로 계속 흘러야 하는 데이터에 적합한 개념이다.\n\n**교수님 설명:**\n> \"별도 얘는 이제 시간 관련된 정보가 별도로 필요한 경우는 아이소 크로너스라고 부르는 게 따로 있습니다.\" — (5주차 강의 #L465)\n>\n> \"비동기 등시라는 건 시간 간격이 일정하다.\" — (5주차 강의 #L510)\n\n> \"등시성(isochronous)\" — (5주차 (이론) 4-new-데이터통신-1-라인코딩-블록코딩 p.30)\n\n---\n\n## 69. 라인 코딩\n\n**정의 요약:** 라인 코딩은 프로그래밍에서 말하는 코드와는 다른 개념으로, 0과 1이라는 디지털 값을 실제 전기 신호(전압의 높낮이 등)로 어떻게 표현할지 정해두는 약속을 만드는 기술이다. NRZ, 맨체스터, 2B1Q 등이 모두 이 라인 코딩의 종류다. 비유하자면 같은 모스 부호라도 짧은 신호·긴 신호를 실제로 어떤 전압으로 표현할지 정해두는 규칙과 같다. 같은 0과 1이라도 실제 신호로 어떻게 표현하느냐에 따라 속도와 동기화 방식이 달라지기 때문에, 뒤에 나오는 여러 인코딩 기법을 이해하는 큰 틀이 되는 개념이다.\n\n**교수님 설명:**\n> \"그래서 그게 이름이 라인 코드입니다.\" — (5주차 강의 #L14)\n>\n> \"그 신호에서 라인에 코드 코드는 여러분들이 작성하는 사람이 이해하는 파이썬 코드가 아니고 여기 코드는 0 1 0 1 만들어내는 기술을 코딩이라고 그래요.\" — (5주차 강의 #L17)\n>\n> \"넌 리턴 투제로 맨체스터 2b 1q 맨체스터 맨체스터는 실제 영국 도시 이름입니다.\" — (5주차 강의 #L21)\n\n---\n\n## 70. 블록 코딩\n\n**정의 요약:** 블록 코딩은 데이터를 몇 비트씩 묶은 블록 단위로 잘라서, 원래 비트 수보다 조금 더 많은 비트를 추가로 붙여 \"멈춰라\", \"시작\", \"끝\"과 같은 제어 신호까지 함께 표현할 수 있게 하는 기법이다(예: 4비트 입력이 들어오면 5비트로 확장). 비유하자면 문장 뒤에 마침표·물음표 같은 문장부호를 추가로 붙여서 의미를 더 정확하게 전달하는 것과 같다. 순수한 데이터 비트만으로는 표현할 수 없는 제어 정보까지 함께 실어 보낼 수 있게 해주는 방법이다.\n\n**교수님 설명:**\n> \"그래서 블록 단위로 뭔가 정리를 해서 코딩을 해봅시다.\" — (5주차 강의 #L408)\n>\n> \"명령어야 잠깐 멈춰 잠깐 쉬어 시작 끝 초기화 등등 명령어 만들어내는 기술이 블록 코인입니다.\" — (5주차 강의 #L416)\n>\n> \"여기 입력이 네 비트 들어가면 5개의 시티, 여기 m 비트 입력이 들어가면 n 추가로 원 이렇게 추가로 해서 명령어를 더 만들어내서 보내는 거다.\" — (5주차 강의 #L420)\n\n---\n\n## 71. NRZ-I\n\n**정의 요약:** NRZ-I는 NRZ 방식을 응용한 라인 코딩으로, 1을 만날 때마다 신호를 반대로 뒤집고 0을 만나면 신호를 그대로 유지하기로 약속한 방식이다(\"I\"는 Invert를 뜻함). 비유하자면 신호등을 계속 켜두다가 \"1\"이라는 값이 올 때만 색을 반대로 바꾸는 것과 같다. 신호의 절대적인 높낮이가 아니라 \"바뀌었는지 아닌지\"만으로 1과 0을 구분하기 때문에, 신호가 뒤집혀 전달돼도 정보가 덜 깨지는 라인 코딩 응용 기법이다.\n\n**교수님 설명:**\n> \"그다음에 이제 뒤에 nrgi라고 하는 거는 약간 응용된 겁니다.\" — (5주차 강의 #L262)\n>\n> \"이거는 인버트라고 해서 1을 만나면 신호를 반대로 뒤집는 약속을 한 게 이거 그래서 아니다.\" — (5주차 강의 #L264)\n>\n> \"1이 되면 1이 되면 1이 되면 일부러 신호가 뒤집어집니다.\" — (5주차 강의 #L293)\n\n---\n\n## 72. NRZ(Non-Return-to-Zero)\n\n**정의 요약:** NRZ(Non-Return-to-Zero)는 이름 그대로, 한 비트를 표현하는 동안 신호가 중간에 기준 전압(0)으로 돌아가지 않고 그 비트 값을 나타내는 전압을 구간 내내 그대로 유지하는 가장 단순한 라인 코딩 방식이다(예: 특정 전압이면 1, 다른 전압이면 0). 비유하자면 신호등을 한 번 켜면 다음 신호가 올 때까지 끄지 않고 그 색을 계속 유지하는 것과 같다. 가장 기본적인 라인 코딩 방식으로, 맨체스터·NRZ-I·2B1Q 같은 다른 방식들이 이 NRZ를 기준으로 비교·응용되는 출발점이 되는 개념이다.\n\n**교수님 설명:**\n> \"넌 리턴 투제로 이름이 0으로 돌아가지 않는 라인 코딩 기술이에요.\" — (5주차 강의 #L258)\n>\n> \"그래서 한 비트를 쭉 유지하는 겁니다.\" — (5주차 강의 #L259)\n>\n> \"여기는 넌 일단 주제로 내 이름이 유니폴라 극 한쪽이니까 5볼트 볼트 이거 가지고 내가 10 10 구분하겠다.\" — (5주차 강의 #L267)\n"
+  },
+  "questions": [
+    {
+      "id": "w5-c-데이터통신-dns-q1",
+      "q": "다음은 네트워크 분석에 사용되는 명령어에 대한 설명이다. 옳지 않은 것을 고르시오.\n① ipconfig는 로컬 호스트의 IP 설정 정보를 확인하는 명령어이다.\n② netstat은 현재 시스템의 네트워크 연결 상태와 포트 사용 현황을 보여준다.\n③ nslookup은 도메인 이름에 대한 DNS 서버의 응답(IP 주소)을 조회하는 명령어이다.\n④ nslookup은 라우터 경로상의 각 홉의 지연시간을 측정하는 명령어이다.",
+      "a": "④ (홉별 지연시간 측정은 traceroute의 기능이며, nslookup은 도메인 이름을 IP 주소로 변환하는 DNS 조회 명령어이다.)",
+      "difficulty": "medium",
+      "cognitiveLevel": "understand",
+      "reasoning": "2025년 기출에서 ipconfig/netstat/nslookup 설명 중 옳지 않은 것을 고르는 동일 문항이 3회 반복 매칭(examMatch=5)되어 재출제 가능성이 높으며, nslookup의 DNS 조회 기능을 traceroute 기능과 혼동시키는 오답으로 변별력을 확보했다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "2025-Q1",
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)"
+        },
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "(실습) week1_WireShark.pptx p.14",
+          "quote": "3. DNS Query와 Response 화면 캡쳐(실습2내용)"
+        },
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "(실습) week1_WireShark.pptx p.13",
+          "quote": "실습2) DNS Query 패킷 캡쳐"
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-dns-q2",
+      "q": "Wireshark 실습에서 nslookup 명령어를 실행하며 DNS Query와 Response 패킷을 캡쳐하였다. 이 두 패킷을 통해 각각 확인할 수 있는 정보는 무엇인가?",
+      "a": "DNS Query 패킷에는 클라이언트가 조회를 요청한 도메인 이름 정보가 담기고, DNS Response 패킷에는 그 도메인 이름에 대응하는 IP 주소가 담겨 있어, 도메인 이름이 실제로 어떤 IP로 변환되는지 확인할 수 있다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "실습 슬라이드(week1_WireShark.pptx p.13~14)에 'DNS Query/Response 패킷 캡쳐'가 실습2 과제로 두 차례 명시되어 있어, 실습 기반 이해도를 확인하는 문항으로 출제될 가능성이 있다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "2025-Q1",
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)"
+        },
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "(실습) week1_WireShark.pptx p.14",
+          "quote": "3. DNS Query와 Response 화면 캡쳐(실습2내용)"
+        },
+        {
+          "type": "slide",
+          "unit": "1주차",
+          "unitOrder": 1,
+          "locator": "(실습) week1_WireShark.pptx p.13",
+          "quote": "실습2) DNS Query 패킷 캡쳐"
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-ip주소-q1",
+      "q": "어떤 대학교가 200.100.0.0/24 대역을 보유하고 있다. 이 대역을 컴퓨터융합학부(호스트 100대 필요), 인공지능학과(호스트 50대 필요) 순서로 서브넷을 할당하려고 한다. 각 학과에 할당할 서브넷을 CIDR 표기로 나타내시오.",
+      "a": "컴퓨터융합학부: 100대를 수용하려면 128개 주소(/25)가 필요하므로 200.100.0.0/25. 인공지능학과: 50대를 수용하려면 64개 주소(/26)가 필요하므로 남은 대역에서 200.100.0.128/26.",
+      "difficulty": "hard",
+      "cognitiveLevel": "apply",
+      "reasoning": "IP주소 개념은 emphasis 4회·examMatch 12회로 전체 개념 중 강조·기출 매칭도가 가장 높고, 기출 힌트 3건 모두 '학과 순서대로 서브넷 CIDR 할당' 계산 문제를 명시하고 있어 동일 유형이 재출제될 가능성이 매우 높다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "2025-Q6",
+          "quote": "CIDR 문제 꼭 풀어보기 (컴퓨터융합학부 할당, 인공지능 할당…)"
+        },
+        {
+          "type": "transcript",
+          "unit": "5주차",
+          "unitOrder": 5,
+          "locator": "#L618",
+          "quote": "그래서 합하면 64k 즉 충남대는 이론적으로 64k개의 IP 주소가 있어요."
+        },
+        {
+          "type": "transcript",
+          "unit": "5주차",
+          "unitOrder": 5,
+          "locator": "#L600",
+          "quote": "그 숫자가 43억 43 지구상에 ipv4 현재 주소는 이론상으로 최대 40k 그걸 알아야 끝난 때가 몇 개 있었는지 알 수가 있습니다."
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-ip주소-q2",
+      "q": "강의에서 '충남대는 이론적으로 64k개의 IP 주소를 가지고 있다'고 언급하였다. 64k(65,536)개의 IP 주소를 확보하기 위해 필요한 서브넷 프리픽스(prefix)는 무엇인가?",
+      "a": "/16 (2^16 = 65,536 = 64K이므로, 호스트 비트가 16비트인 /16 대역이 필요하다.)",
+      "difficulty": "medium",
+      "cognitiveLevel": "apply",
+      "reasoning": "강의 발화(#L618) '충남대는 이론적으로 64k개의 IP 주소가 있다'가 직접 인용되어 있어, 이 수치를 서브넷 prefix로 역산하는 응용 계산 문제로 변형되어 출제될 가능성이 높다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "2025-Q6",
+          "quote": "CIDR 문제 꼭 풀어보기 (컴퓨터융합학부 할당, 인공지능 할당…)"
+        },
+        {
+          "type": "transcript",
+          "unit": "5주차",
+          "unitOrder": 5,
+          "locator": "#L618",
+          "quote": "그래서 합하면 64k 즉 충남대는 이론적으로 64k개의 IP 주소가 있어요."
+        },
+        {
+          "type": "transcript",
+          "unit": "5주차",
+          "unitOrder": 5,
+          "locator": "#L600",
+          "quote": "그 숫자가 43억 43 지구상에 ipv4 현재 주소는 이론상으로 최대 40k 그걸 알아야 끝난 때가 몇 개 있었는지 알 수가 있습니다."
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-osi7계층-q1",
+      "q": "OSI 7계층에 대한 설명으로 옳지 않은 것은?\n① 물리 계층(Physical Layer)은 비트 단위의 신호를 전송한다.\n② 데이터링크 계층은 MAC 주소를 이용해 동일 네트워크 내 프레임 전달을 담당한다.\n③ 네트워크 계층은 IP 주소를 이용하여 종단 간 경로설정(라우팅)을 담당한다.\n④ 전송 계층은 포트 번호를 사용하지 않고 오직 IP 주소만으로 통신을 식별한다.",
+      "a": "④ (전송 계층은 포트 번호를 사용해 통신을 식별하며, IP 주소는 네트워크 계층의 식별자이다.)",
+      "difficulty": "medium",
+      "cognitiveLevel": "understand",
+      "reasoning": "OSI 7계층은 examMatch 9회로 기출 매칭 빈도가 높고, 과거 기출에 '네트워크 5계층에 대한 설명으로 틀린 것은?' 형태의 오답 고르기 문항이 존재해 동일 형식이 재출제될 가능성이 높다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "2025-Q1",
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층"
+        },
+        {
+          "type": "slide",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "(이론) 1-1-데이터통신-layer-packet-signal-공개 p.23",
+          "quote": "정리 / 통신에서 계층 / 계층별 역할, 식별자"
+        },
+        {
+          "type": "slide",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "(이론) 1-1-데이터통신-layer-packet-signal-공개 p.6",
+          "quote": "OSI 계층 / OSI 7 Model"
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-osi7계층-q2",
+      "q": "네트워크 명령어 옵션 중 -tn은 전송계층(Transport Layer), -rn은 네트워크 계층(Network Layer)과 관련된 정보를 보여준다고 할 때, 각 계층에서 사용하는 식별자(주소체계)는 각각 무엇인가?",
+      "a": "전송 계층은 포트 번호(Port Number)를 식별자로 사용하고, 네트워크 계층은 IP 주소를 식별자로 사용한다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "analyze",
+      "reasoning": "기출 문항에 '-tn은 전송계층, -rn은 네트워크 계층'이라는 구체적 언급이 있고 슬라이드에 '계층별 역할, 식별자'가 정리 항목으로 명시되어 있어, 계층별 식별자를 구분하는 문제로 출제될 가능성이 높다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "2025-Q1",
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층"
+        },
+        {
+          "type": "slide",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "(이론) 1-1-데이터통신-layer-packet-signal-공개 p.23",
+          "quote": "정리 / 통신에서 계층 / 계층별 역할, 식별자"
+        },
+        {
+          "type": "slide",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "(이론) 1-1-데이터통신-layer-packet-signal-공개 p.6",
+          "quote": "OSI 계층 / OSI 7 Model"
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-pcm펄스코드변조-q1",
+      "q": "사람 목소리(전화 음성) 신호를 표본화율 8kHz, 양자화 8비트의 PCM 방식으로 변환할 때, 전송에 필요한 비트레이트(bps)를 구하시오.",
+      "a": "8,000 samples/sec × 8 bits/sample = 64,000 bps (64kbps)",
+      "difficulty": "medium",
+      "cognitiveLevel": "apply",
+      "reasoning": "기출 힌트에 '사람 목소리 전송 비트레이트 계산 문제'가 명시되어 있고, 강의에서 'PCM 표준은 양자화 8비트'라고 직접 언급(20:35)하여 표본화율과 결합한 계산 문제로 출제될 가능성이 높다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "2025-Q4",
+          "quote": "전화 다중화는 T1 ~ T4"
+        },
+        {
+          "type": "transcript",
+          "unit": "4주차",
+          "unitOrder": 4,
+          "locator": "20:35",
+          "quote": "그다음에 양자화를 8비트 이게 바로 PCM 표준이에요."
+        },
+        {
+          "type": "transcript",
+          "unit": "4주차",
+          "unitOrder": 4,
+          "locator": "07:42",
+          "quote": "BCM 이름에서 여러분들이 기억해야 될 단어 제일 끝에 있는 모듈레이션입니다."
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-pcm펄스코드변조-q2",
+      "q": "전화 다중화 방식인 T1 회선은 64kbps PCM 음성 채널 몇 개를 TDM(시분할다중화)으로 묶어 구성되며, T1 회선의 총 전송속도는 얼마인가?",
+      "a": "T1 회선은 24개의 64kbps PCM 채널을 TDM으로 다중화하며, 총 전송속도는 1.544Mbps이다(24×64kbps=1.536Mbps + 동기화 오버헤드 8kbps).",
+      "difficulty": "hard",
+      "cognitiveLevel": "apply",
+      "reasoning": "기출 힌트에 'TDM 계산 문제'와 '전화 다중화는 T1~T4'가 함께 명시되어 있어, PCM 채널을 TDM으로 묶는 T1 회선 구성·속도 계산 문제로 출제될 가능성이 높다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "2025-Q4",
+          "quote": "전화 다중화는 T1 ~ T4"
+        },
+        {
+          "type": "transcript",
+          "unit": "4주차",
+          "unitOrder": 4,
+          "locator": "20:35",
+          "quote": "그다음에 양자화를 8비트 이게 바로 PCM 표준이에요."
+        },
+        {
+          "type": "transcript",
+          "unit": "4주차",
+          "unitOrder": 4,
+          "locator": "07:42",
+          "quote": "BCM 이름에서 여러분들이 기억해야 될 단어 제일 끝에 있는 모듈레이션입니다."
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-pingtraceroute-q1",
+      "q": "국내에서 해외 사이트로 traceroute를 실행한 결과, 4번째 홉까지는 각 2~5ms였으나 5번째 홉부터 급격히 120ms 이상으로 증가하였다. 지연이 가장 크게 발생한 구간은 어디이며, 그 이유는 무엇인가?",
+      "a": "4번째 홉에서 5번째 홉으로 넘어가는 구간(국내망에서 해외로 빠져나가는 구간)에서 지연이 급증했으며, 이는 해당 구간이 국제 회선(해저케이블 등)을 거치며 물리적 거리 증가와 국제 백본망 경유로 왕복시간이 늘어났기 때문이다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "analyze",
+      "reasoning": "과거 기출 3건 모두 'traceroute 결과에서 지연이 크게 발생한 구간을 찾으라'는 동일 형태이며(examMatch=5), 정확히 동일한 응용 분석형 문제가 재출제될 가능성이 매우 높다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "2025-Q2",
+          "quote": "traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지"
+        },
+        {
+          "type": "slide",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "(이론)1-2-명령어실습 p.6",
+          "quote": "ping, traceroute • ping • traceroute"
+        }
+      ]
+    },
+    {
+      "id": "w5-c-데이터통신-pingtraceroute-q2",
+      "q": "ping과 traceroute 명령어의 차이점은 무엇이며, 각각 어떤 상황에서 사용하는가?",
+      "a": "ping은 목적지까지의 도달 가능 여부와 왕복시간(RTT)만을 확인하는 반면, traceroute는 목적지까지 거쳐가는 각 라우터(홉)별 응답시간을 측정해 어느 구간에서 지연·장애가 발생하는지 확인한다. 단순 연결 확인에는 ping을, 경로상 지연 구간 파악에는 traceroute를 사용한다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "슬라이드(1-2-명령어실습 p.6)에 ping과 traceroute가 나란히 제시되어 있어, traceroute 응용 분석 문제의 전제가 되는 두 명령어의 개념 차이를 확인하는 기초 문항으로 함께 출제될 가능성이 있다.",
+      "sources": [
+        {
+          "type": "exam",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "2025-Q2",
+          "quote": "traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지"
+        },
+        {
+          "type": "slide",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "(이론)1-2-명령어실습 p.6",
+          "quote": "ping, traceroute • ping • traceroute"
+        }
+      ]
+    }
+  ]
+}

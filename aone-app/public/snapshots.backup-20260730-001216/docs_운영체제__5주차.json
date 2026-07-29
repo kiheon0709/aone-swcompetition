@@ -1,0 +1,214 @@
+{
+  "subject": "운영체제",
+  "unit": "5주차",
+  "unitOrder": 5,
+  "bySource": {
+    "transcript": {
+      "concepts": [
+        {
+          "name": "상호 배제(Mutual Exclusion)",
+          "importance": 22,
+          "examSignal": 21
+        },
+        {
+          "name": "시그널과 인터럽트",
+          "importance": 23,
+          "examSignal": 7
+        },
+        {
+          "name": "레이스 컨디션",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "임계 구역 문제의 요구사항",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "임계 구역(Critical Section)",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "동시성 제어",
+          "importance": 12,
+          "examSignal": 7
+        },
+        {
+          "name": "공유 변수",
+          "importance": 11,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 간 통신(IPC)",
+          "importance": 19,
+          "examSignal": 0
+        },
+        {
+          "name": "경쟁 상태(Race Condition)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "교착 상태(Deadlock)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "바쁜 대기(Busy Waiting)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "베이커리 알고리즘",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "생산자-소비자 문제",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "원자적 연산(Atomic Operation)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "원형 버퍼(Circular Buffer)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "피터슨 알고리즘",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "기아(Starvation)",
+          "importance": 8,
+          "examSignal": 0
+        },
+        {
+          "name": "진행(Progress)",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [
+        {
+          "quote": "이번 시간에는 아주 중요한 내용인 Conference Control, 즉 프로세스들 간의 충돌 문제에 대해서 살펴보겠습니다.",
+          "locator": "#L3",
+          "concept": "동시성 제어"
+        },
+        {
+          "quote": "어느 프로세스이든 Shared Buffer에 접근할 때 Mutual Exclusion이 보장되어야 합니다.",
+          "locator": "#L75",
+          "concept": "상호 배제(Mutual Exclusion)"
+        },
+        {
+          "quote": "우리가 앞에서 본 것처럼 Critical Section은 Mutual Exclusion하게 실행되어야 됩니다.",
+          "locator": "#L139",
+          "concept": "임계 구역(Critical Section)"
+        },
+        {
+          "quote": "즉 이렇게 base condition이라는 것이 꼭 서로 다른 프로세스들 사이에서만 일어나는 게 아니라 하나의 프로세스 안에서 여러 개의 쓰레드를 쓰는 경우에도 이런 문제들이 발생할 수 있다는 걸 꼭 잊지 말아야 되겠습니다.",
+          "locator": "#L187",
+          "concept": "레이스 컨디션"
+        },
+        {
+          "quote": "그래서 꼭 만족돼야 된다 라고 요구사항으로 정리하는 겁니다.",
+          "locator": "#L241",
+          "concept": "임계 구역 문제의 요구사항"
+        },
+        {
+          "quote": "Critical Section Problem의 세 가지 요구사항 중에서 가장 중요한 것은 Mutual Exclusion이고 그리고 이것은 Critical Section 주변에 담장을 친다라고 담장을 쳐야 된다라는 것을 배운 적이 있습니다.",
+          "locator": "#L257",
+          "concept": "상호 배제(Mutual Exclusion)"
+        },
+        {
+          "quote": "지금 터는 p0나 p1이 같이 바라보고 있는 공유변수이기 때문에 p0가 1로 바꾼 값을 p1도 그 값을 바라본다 그 값을 읽는다 라는 걸 잊지 말아야 되겠습니다.",
+          "locator": "#L281",
+          "concept": "공유 변수"
+        },
+        {
+          "quote": "네 자 이런 식으로 P0가 들어가 있을 때는 P1이 못 들어가고 P1이 들어가 있을 때는 P0로 못 들어가니까 어느 순간에는 꼭 프로세스 하나만이",
+          "locator": "#L283",
+          "concept": "상호 배제(Mutual Exclusion)"
+        }
+      ],
+      "examHints": [],
+      "questionIds": [
+        "w5-c-운영체제-상호배제mutualexclusion-q1",
+        "w5-c-운영체제-상호배제mutualexclusion-q2"
+      ]
+    },
+    "slide": {
+      "concepts": [
+        {
+          "name": "상호 배제(Mutual Exclusion)",
+          "importance": 22,
+          "examSignal": 21
+        },
+        {
+          "name": "임계 구역(Critical Section)",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "동시성 제어",
+          "importance": 12,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 간 통신(IPC)",
+          "importance": 19,
+          "examSignal": 0
+        },
+        {
+          "name": "경쟁 상태(Race Condition)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "교착 상태(Deadlock)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "바쁜 대기(Busy Waiting)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "생산자-소비자 문제",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "원형 버퍼(Circular Buffer)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "기아(Starvation)",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": [
+        "w5-c-운영체제-상호배제mutualexclusion-q1",
+        "w5-c-운영체제-상호배제mutualexclusion-q2"
+      ]
+    },
+    "exam": {
+      "concepts": [],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": []
+    }
+  }
+}

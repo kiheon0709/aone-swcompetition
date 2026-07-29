@@ -1,0 +1,215 @@
+{
+  "subject": "운영체제",
+  "unit": "1주차",
+  "unitOrder": 1,
+  "bySource": {
+    "transcript": {
+      "concepts": [
+        {
+          "name": "부팅과 종료",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "운영체제의 효율성과 편의성",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "처리량과 응답 시간",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "컴퓨터 자원과 Accounting",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 관리",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "단일 프로그래밍과 단순 배치",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "멀티프로그래밍",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "멀티프로세싱(SMP)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "시스템 콜과 명령 해석기",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "운영체제(OS)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "커널",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "타임셰어링과 타임 퀀텀",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "프로세스 스케줄링",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "메모리 관리",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [
+        {
+          "quote": "1,8 번이 가장 오래걸리고 중요한 작업임!",
+          "locator": "#L7",
+          "concept": "부팅과 종료"
+        },
+        {
+          "quote": "Process Management 가 가장 덩치가 크고 양이 많으니까 이걸 잘 알아야 뒤에것도 할만하다.",
+          "locator": "#L23",
+          "concept": "프로세스 관리"
+        },
+        {
+          "quote": "Efficiency가 중요하다.",
+          "locator": "#L53",
+          "concept": "운영체제의 효율성과 편의성"
+        },
+        {
+          "quote": "(billing은 아주 중요!)",
+          "locator": "#L64",
+          "concept": "컴퓨터 자원과 Accounting"
+        },
+        {
+          "quote": "throughput과 response time 꼮 알아둘것!",
+          "locator": "#L145",
+          "concept": "처리량과 응답 시간"
+        }
+      ],
+      "examHints": [],
+      "questionIds": [
+        "w1-c-운영체제-부팅과종료-q1",
+        "w1-c-운영체제-부팅과종료-q2",
+        "w1-c-운영체제-운영체제의효율성과편의성-q1",
+        "w1-c-운영체제-운영체제의효율성과편의성-q2",
+        "w1-c-운영체제-처리량과응답시간-q1",
+        "w1-c-운영체제-처리량과응답시간-q2",
+        "w1-c-운영체제-컴퓨터자원과accounting-q1",
+        "w1-c-운영체제-컴퓨터자원과accounting-q2",
+        "w1-c-운영체제-프로세스관리-q1",
+        "w1-c-운영체제-프로세스관리-q2"
+      ]
+    },
+    "slide": {
+      "concepts": [
+        {
+          "name": "부팅과 종료",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "운영체제의 효율성과 편의성",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "처리량과 응답 시간",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "컴퓨터 자원과 Accounting",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 관리",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "단일 프로그래밍과 단순 배치",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "멀티프로그래밍",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "멀티프로세싱(SMP)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "시스템 콜과 명령 해석기",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "운영체제(OS)",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "커널",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "타임셰어링과 타임 퀀텀",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "프로세스 스케줄링",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "메모리 관리",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": [
+        "w1-c-운영체제-부팅과종료-q1",
+        "w1-c-운영체제-부팅과종료-q2",
+        "w1-c-운영체제-운영체제의효율성과편의성-q1",
+        "w1-c-운영체제-운영체제의효율성과편의성-q2",
+        "w1-c-운영체제-처리량과응답시간-q1",
+        "w1-c-운영체제-처리량과응답시간-q2",
+        "w1-c-운영체제-컴퓨터자원과accounting-q1",
+        "w1-c-운영체제-컴퓨터자원과accounting-q2",
+        "w1-c-운영체제-프로세스관리-q1",
+        "w1-c-운영체제-프로세스관리-q2"
+      ]
+    },
+    "exam": {
+      "concepts": [],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": []
+    }
+  }
+}

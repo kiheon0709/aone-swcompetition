@@ -1,0 +1,15 @@
+# Vercel CLI 업로드 제외 — 웹 배포에 불필요한 대용량 산출물
+# (CLI는 .gitignore를 읽지 않으므로 별도로 명시한다)
+
+# Tauri 데스크톱 셸 — 웹 빌드와 무관 (target 6.8GB, resources 325MB)
+src-tauri
+
+# 빌드 산출물 — Vercel이 서버에서 다시 빌드한다
+.next
+out
+node_modules
+
+# 기타
+.DS_Store
+*.tsbuildinfo
+.agents

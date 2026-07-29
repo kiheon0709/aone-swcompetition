@@ -1,0 +1,511 @@
+{
+  "totals": {
+    "calls": 374,
+    "inputTokens": 1601,
+    "outputTokens": 1121573,
+    "cacheTokens": 7388147,
+    "costUsd": 92.1356
+  },
+  "runs": [
+    {
+      "ts": "2026-07-22T08:49:56.086Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/4주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T08:51:17.261Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T08:53:21.183Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T08:54:58.010Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T08:56:26.591Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T08:57:34.406Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T08:59:23.991Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:01:14.793Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:03:06.323Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/7주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:04:45.847Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/1주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:07:30.025Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/3주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:08:25.177Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/4주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:10:40.065Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:12:46.631Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T09:15:01.381Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/7주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:08:47.411Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:10:23.757Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/1주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:12:33.227Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/1주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:24:59.510Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:37:22.599Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:39:50.689Z",
+      "engine": "codex-cli",
+      "folders": [
+        "데이터통신/2주차"
+      ],
+      "calls": 0,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:44:38.239Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/2주차"
+      ],
+      "calls": 0,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:49:03.694Z",
+      "engine": "codex-cli",
+      "folders": [
+        "운영체제/7주차"
+      ],
+      "calls": 0,
+      "outputTokens": 0,
+      "costUsd": 0
+    },
+    {
+      "ts": "2026-07-22T11:57:17.537Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/7주차"
+      ],
+      "calls": 1,
+      "outputTokens": 16383,
+      "costUsd": 0.5319
+    },
+    {
+      "ts": "2026-07-22T12:00:43.043Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/1주차"
+      ],
+      "calls": 1,
+      "outputTokens": 12018,
+      "costUsd": 0.3787
+    },
+    {
+      "ts": "2026-07-22T12:04:29.743Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/1주차"
+      ],
+      "calls": 1,
+      "outputTokens": 18853,
+      "costUsd": 0.5838
+    },
+    {
+      "ts": "2026-07-22T12:06:45.554Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 10839,
+      "costUsd": 0.3496
+    },
+    {
+      "ts": "2026-07-22T12:10:16.644Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 17065,
+      "costUsd": 0.5096
+    },
+    {
+      "ts": "2026-07-22T12:11:49.538Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 7215,
+      "costUsd": 0.2396
+    },
+    {
+      "ts": "2026-07-22T12:14:57.335Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 16703,
+      "costUsd": 0.517
+    },
+    {
+      "ts": "2026-07-22T12:17:55.992Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/3주차"
+      ],
+      "calls": 1,
+      "outputTokens": 14979,
+      "costUsd": 0.4637
+    },
+    {
+      "ts": "2026-07-22T12:21:38.931Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/3주차"
+      ],
+      "calls": 1,
+      "outputTokens": 18992,
+      "costUsd": 0.6029
+    },
+    {
+      "ts": "2026-07-22T12:24:21.271Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/3주차"
+      ],
+      "calls": 1,
+      "outputTokens": 13174,
+      "costUsd": 0.4102
+    },
+    {
+      "ts": "2026-07-22T12:26:58.722Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/4주차"
+      ],
+      "calls": 1,
+      "outputTokens": 13776,
+      "costUsd": 0.43
+    },
+    {
+      "ts": "2026-07-22T12:31:52.039Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/4주차"
+      ],
+      "calls": 1,
+      "outputTokens": 24277,
+      "costUsd": 0.7198
+    },
+    {
+      "ts": "2026-07-22T12:34:54.727Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 14785,
+      "costUsd": 0.5089
+    },
+    {
+      "ts": "2026-07-22T12:39:14.456Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 21548,
+      "costUsd": 0.647
+    },
+    {
+      "ts": "2026-07-22T12:42:25.638Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 15412,
+      "costUsd": 0.4711
+    },
+    {
+      "ts": "2026-07-22T12:46:01.324Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 17746,
+      "costUsd": 0.5789
+    },
+    {
+      "ts": "2026-07-22T12:48:19.658Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 10683,
+      "costUsd": 0.3382
+    },
+    {
+      "ts": "2026-07-22T12:51:43.352Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 16853,
+      "costUsd": 0.5264
+    },
+    {
+      "ts": "2026-07-22T12:54:43.558Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/6주차"
+      ],
+      "calls": 1,
+      "outputTokens": 14913,
+      "costUsd": 0.4592
+    },
+    {
+      "ts": "2026-07-22T12:58:53.897Z",
+      "engine": "claude-cli",
+      "folders": [
+        "데이터통신/7주차"
+      ],
+      "calls": 1,
+      "outputTokens": 20338,
+      "costUsd": 0.6609
+    },
+    {
+      "ts": "2026-07-22T13:03:48.386Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/1주차"
+      ],
+      "calls": 1,
+      "outputTokens": 24882,
+      "costUsd": 0.7439
+    },
+    {
+      "ts": "2026-07-22T13:11:58.948Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/2주차"
+      ],
+      "calls": 1,
+      "outputTokens": 42207,
+      "costUsd": 1.2925
+    },
+    {
+      "ts": "2026-07-22T13:20:16.937Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/3주차"
+      ],
+      "calls": 1,
+      "outputTokens": 42821,
+      "costUsd": 1.3332
+    },
+    {
+      "ts": "2026-07-22T13:22:58.118Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/4주차"
+      ],
+      "calls": 1,
+      "outputTokens": 13179,
+      "costUsd": 0.4113
+    },
+    {
+      "ts": "2026-07-22T13:29:15.216Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/5주차"
+      ],
+      "calls": 1,
+      "outputTokens": 31370,
+      "costUsd": 0.952
+    },
+    {
+      "ts": "2026-07-22T13:42:58.506Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/6주차"
+      ],
+      "calls": 2,
+      "outputTokens": 67260,
+      "costUsd": 2.0138
+    },
+    {
+      "ts": "2026-07-22T13:46:33.505Z",
+      "engine": "claude-cli",
+      "folders": [
+        "운영체제/7주차"
+      ],
+      "calls": 1,
+      "outputTokens": 17148,
+      "costUsd": 0.554
+    }
+  ]
+}

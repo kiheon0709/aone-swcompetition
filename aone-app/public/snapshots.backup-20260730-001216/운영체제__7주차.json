@@ -1,0 +1,2598 @@
+{
+  "subject": "운영체제",
+  "unit": "7주차",
+  "unitOrder": 7,
+  "concepts": [
+    {
+      "id": "c-운영체제-상호배제mutualexclusion",
+      "name": "상호 배제(Mutual Exclusion)",
+      "importance": 49,
+      "examSignal": 35,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 21
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 35
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 35
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-세마포어와semwaitsignal",
+      "name": "세마포어와 SEM wait·signal",
+      "importance": 26,
+      "examSignal": 28,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 28
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 28
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-마이크로커널",
+      "name": "마이크로커널",
+      "importance": 14,
+      "examSignal": 19,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 19
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 19
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 19
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 19
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 19
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 19
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-동기화",
+      "name": "동기화",
+      "importance": 27,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 14
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스제어블록pcb",
+      "name": "프로세스 제어 블록(PCB)",
+      "importance": 27,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 14
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 14
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 14
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 14
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-testandset명령",
+      "name": "Test-and-Set 명령",
+      "importance": 18,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 14
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스5상태모델",
+      "name": "프로세스 5-상태 모델",
+      "importance": 18,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스중단상태와스와핑",
+      "name": "프로세스 중단 상태와 스와핑",
+      "importance": 18,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 14
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 14
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 14
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 14
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 14
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-식사하는철학자문제",
+      "name": "식사하는 철학자 문제",
+      "importance": 16,
+      "examSignal": 14,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 14
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-교착상태deadlock",
+      "name": "교착 상태(Deadlock)",
+      "importance": 32,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-사용자모드와커널모드",
+      "name": "사용자 모드와 커널 모드",
+      "importance": 23,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-시그널과인터럽트",
+      "name": "시그널과 인터럽트",
+      "importance": 23,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-원자적연산atomicoperation",
+      "name": "원자적 연산(Atomic Operation)",
+      "importance": 23,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-컨텍스트스위치",
+      "name": "컨텍스트 스위치",
+      "importance": 23,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스관리",
+      "name": "프로세스 관리",
+      "importance": 23,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-임계구역criticalsection",
+      "name": "임계 구역(Critical Section)",
+      "importance": 22,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-임계구역문제의요구사항",
+      "name": "임계 구역 문제의 요구사항",
+      "importance": 22,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-fork시스템콜",
+      "name": "fork 시스템 콜",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-가상주소공간vas",
+      "name": "가상 주소 공간(VAS)",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-레이스컨디션",
+      "name": "레이스 컨디션",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-부팅과종료",
+      "name": "부팅과 종료",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-비선점nopreemption",
+      "name": "비선점(No Preemption)",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-세마포어semaphore",
+      "name": "세마포어(Semaphore)",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-쓰레드",
+      "name": "쓰레드",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-운영체제의효율성과편의성",
+      "name": "운영체제의 효율성과 편의성",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-처리량과응답시간",
+      "name": "처리량과 응답 시간",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-컴퓨터자원과accounting",
+      "name": "컴퓨터 자원과 Accounting",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 7
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 7
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 7
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 7
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-파일연산과시스템콜",
+      "name": "파일 연산과 시스템 콜",
+      "importance": 14,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-동시성제어",
+      "name": "동시성 제어",
+      "importance": 12,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-공유변수",
+      "name": "공유 변수",
+      "importance": 11,
+      "examSignal": 7,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 7
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 7
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 7
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-바쁜대기busywaiting",
+      "name": "바쁜 대기(Busy Waiting)",
+      "importance": 19,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-생산자소비자문제",
+      "name": "생산자-소비자 문제",
+      "importance": 19,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스간통신ipc",
+      "name": "프로세스 간 통신(IPC)",
+      "importance": 19,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스스케줄링",
+      "name": "프로세스 스케줄링",
+      "importance": 19,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-기아starvation",
+      "name": "기아(Starvation)",
+      "importance": 16,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-copyonwritecow",
+      "name": "Copy-on-Write(COW)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-exec시스템콜",
+      "name": "exec 시스템 콜",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-readerswriters문제",
+      "name": "Readers-Writers 문제",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-semwait와semsignal",
+      "name": "semWait와 semSignal",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-경쟁상태racecondition",
+      "name": "경쟁 상태(Race Condition)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-계층디렉토리구조",
+      "name": "계층 디렉토리 구조",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-계층형디렉토리와경로명",
+      "name": "계층형 디렉토리와 경로명",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-교착상태처리방법",
+      "name": "교착 상태 처리 방법",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-단일프로그래밍과단순배치",
+      "name": "단일 프로그래밍과 단순 배치",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-디바이스파일과장치번호",
+      "name": "디바이스 파일과 장치 번호",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-디스패처",
+      "name": "디스패처",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-멀티쓰레딩과동시성병렬성",
+      "name": "멀티쓰레딩과 동시성·병렬성",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-멀티프로그래밍",
+      "name": "멀티프로그래밍",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-멀티프로세싱smp",
+      "name": "멀티프로세싱(SMP)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-메시지패싱과공유메모리",
+      "name": "메시지 패싱과 공유 메모리",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-모니터와조건변수",
+      "name": "모니터와 조건 변수",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-바이너리세마포어뮤텍스",
+      "name": "바이너리 세마포어(뮤텍스)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-뱅커스알고리즘bankersalgorithm",
+      "name": "뱅커스 알고리즘(Banker's Algorithm)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-베이커리알고리즘",
+      "name": "베이커리 알고리즘",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-블록상태와대기큐",
+      "name": "블록 상태와 대기 큐",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-세마포어기반교착상태예방",
+      "name": "세마포어 기반 교착 상태 예방",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-순환대기circularwait",
+      "name": "순환 대기(Circular Wait)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-시스템콜과명령해석기",
+      "name": "시스템 콜과 명령 해석기",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-아이노드inode",
+      "name": "아이노드(inode)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-엔트리카운트솔루션",
+      "name": "엔트리 카운트 솔루션",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-운영체제os",
+      "name": "운영체제(OS)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-원형버퍼circularbuffer",
+      "name": "원형 버퍼(Circular Buffer)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-유저컨텍스트와시스템컨텍스트",
+      "name": "유저 컨텍스트와 시스템 컨텍스트",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-자원할당그래프resourceallocationgraph",
+      "name": "자원 할당 그래프(Resource Allocation Graph)",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-커널",
+      "name": "커널",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-타임셰어링과타임퀀텀",
+      "name": "타임셰어링과 타임 퀀텀",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-파일과파일시스템",
+      "name": "파일과 파일 시스템",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-파일링크와댕글링포인터",
+      "name": "파일 링크와 댕글링 포인터",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-파일접근권한",
+      "name": "파일 접근 권한",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-파일제어블록fcb과파일속성",
+      "name": "파일 제어 블록(FCB)과 파일 속성",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-파일컨트롤블록과아이노드",
+      "name": "파일 컨트롤 블록과 아이노드",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-피터슨알고리즘",
+      "name": "피터슨 알고리즘",
+      "importance": 10,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-경로탐색과파일오픈",
+      "name": "경로 탐색과 파일 오픈",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-교착상태복구와프로세스종료",
+      "name": "교착 상태 복구와 프로세스 종료",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-독자작성자문제",
+      "name": "독자-작성자 문제",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-메모리관리",
+      "name": "메모리 관리",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "1주차",
+          "unitOrder": 1,
+          "examSignal": 0
+        },
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-모놀리틱커널",
+      "name": "모놀리틱 커널",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-소비성자원consumableresource",
+      "name": "소비성 자원(Consumable Resource)",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-실행컨텍스트",
+      "name": "실행 컨텍스트",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "2주차",
+          "unitOrder": 2,
+          "examSignal": 0
+        },
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-재사용가능자원reusableresource",
+      "name": "재사용 가능 자원(Reusable Resource)",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-점유대기holdandwait",
+      "name": "점유 대기(Hold-and-Wait)",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-진입구역과퇴출구역",
+      "name": "진입 구역과 퇴출 구역",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-진행progress",
+      "name": "진행(Progress)",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스종료와좀비상태",
+      "name": "프로세스 종료와 좀비 상태",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-프로세스컨텍스트",
+      "name": "프로세스 컨텍스트",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "3주차",
+          "unitOrder": 3,
+          "examSignal": 0
+        },
+        {
+          "unit": "4주차",
+          "unitOrder": 4,
+          "examSignal": 0
+        },
+        {
+          "unit": "5주차",
+          "unitOrder": 5,
+          "examSignal": 0
+        },
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    },
+    {
+      "id": "c-운영체제-한정대기boundedwaiting",
+      "name": "한정 대기(Bounded Waiting)",
+      "importance": 8,
+      "examSignal": 0,
+      "history": [
+        {
+          "unit": "6주차",
+          "unitOrder": 6,
+          "examSignal": 0
+        },
+        {
+          "unit": "7주차",
+          "unitOrder": 7,
+          "examSignal": 0
+        }
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "ts": "2026-07-21T07:22:46.439Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "orchestrator",
+      "text": "이벤트 수신: 운영체제/7주차 자료 투입 (engine=codex-cli, tier=standard)"
+    },
+    {
+      "ts": "2026-07-21T07:22:46.440Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "orchestrator",
+      "text": "태스크 DAG 구성 — L0.extract → L1.normalize → L2L3.extract → L3.scores → L4.questions → L4.note → L4.proactive"
+    },
+    {
+      "ts": "2026-07-21T07:22:47.062Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "L0",
+      "text": "PDF 텍스트 추출 — 신규 2건, 캐시 스킵 0건 (05_Deadlock_and_Starvation.pdf, 06_File_Management.pdf)"
+    },
+    {
+      "ts": "2026-07-21T07:22:47.065Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "L1",
+      "text": "7주차 자료 정규화 — 전사 발화 1198건, 슬라이드 2종 43페이지"
+    },
+    {
+      "ts": "2026-07-21T07:24:15.276Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "L2",
+      "text": "개념+신호 통합 추출(호출 3회) — 신규 개념 23개, 기존 병합 3개, 근거 69건 연결 (누적 개념 86개), 강조 6건, 시험 언급 0건"
+    },
+    {
+      "ts": "2026-07-21T07:24:15.283Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "L3",
+      "text": "unit 점수 산출 — 개념 86개 importance/examSignal 갱신 (결정적 가중 함수)"
+    },
+    {
+      "ts": "2026-07-21T07:25:18.061Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "L4",
+      "text": "예상문제 생성 — 10문항 생성, 검증 통과 10건, 반려 0건 (tier=standard)"
+    },
+    {
+      "ts": "2026-07-21T07:31:05.795Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "L4",
+      "text": "통합 학습노트 증분 조립 — 반영 개념 26개, 마크다운 34563자 (7주차까지 누적)"
+    },
+    {
+      "ts": "2026-07-21T07:31:05.796Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "L4",
+      "text": "능동 제안 조건 미충족 (임계·상승 조건 미달)"
+    },
+    {
+      "ts": "2026-07-21T07:31:05.796Z",
+      "unit": "7주차",
+      "unitOrder": 7,
+      "layer": "orchestrator",
+      "text": "7주차 처리 완료 — 누적 개념 86개, 이번 unit 신호 6건, 검증 통과 문항 10건"
+    }
+  ],
+  "proactive": [],
+  "note": {
+    "markdown": "# 운영체제 학습노트 — 7주차까지\n\n⚠️ 시험 대비 경고 개념: 없음\n\n## 1. 부팅과 종료\n\n부팅(Booting)은 운영체제를 컴퓨터 시스템에 설치하여 운영체제가 동작하도록 만드는 과정이다. 종료(Shutting down)는 부팅의 반대 과정이다. 컴퓨터라는 가게를 열고 닫는 일에 비유할 수 있다.\n\n> Booting(OS을 컴퓨터 시스템에 설치해서 OS가 동작하도록 만들어주는게 Booting임 (OS: Operating System)\n>\n> — (1주차 강의 #L12)\n\n> Booting의 반대되는게 Shutting down.\n>\n> — (1주차 강의 #L19)\n\n**왜 중요한가:** 운영체제가 언제부터 동작하기 시작하고 언제 동작을 마치는지 이해하는 출발점이기 때문이다.\n\n## 2. 운영체제의 효율성과 편의성\n\n운영체제에서는 효율성(Efficiency)이 중요하며, 사용자가 편리하게 사용할 수 있게 하는 성질을 편의성(Convenience)이라고 한다. 즉, 컴퓨터를 잘 활용하는 것과 사람이 쉽게 사용하는 것이라는 두 목표를 함께 생각해야 한다.\n\n> Efficiency가 중요하다.\n>\n> — (1주차 강의 #L53)\n\n> 사용자가 사용하기 편리한게 Convenience\n>\n> — (1주차 강의 #L54)\n\n**왜 중요한가:** 운영체제가 무엇을 목표로 설계되는지 판단하는 기본 기준이기 때문이다.\n\n## 3. 처리량과 응답 시간\n\n처리량(Throughput)은 단위 시간 동안 완료한 작업의 수이다. 응답 시간(Response time)은 사용자가 명령을 내린 순간부터 그 명령의 실행이 시작될 때까지 걸린 시간이다. 식당에 비유하면 처리량은 한 시간에 완성한 요리 수이고, 응답 시간은 주문 후 조리를 시작할 때까지 기다린 시간이다.\n\n> throughput과 response time 꼮 알아둘것!\n>\n> — (1주차 강의 #L145)\n\n> Throughput : number of jobs completed in a unit time\n>\n> — (1주차 01_Operating_System_overview p.13)\n\n> Response time : time since a user gives a command until the command is begun execution\n>\n> — (1주차 01_Operating_System_overview p.13)\n\n**왜 중요한가:** 컴퓨터가 많은 일을 처리하는지, 사용자의 명령에 빨리 반응하는지를 구분해 평가할 수 있기 때문이다.\n\n## 4. 컴퓨터 자원과 Accounting\n\n메모리, CPU, 입출력 장치(I/O), 저장장치의 데이터는 모두 컴퓨터 자원(Resource)이다. Accounting은 이러한 자원이 얼마나 사용되는지 통계를 모아 성능을 살피고, 그 사용량에 따라 과금하는 일이다.\n\n> 하드웨어의 메모리, CPU, I/O 모두 리소스고, 스토리지에 저장되는 데이터들도 리소스다.\n>\n> — (1주차 강의 #L60)\n\n> Accounting은 리소스들이 얼마만큼 사용되는지 사용 통계자료를 수집해서 어느정도 성능을 발휘하는지, 그거에 따라 과금을 한다.\n>\n> — (1주차 강의 #L64)\n\n**왜 중요한가:** 운영체제가 무엇을 관리하며, 자원 사용 기록이 성능 확인과 비용 계산에 어떻게 쓰이는지 보여주기 때문이다.\n\n## 5. 프로세스 관리\n\n프로세스는 프로그램이 실행 상태에 있는 것이다. 프로세스 관리는 프로그램을 실행하고 창이 뜨게 하는 등의 일을 담당하는 운영체제 기능이다. 요리법이 프로그램이라면, 그 요리법을 따라 실제로 요리하고 있는 일이 프로세스인 셈이다.\n\n> OS 안에 있는 Process Management라는 기능이 창이 뜨고, 실행시키고 하는것들을 하고\n>\n> — (1주차 강의 #L15)\n\n> 프로세스는 프로그램이 실행상태에 있는 것.\n>\n> — (2주차 강의 #L70)\n\n**왜 중요한가:** 실행 중인 프로그램이 무엇인지 알아야 운영체제가 그것을 어떻게 관리하는지 이해할 수 있기 때문이다.\n\n## 6. 단일 프로그래밍과 단순 배치\n\n단일 프로그래밍(Uni-Programming)은 프로그램 하나를 실행하는 방식이며, 이를 단순 배치 시스템(Simple Batch System)이라고 한다. 이 방식에서는 입출력 명령이 끝날 때까지 프로세서가 기다려야 한다.\n\n> 이게 Uni-Programming 방법.\n>\n> — (1주차 강의 #L117)\n\n> 즉, 프로그램 하나를 실행하는 방식을 Simple Batch System이라고 한다.\n>\n> — (1주차 강의 #L119)\n\n> Processor must wait for I/O instruction to complete before proceeding\n>\n> — (1주차 01_Operating_System_overview p.8)\n\n**왜 중요한가:** 한 프로그램만 실행할 때 CPU가 입출력을 기다리는 문제를 이해해야 다음의 멀티프로그래밍이 필요한 이유를 알 수 있기 때문이다.\n\n## 7. 멀티프로그래밍\n\n멀티프로그래밍에서는 한 작업이 입출력을 기다리면 프로세서가 다른 작업으로 전환할 수 있다. CPU는 하나이며, 프로그램 A와 B가 실제로 동시에 겹쳐 실행되는 것은 아니다. 한 명의 요리사가 한 요리의 오븐 시간을 기다리는 동안 다른 요리를 손질하는 모습과 비슷하다.\n\n> 멀티프로그래밍은  CPU가 필요로 하는 만큼 시간을 계속 쓰는거임.\n>\n> — (1주차 강의 #L127)\n\n> 멀티프로그래밍에서는 A를 실행하면서 B도 동시에 겹쳐서 실행되지 않는다.\n>\n> — (1주차 강의 #L166)\n\n> When one job needs to wait for I/O, the processor can switch to the other job\n>\n> — (1주차 01_Operating_System_overview p.9)\n\n**왜 중요한가:** CPU 하나로 여러 프로그램을 다루면서 입출력 대기 시간을 활용하는 원리를 설명하기 때문이다.\n\n## 8. 멀티프로세싱(SMP)\n\n멀티프로세싱은 프로세서(CPU)가 여러 개인 구성을 뜻한다. CPU가 여러 개이므로 프로그램 A와 B가 동시에 실행될 수 있으며, 관련 방식으로 대칭형 멀티프로세싱(SMP)이 제시된다.\n\n> 멀티 프로그래밍은 CPU 하나가 프로그램 A,B,C를  실행하는거고,    멀티 프로세싱은 프로세서(CPU)가 여러개 있는것을 의미한다.\n>\n> — (1주차 강의 #L151)\n\n> 근데 멀티프로세싱을 보면 CPU가 여러개인거니까 A,B가 동시에 실행될 수 있다 이거야.\n>\n> — (1주차 강의 #L167)\n\n> Symmetric multiprocessing (SMP)\n>\n> — (1주차 01_Operating_System_overview p.14)\n\n**왜 중요한가:** CPU 하나가 작업을 바꾸어 가며 실행하는 멀티프로그래밍과, 여러 CPU가 동시에 실행하는 멀티프로세싱을 구별할 수 있기 때문이다.\n\n## 9. 시스템 콜과 명령 해석기\n\n시스템 콜(System call)은 함수들의 집합이며, 실행 중인 프로그램과 운영체제 사이의 인터페이스이다. 명령 해석기(Command interpreter)는 사용자의 명령을 받아 시스템 콜을 호출함으로써 그 명령을 운영체제에 전달하는 프로그램이다.\n\n> 시스템콜은 Fuction들의 집합임.\n>\n> — (1주차 강의 #L186)\n\n> Command interpreter는 프로그램이고 프로그램의 역할이 사용자가 입력한 명령을 받아서 시스템콜을 부름으로써 OS에 전달하는거니까.\n>\n> — (1주차 강의 #L195)\n\n> System calls are the interface between a running program and the operating system.\n>\n> — (1주차 01_Operating_System_overview p.17)\n\n**왜 중요한가:** 사용자 명령과 프로그램의 요청이 어떤 통로를 거쳐 운영체제에 전달되는지 보여주기 때문이다.\n\n## 10. 운영체제(OS)\n\n운영체제(OS)는 응용 프로그램의 실행을 제어하는 소프트웨어이다. 한마디로 프로그램과 하드웨어 사이를 이어 주는 인터페이스로, 둘 사이의 중간 안내자처럼 볼 수 있다.\n\n> OS는 어플리케이션(응용) 프로그램의 실행을 제어하는 소프트웨어.\n>\n> — (1주차 강의 #L25)\n\n> 한마디로 정의하자면 프로그램과 하드웨어 사이의 인터페이스이다!\n>\n> — (1주차 강의 #L37)\n\n**왜 중요한가:** 운영체제 과목 전체에서 다루는 대상이 무엇인지 가장 짧게 설명하는 핵심 정의이기 때문이다.\n\n## 11. 커널\n\n커널(Kernel)은 ‘핵심(core)’이라는 뜻으로, 운영체제 중에서도 전통적이고 핵심적인 기능을 가리킨다. 슬라이드에서는 주기억장치에 상주하는 운영체제의 일부로 설명한다.\n\n> Kernel = 핵심(core)라는것.\n>\n> — (1주차 강의 #L93)\n\n> OS 중에서도 정통적인 핵심적인 기능을 의미함.\n>\n> — (1주차 강의 #L97)\n\n> Portion of operating system that resides in the main memory\n>\n> — (1주차 01_Operating_System_overview p.6)\n\n**왜 중요한가:** 운영체제 전체와 그 안의 핵심 부분인 커널을 구분하는 기준이기 때문이다.\n\n## 12. 타임셰어링과 타임 퀀텀\n\n타임셰어링(Time sharing)은 CPU 시간을 타임 퀀텀(Time quantum)이라는 단위로 잘게 나누어 여러 프로그램에 번갈아 주는 방식이다. 여러 프로그램이 CPU 시간을 공유하는 모습은 한 사람이 제한된 시간씩 여러 사람의 요청을 차례로 처리하는 것과 비슷하다.\n\n> 타임쉐어링은 타임퀀텀이라는 단위로 쪼개서 교대로 프로그램들에 시간을 주는거임.\n>\n> — (1주차 강의 #L128)\n\n> CPU타임을 여러개의 프로그램들이 공유한다.\n>\n> — (1주차 강의 #L128)\n\n> A time unit called a time slice (also called time quantum) is given to a program at a time\n>\n> — (1주차 01_Operating_System_overview p.12)\n\n**왜 중요한가:** 하나의 CPU 시간을 여러 프로그램이 어떤 기준으로 나누어 사용하는지 이해하게 해 주기 때문이다.\n\n## 13. 프로세스 중단 상태와 스와핑\n\n중단(suspended) 상태는 주기억장치에서 준비 상태로 있던 프로세스가 보조기억장치로 밀려난 상태이다. 프로세스를 주기억장치와 보조기억장치 사이에서 옮기는 일을 스와핑(Swap)이라고 한다. 당장 쓰지 않는 물건을 책상에서 창고로 옮기는 모습과 비슷하다.\n\n> suspended 상태는 메인메모리에 ready상태로 있다가 보조기억장치로 밀려나간 프로세스를 의미한다.\n>\n> — (2주차 강의 #L193)\n\n> 프로세스를 메인메모리<->보조기억장치 = Swap.\n>\n> — (2주차 강의 #L197)\n\n**왜 중요한가:** 프로세스가 주기억장치 밖으로 옮겨질 때 어떤 상태가 되는지 이해하는 데 필요하기 때문이다.\n\n## 14. 마이크로커널\n\n마이크로커널은 커널의 크기가 작아서 붙은 이름이다. 하드웨어 직접 제어, 프로세스 메모리 보호, 프로세스 간 통신, 스케줄링처럼 꼭 필요한 기능은 커널에 남으며, 모놀리틱 커널보다 실행 속도가 느리다는 단점이 있다. 꼭 필요한 도구만 작은 작업대에 남겨 놓은 모습과 비슷하다.\n\n> 커널의 크기가 작기 때문에 마이크로라는 이름이 붙었다.\n>\n> — (2주차 강의 #L8)\n\n> 하드웨어에 종속적인, 직접 제어해야하는 코드들, 프로세스 메모리 영역을 보호하는 기능들, 프로세스 간 통신 기능들, 어느 프로세스를 실행할지 스케줄링 기능은 꼭 남아야 한다.\n>\n> — (2주차 강의 #L10)\n\n> 단점은, 모놀로틱 보다 실행속도가 느리다.\n>\n> — (2주차 강의 #L31)\n\n**왜 중요한가:** 커널을 작게 구성할 때 무엇을 반드시 남겨야 하고 어떤 단점이 생기는지 보여주기 때문이다.\n\n## 15. 사용자 모드와 커널 모드\n\n시스템 콜을 경계로 위쪽은 사용자 공간인 사용자 모드이고, 아래쪽은 커널 공간인 커널 모드이다. 제시된 주소 범위에서는 0~3G가 사용자 모드, 3~4G-1번지가 커널 모드이며, 시스템 콜을 할 때 커널 모드로 갔다가 사용자 모드로 돌아오는 일을 모드체인지라고 한다. 방문객이 요청을 맡기면 관리 직원 구역에서 처리한 뒤 다시 방문객 구역으로 돌아오는 모습과 비슷하다.\n\n> System call 위를 유저 공간 - 유저모드\n>\n> — (2주차 강의 #L58)\n\n> 아래를 커널공간 - 커널모드\n>\n> — (2주차 강의 #L59)\n\n> 따라서 0~3G 까지는 유저모드에서 실행된다 부르고 3~4G-1번지까지를 커널모드/시스템모드를 실행한다고 말한다.\n>\n> — (3주차 강의 #L47)\n\n> 시스템콜을 하면 커널모드로 갔다가 다시 유저모드로 돌아오는데 이렇게 모드를 바꾸는걸 \"모드체인지\"라고 한다.\n>\n> — (3주차 강의 #L47)\n\n**왜 중요한가:** 프로그램의 실행 영역과 커널의 실행 영역을 구분하고, 시스템 콜 때 두 모드가 어떻게 오가는지 이해하는 기준이기 때문이다.\n\n## 16. 프로세스 5-상태 모델\n\n프로세스 5-상태 모델은 두 상태로 나뉘어 있던 프로세스 상태 전이 과정을 다섯 상태로 확장해 나타낸 구성이다. 운영체제의 기본 개념이므로 이를 이해하면 제품마다 표현이 달라도 이해할 수 있다. 사람의 일정을 몇 가지 대표 단계로 나누어 흐름을 파악하는 지도와 비슷하다.\n\n> 앞에 그림에서 프로세스의 상태 전이 과정을 그린 건데 2개로 나뉘어 있었는데 더 확장한 5상태 구성  상태도가 있다.\n>\n> — (2주차 강의 #L168)\n\n> 5-상태도 OS 의 기본적 개념 -> 이거 이해하면 제품마다 다 달라도 이해가 가능함.\n>\n> — (2주차 강의 #L170)\n\n**왜 중요한가:** 서로 다른 운영체제 제품의 프로세스 상태도 이해할 수 있게 해 주는 기본 틀이기 때문이다.\n\n## 17. 프로세스 제어 블록(PCB)\n\n프로세스 제어 블록(PCB)은 프로세스 정보를 담기 위해 프로세스마다 하나씩 만드는 기록 공간이다. 새 프로세스를 만들 때 먼저 PCB를 만들며, 이 PCB들은 시스템 컨텍스트를 구성한다. 사람마다 개인 기록 카드를 한 장씩 만들고, 새 사람이 들어오면 먼저 그 카드를 발급하는 모습과 비슷하다.\n\n> 프로세스에 대한 정보를 저장하느 것을 PCB 프로세스 컨트롤 블럭이라고 한다.\n>\n> — (2주차 강의 #L220)\n\n> PCB는 모든 각각 프로세스 마다 하나씩 만든다.\n>\n> — (2주차 강의 #L221)\n\n> 그리고 프로세스에 대한 정보를 저장하는 PCB들이 시스템 컨텍스트를 구성한다.\n>\n> — (3주차 강의 #L7)\n\n> 가장 먼저 해야할 일은 새로 만들어져야하는 프로세스의 정보를 담기 위해서 PCB를 만들어야한다.\n>\n> — (3주차 강의 #L138)\n\n**왜 중요한가:** 운영체제가 새 프로세스를 만들고 관리할 때 그 프로세스의 정보를 어디에 보관하는지 알려주기 때문이다.\n\n## 18. 디스패처\n\n디스패처(Dispatcher)는 운영체제 안에 있는 함수 중 하나이다. 스케줄러 기능의 일부로서 어떤 프로세스를 실행하도록 준비하는 커널의 일들을 통틀어 가리키며, 프로세서를 한 프로세스에서 다른 프로세스로 전환한다. 다음 선수가 뛸 수 있도록 준비시키고 교대시키는 진행 요원과 비슷하다.\n\n> Dispatcher는 OS안에 들어있는 함수중 하나이다.\n>\n> — (2주차 강의 #L91)\n\n> 스케줄러가 가지는 일부 기능 중 디스패처가 있는데 어떤 프로세스를 실행하기 위한 준비하는 커널의 일들을 통틀어 디스패처라고 부른다.\n>\n> — (2주차 강의 #L96)\n\n> Dispatcher (a kernel function) switches the processor from one process to another\n>\n> — (2주차 02_Process_description_and_Control p.3)\n\n**왜 중요한가:** 선택된 프로세스가 실제로 실행될 수 있도록 커널이 준비하고 교대하는 역할을 설명하기 때문이다.\n\n## 19. 컨텍스트 스위치\n\n컨텍스트 스위치(Context Switch)는 실행 중인 프로세스가 더 일할 수 없을 때 다른 프로세스로 넘어가는 것이다. 이때 중단될 프로세스의 레지스터 값은 PCB에 저장되고, 이전에 저장한 값을 가져와 다음 프로세스를 시작한다. 하던 일을 바꾸기 전에 현재 상태를 메모하고 다음 일의 메모를 펼치는 모습과 비슷하다.\n\n> TSS 레지스터 값들이 프로세스 스위치가 일어날때 (ContextSwitch) 교체될 프로세스의 PCB안에 든 값을  PCB에 저장해야한다.\n>\n> — (2주차 강의 #L304)\n\n> 중단됐던 프로세스에 대해서 레지스터 값을 저장하는것 = save context / 이전 저장했던 레지스터값을 가져와서 새로 시작하는걸 restore context\n>\n> — (2주차 강의 #L307)\n\n> 프로세스 2를 실행하다가 어떤 이유때문에 일을 더이상 실행시키지 못할때 프로세스1로 넘어가는 것을 컨텍스트 스위치라고 한다.\n>\n> — (3주차 강의 #L217)\n\n> 그 중에서도 중단될 프로세스의 레지스터값을 PCB에 저장.\n>\n> — (3주차 강의 #L236)\n\n**왜 중요한가:** CPU가 실행할 프로세스를 바꿀 때 이전 작업의 상태를 잃지 않고 다음 작업을 이어 가는 방법이기 때문이다.\n\n## 20. 모놀리틱 커널\n\n모놀리틱 커널은 파일 관리, 프로세스 관리, 메모리 관리, 통신 프로토콜 등이 모두 커널 내부에 구현된 구성이다. UNIX와 리눅스가 모놀리틱 커널에 해당한다. 여러 부서가 하나의 큰 건물 안에 모두 들어 있는 모습과 비슷하다.\n\n> 파일관리, 프로세스관리, 메모리관리, 통신프로토콜 등이 모두 커널 내부에 구현되어있다.\n>\n> — (2주차 강의 #L2)\n\n> UNIX, 리눅스가 모놀리틱 커널임.\n>\n> — (2주차 강의 #L4)\n\n**왜 중요한가:** 운영체제의 여러 관리 기능을 커널 내부에 함께 두는 구성 방식을 이해하게 해 주기 때문이다.\n\n## 21. 실행 컨텍스트\n\n실행 컨텍스트(Execution Context)는 명령어가 실행 대상으로 삼는 데이터와 그 밖에 실행에 필요한 자원들의 집합이다. 즉, 프로그램이 실행되는 환경으로, 작업을 시작할 때 필요한 재료와 도구를 한데 모아 둔 작업대처럼 볼 수 있다.\n\n> 또 인스트럭션의 실행 대상이 되는 데이터, 기타 실행에 필요한 자원들의 집합들을 Execution Context 라고 한다.\n>\n> — (2주차 강의 #L80)\n\n> Context : the execution environment of a program\n>\n> — (2주차 02_Process_description_and_Control p.17)\n\n**왜 중요한가:** 프로그램을 실행하려면 명령어뿐 아니라 어떤 데이터와 자원이 함께 필요한지 이해하게 해 주기 때문이다.\n\n## 22. 프로세스 스케줄링\n\n프로세스 스케줄링은 여러 프로그램을 실행할 때 다음에 실행할 프로세스를 고르고, 프로세스들 사이에 CPU를 공평하게 할당하는 운영체제의 일이다. 여러 사람이 한 대의 놀이기구를 기다릴 때 운영자가 다음 탑승자를 정하고 차례를 나누어 주는 것과 비슷하다.\n\n> 여러개의 프로그램을 실행하는 경우가 많은데 그런 걸 OS안에 있는 Process Scheduling 이라는 기능이 돕는다.\n>\n> — (1주차 강의 #L17)\n\n> 이때 프로세스간 CPU를 공평하게 할당하는 일을 OS가 수행하면서 이 작업은 커널모드->유저모드로 전이할때 커널의 프로세스 스케줄러 함수에 의해 수행된다.\n>\n> — (3주차 강의 #L99)\n\n> Determine which program is next to be executed, in other words,\n>\n> — (1주차 01_Operating_System_overview p.11)\n\n**왜 중요한가:** 여러 프로세스가 하나의 CPU를 사용할 때 누가 다음 차례를 얻는지 결정하는 원리이기 때문이다.\n\n## 23. 가상 주소 공간(VAS)\n\n가상 주소 공간(VAS)은 프로세스를 실행해 만들 때 각 프로세스에 고유하게 마련되는 주소 공간이다. 제시된 강의 설명에서는 크기가 4GB이며 보조기억장치에 만들어진다. 프로세스마다 자기 물건을 놓을 수 있는 전용 사물함을 하나씩 받는 것과 비슷하다.\n\n> 실행을 시키면 프로세스가 만들어지는데 이 과정중에 프로세스 고유의 가상 주소 공간 (4GB)가 보조기억장치에 만들어진다.\n>\n> — (3주차 강의 #L36)\n\n> 각 프로세스마다 가상주소공간(VAS)를 가진다.\n>\n> — (3주차 강의 #L55)\n\n**왜 중요한가:** 각 프로세스가 자신만의 주소 공간을 가진다는 실행 환경의 기본 구조를 이해하게 해 주기 때문이다.\n\n## 24. fork 시스템 콜\n\nfork()는 실행 중인 프로세스가 운영체제에 자식 프로세스를 만들어 달라고 요청하는 시스템 콜이다. 생성 뒤에는 자식의 PCB, 파일 같은 자원 정보와 메모리 컨텍스트가 부모로부터 복사되며, 부모는 실행 결과로 자식의 pid 값을 돌려받는다. 부모의 작업 서류를 복사해 자식용 새 서류철을 만드는 모습과 비슷하다.\n\n> 이 프로세스가 실행되는 중에 fork() 가 시스템콜인데 얘가 자식프로세스를 만들어달라고 OS에 요청하는 것이다.\n>\n> — (3주차 강의 #L15)\n\n> 마지막 8번에서 부모프로세스에게 fork실행 결과로  자식 pid값을 부모에게 리턴해준다.\n>\n> — (3주차 강의 #L168)\n\n> After fork() : information(PCB, resources(file, ...) and memory context ) for child process is copied from that of parent process\n>\n> — (3주차 02_Process_description_and_Control p.28)\n\n**왜 중요한가:** 실행 중인 프로세스를 바탕으로 자식 프로세스를 만드는 과정을 설명하기 때문이다.\n\n## 25. 유저 컨텍스트와 시스템 컨텍스트\n\n프로세스의 컨텍스트는 유저 컨텍스트와 시스템 컨텍스트 두 가지로 나뉜다. 이 가운데 시스템 컨텍스트는 커널 스택과 PCB로 구성된다. 한 사람의 활동 기록을 본인이 쓰는 자료와 관리자가 보관하는 자료로 나누는 것과 비슷하다.\n\n> 컨텍스트에는 유저 컨텍스트, 시스템 컨텍스트 2가지로 나뉜다.\n>\n> — (3주차 강의 #L3)\n\n> 시스템컨텍스트는 커널스택과 PCB로 구성된다.\n>\n> — (3주차 강의 #L71)\n\n**왜 중요한가:** 프로세스 실행에 필요한 문맥을 사용자 쪽 정보와 시스템 쪽 정보로 나누어 이해할 수 있기 때문이다.\n\n## 26. Copy-on-Write(COW)\n\nCopy-on-Write(COW)는 자식 프로세스의 데이터 영역과 스택 영역을 바로 복사하지 않고 최대한 늦추다가, 값이 바뀌는 쓰기 시점에 복사하는 방법이다. 처음에는 부모와 자식이 같은 페이지를 공유하며, 이를 통해 프로세스 생성 시간과 메모리 사용을 줄인다. 같은 문서를 함께 읽다가 누군가 수정하려는 순간에만 자기 복사본을 만드는 것과 비슷하다.\n\n> 리눅스를 비롯한 많은 OS에서 프로세스를 생성하는데 걸리는 시간을 줄이고 메모리 사용 효율을 높이기 위해 자식프로세스의 데이터영역과 스택영역을 복사하는 것을 최대한 뒤로 늦추는 방법 = COW 방법을 채택해서 사용한다.\n>\n> — (3주차 강의 #L179)\n\n> Copy를 해주되, write(값의 변화가 생길때)에 복사해줘라.\n>\n> — (3주차 강의 #L186)\n\n> COW allows parent, child processes to initially share the same pages.\n>\n> — (3주차 02_Process_description_and_Control p.29)\n\n**왜 중요한가:** 자식 프로세스를 만들 때 불필요한 즉시 복사를 피하여 시간과 메모리를 아끼는 원리이기 때문이다.\n\n## 27. exec 시스템 콜\n\nexec 시스템 콜이 실행되면 운영체제는 기존 프로세스의 코드·데이터·스택을 버리고 지정된 새 프로그램의 코드·데이터·스택으로 바꾼 뒤 PCB를 업데이트한다. pid 값은 그대로이고 프로세스의 몸체만 바뀌는 셈으로, 같은 이름표를 단 사람이 옷과 작업 도구를 전부 새것으로 바꾸는 모습과 비슷하다.\n\n> 그럼 OS가 원래 부모프로세스의 코드/데이터/스택 내용을 버리고 지정된 새로운 프로그램의 코드/데이터/스택을 대신 메모리에 집어넣어주고 그들의 주소를 이용해서 새로 만들어진 프로세스의 PCB를 업데이트한다.\n>\n> — (3주차 강의 #L196)\n\n> pid값은 그대로 가지고 있고 몸체만 바뀐다.\n>\n> — (3주차 강의 #L198)\n\n> User context of a.out is replaced by ‘new.exe’ program\n>\n> — (3주차 02_Process_description_and_Control p.29)\n\n**왜 중요한가:** 프로세스의 식별자는 유지하면서 실행할 프로그램의 내용을 새것으로 교체하는 방식을 설명하기 때문이다.\n\n## 28. 프로세스 컨텍스트\n\n프로세스 컨텍스트는 프로세스가 실행되는 데 필요한 컴퓨터 자원, 정보, 구성요소를 모두 모은 집합, 즉 프로세스의 실행 환경이다. 요리사가 일을 시작하기 위해 필요한 재료, 도구, 조리 순서와 현재 진행 상태를 한꺼번에 모아 둔 작업 자리와 비슷하다.\n\n> 문맥, 실행환경이라 불리는 프로세스 컨텍스트는 프로세스가 실행되는데 필요한 컴퓨터 자원, 정보, 구성요소들의 모든 집합이다.\n>\n> — (3주차 강의 #L2)\n\n> Context : the execution environment of a program\n>\n> — (3주차 02_Process_description_and_Control p.17)\n\n**왜 중요한가:** 프로세스가 실행되려면 어떤 정보와 자원이 하나의 실행 환경을 이루어야 하는지 이해하는 바탕이기 때문이다.\n\n## 29. 시그널과 인터럽트\n\n시그널은 한 프로세스가 다른 프로세스에게 이벤트 발생을 알리는 방법이고, 인터럽트는 컴퓨터의 하드웨어 장치가 CPU에게 이벤트 발생을 알리는 방법이다. 사람이 다른 사람에게 소식을 전하는 것이 시그널이라면, 장치가 CPU의 알림 벨을 누르는 것은 인터럽트와 비슷하다.\n\n> 프로세스가 다른 프로세스에게 이벤트가 발생했음을 알리는 방법이다.\n>\n> — (4주차 강의 #L52)\n\n> 인터럽트는 컴퓨터 하드웨어 장치가 CPU에게 어떤 이벤트가 발생했음을 알리는 방법입니다.\n>\n> — (5주차 강의 #L149)\n\n**왜 중요한가:** 이벤트를 알리는 주체와 대상을 구분해야 프로세스와 CPU가 어떤 알림에 반응하는지 이해할 수 있기 때문이다.\n\n## 30. 쓰레드\n\n쓰레드(Thread)는 프로세스 내부에 있는 실행 단위이다. 하나의 프로세스를 작업장이라고 보면, 쓰레드는 그 작업장 안에서 실제 명령을 수행하는 일꾼과 비슷하다.\n\n> 쓰레드는 프로세스 내부 실행 단위이다.\n>\n> — (4주차 강의 #L66)\n\n> 프로세스와 쓰레드가 별개의 것이 아니고 쓰레드가 프로세스 내부에 있는거임.\n>\n> — (4주차 강의 #L72)\n\n**왜 중요한가:** 프로그램의 실제 실행 흐름이 프로세스 내부에서 어떤 단위로 이루어지는지 보여주기 때문이다.\n\n## 31. 동기화\n\n여러 쓰레드나 프로그램 문장이 함께 움직일 때는 실행 순서가 엉키지 않도록 교통정리가 필요하며, 이것이 동기화 문제이다. 세마포어는 이런 실행 순서를 제어하는 데 사용할 수 있다.\n\n> 지금 보는 슬라이드는 세마포어가 어떤 프로그램 문장들의 실행 순서를 제어하는 데도 이용될 수 있음을 보여주는 그림입니다.\n>\n> — (6주차 강의 #L235)\n\n**왜 중요한가:** 여러 실행 흐름이 공유 자원을 안전한 순서로 사용하게 만드는 바탕이기 때문이다.\n\n## 32. 멀티쓰레딩과 동시성·병렬성\n\n멀티쓰레딩은 하나의 프로세스 안에 여러 쓰레드를 두는 기술이다. CPU 하나가 서로 다른 시간대에 작업을 실행해 실행 구간이 겹치지 않는 경우를 동시성(Concurrent) 실행이라고 한다. 한 명의 요리사가 여러 요리를 번갈아 처리하는 모습과 비슷하다.\n\n> 하나의 프로세스 안에 여러개의 쓰레드를 가진것이 멀티쓰레딩 즉 멀티쓰레드를 가지는 기술이라고 함.\n>\n> — (4주차 강의 #L110)\n\n> CPU한개가 서로 다른 시간대에 일들을 실행해서 겹치는 경우가 없는게 컨커런트하게 실행되는 것임.\n>\n> — (4주차 강의 #L136)\n\n**왜 중요한가:** 여러 실행 흐름을 가진 구조와 CPU 하나에서 작업들이 번갈아 진행되는 방식을 구분해 이해할 수 있기 때문이다.\n\n## 33. 메시지 패싱과 공유 메모리\n\n메시지 패싱과 공유 메모리는 프로세스들이 정보를 주고받는 두 가지 방법이다. 메시지 패싱은 시스템 콜로 메시지를 커널에 보내고, 공유 메모리는 커널로 들어갈 필요가 없어 시간이 더 적게 걸린다. 우체국을 거쳐 쪽지를 보내는 방식과 같은 칠판에 직접 내용을 적어 공유하는 방식의 차이로 생각할 수 있다.\n\n> 메세지를 커널에게 보내는 시스템콜을 보내서 커널에 보낸다.\n>\n> — (4주차 강의 #L38)\n\n> 커널로 들어갈 필요도 없고 그래서 더 시간이 적게 걸린다.\n>\n> — (4주차 강의 #L41)\n\n> message passing, shared memory, Remote Procedure Call\n>\n> — (4주차 03_Threads p.6)\n\n**왜 중요한가:** 프로세스 사이에서 정보를 전달하는 방식에 따라 커널을 거치는지와 걸리는 시간이 달라지기 때문이다.\n\n## 34. 프로세스 간 통신(IPC)\n\n프로세스 간 통신(IPC)은 프로세스들이 서로 정보를 주고받을 수 있도록 운영체제가 지원하는 방법이다. 메시지 패싱과 공유 메모리가 그 방법이며, 생산자-소비자 문제에서는 생산자가 만든 정보를 소비자에게 전달하기 위해 공유 메모리를 사용한다. 서로 떨어진 작업자들이 공용 전달 통로나 같은 게시판으로 자료를 교환하는 것과 비슷하다.\n\n> 이번엔 프로세스들이 서로 정보를 주고받을 수 있도록 OS가 지원하는 방법을 알아보자.\n>\n> — (4주차 강의 #L30)\n\n> IPC 방법 중에 메시지 패싱과 쉐어드 메모리 방법이 있다고 배웠는데 이 문제에서는 쉐어드 메모리를 사용하는 것입니다.\n>\n> — (5주차 강의 #L73)\n\n**왜 중요한가:** 서로 다른 프로세스가 정보를 주고받는 통로와 생산자-소비자 사이의 데이터 전달 방식을 이해하게 해 주기 때문이다.\n\n## 35. 프로세스 종료와 좀비 상태\n\n실행을 마친 프로세스는 곧바로 사라지지 않고 종료 상태에 머물다가 wait 시스템 콜이 호출된 뒤 사라진다. 자식의 정보가 부모에게 전달되면 운영체제가 종료 상태의 PCB까지 회수하여 자식 프로세스가 완전히 사라진다. 일을 끝냈지만 확인 서류가 처리될 때까지 명단에 남아 있는 사람과 비슷하다.\n\n> 실행을 끝마친 시스템은 바로 컴퓨터시스템에서 사라지는게 아니라 터미네이트 상태에서 머물게 되다가 wait 시스템콜이 불린 다음에 나가게된다.(사라지게된다.)\n>\n> — (4주차 강의 #L4)\n\n> 부모에게 전달해주면 더이상 자식의 PCB가 남아있을 이유가 없으므로 종료상태의 PCB마저 OS가 회수하고 자식프로세스가 완전히 사라지는 것이다.\n>\n> — (4주차 강의 #L20)\n\n**왜 중요한가:** 실행을 끝낸 자식 프로세스가 언제 완전히 제거되고 PCB가 회수되는지 이해하는 데 필요하기 때문이다.\n\n## 36. 상호 배제(Mutual Exclusion)\n\n상호 배제는 두 개 이상의 프로세스가 같은 메모리 영역에 접근할 때 한 번에 하나의 프로세스만 접근하게 하는 성질이다. 여러 사람이 같은 방을 쓰더라도 열쇠를 한 사람에게만 주는 것과 같으며, 경쟁 상태를 막으려면 이 성질을 만족하도록 프로그래밍해야 한다.\n\n> 두 개 이상의 프로세스가 같은 메모리 영역을 액세스하는 상황에서 한 번에 한 프로세스씩 액세스하도록 하는 성질을 말합니다.\n>\n> — (5주차 강의 #L19)\n\n> 이 race condition을 방지하려면 Mutual Exclusion 성질이 만족되도록 프로그래밍을 해야 됩니다.\n>\n> — (5주차 강의 #L25)\n\n**왜 중요한가:** 여러 프로세스가 공유 자원을 동시에 건드려 값이 엉키는 경쟁 상태를 막는 기본 성질이기 때문이다.\n\n## 37. 레이스 컨디션\n\n레이스 컨디션은 생산자와 소비자처럼 여러 프로세스가 공유 데이터에 접근해 값을 바꾸는 작업이 서로 겹쳐서 생기는 문제이다. 여러 사람이 같은 장부의 숫자를 거의 동시에 고쳐 최종 값이 어긋나는 상황과 비슷하다.\n\n> 이것이 바로 race condition 때문에 발생한 것입니다.\n>\n> — (5주차 강의 #L177)\n\n> 프로듀서나 consumer가 counter라고 하는 변수를 즉 공유 데이터를 같이 접근을 해가지고 값을 변경하던 작업이 서로 겹쳐서 일어났습니다.\n>\n> — (5주차 강의 #L177)\n\n**왜 중요한가:** 공유 데이터를 다루는 작업이 겹칠 때 잘못된 결과가 발생하는 이유를 보여주기 때문이다.\n\n## 38. 임계 구역 문제의 요구사항\n\n임계 구역 문제를 올바르게 해결하려면 상호 배제, 진행, 한정 대기라는 세 가지 성질을 모두 만족해야 한다. 즉, 한 명씩 들어가되 들어갈 수 있는 사람의 진행을 막지 않고, 누군가를 끝없이 줄에 세워 두어서도 안 된다는 뜻이다.\n\n> 첫째가 Mutual Exclusion, 그 다음이 Progress, 마지막이 Bounded Weighting이라고 하는 것이었는데.\n>\n> — (6주차 강의 #L61)\n\n**왜 중요한가:** 임계 구역 해법이 동시 접근 방지뿐 아니라 진행 가능성과 공정한 대기까지 보장하는지 판단하는 기준이기 때문이다.\n\n## 39. 임계 구역(Critical Section)\n\n임계 구역은 프로세스 코드 중 공유 자원에 접근하는 부분이다. 이 코드를 담장으로 둘러싸듯 보호하면 여러 프로세스가 함부로 함께 들어와 경쟁 상태를 일으키는 일을 막을 수 있다.\n\n> Critical Section 코드를 Race Condition이 일어나지 않게 실행하기 위해서는 Critical Section 코드를 담장으로 둘러싸는 방법을 쓴다 라고 했습니다.\n>\n> — (6주차 강의 #L3)\n\n> A section of code within a process that requires access to shared resources\n>\n> — (5주차 04_Mutual_Exclusion_and_Synchronization p.3)\n\n**왜 중요한가:** 공유 자원 충돌을 막기 위해 코드의 어느 부분을 특별히 보호해야 하는지 알려주기 때문이다.\n\n## 40. 동시성 제어\n\n동시성 제어는 여러 프로세스의 활동을 맞추어 프로세스들 사이의 충돌을 다루는 것이다. 여러 사람이 같은 공간에서 일할 때 순서와 사용 규칙을 정하는 교통정리와 비슷하다.\n\n> 이번 시간에는 아주 중요한 내용인 Conference Control, 즉 프로세스들 간의 충돌 문제에 대해서 살펴보겠습니다.\n>\n> — (5주차 강의 #L3)\n\n> Synchronization of multiple activities in processes\n>\n> — (5주차 04_Mutual_Exclusion_and_Synchronization p.2)\n\n**왜 중요한가:** 여러 프로세스가 함께 실행될 때 공유 자원을 둘러싼 충돌을 이해하고 조정하는 바탕이기 때문이다.\n\n## 41. 경쟁 상태(Race Condition)\n\n경쟁 상태는 여러 쓰레드나 프로세스가 같은 공유 데이터 항목을 읽고 쓰는 상황이다. 강의에서는 두 개 이상의 프로세스가 같은 메모리 영역에 거의 동시에 접근하는 나쁜 상황이므로 피해야 한다고 설명한다.\n\n> 먼저 Race condition, Race condition이란 두 개 이상의 프로세스가 같은 메모리 영역을 거의 동시에 액세스하는 상황이기 때문에\n>\n> — (5주차 강의 #L13)\n\n> 그래서 이 race condition이라는 것은 나쁜 상황이고 그리고 이런 상황은 피하도록 되어야 됩니다.\n>\n> — (5주차 강의 #L17)\n\n**왜 중요한가:** 공유 데이터의 결과가 실행 타이밍에 따라 잘못될 수 있는 위험을 알아야 이를 막는 동기화가 필요한 이유를 이해할 수 있기 때문이다.\n\n## 42. 교착 상태(Deadlock)\n\n교착 상태는 프로세스들이 서로 상대방이 가진 자원을 기다리면서 어느 쪽도 진행하지 못하고, 필요한 자원을 영원히 배정받지 못하는 상황이다. 좁은 길에서 마주 본 두 차가 상대가 먼저 비켜 주기만 기다리는 모습과 비슷하다.\n\n> 그러니까 영원히 자원이 배정되지 않는 경우를 우리가 데드락이라고 얘기합니다.\n>\n> — (5주차 강의 #L35)\n\n> 여러 프로세스들이 서로 상대방이 지시하고 있는 리소스를 사용하려고 기다리는 상태를 말합니다.\n>\n> — (6주차 강의 #L69)\n\n**왜 중요한가:** 프로세스들이 서로 기다리다가 시스템의 작업이 영원히 멈출 수 있는 위험을 설명하기 때문이다.\n\n## 43. 바쁜 대기(Busy Waiting)\n\n바쁜 대기는 어떤 조건이 성립할 때까지 반복문을 돌며 계속 조건만 확인하는 기다림이다. 프로세스가 빙글빙글 돌면서 CPU 시간을 사용하므로, 실제 일을 하지 않는데도 CPU가 낭비된다.\n\n> 여기서 p2는 걸려서 빙글빙글 도는 즉 비지 웨이팅을 하게 됩니다.\n>\n> — (6주차 강의 #L43)\n\n> cpu 타임이 낭비가 되는 거고, cpu를 효율적으로 못 쓰는 셈이 됩니다.\n>\n> — (6주차 강의 #L57)\n\n**왜 중요한가:** 기다리는 동안에도 CPU 시간을 쓰는 동기화 방식의 비용을 이해하게 해 주기 때문이다.\n\n## 44. 베이커리 알고리즘\n\n베이커리 알고리즘은 두 개를 넘어 일반적인 N개의 프로세스에도 통용되도록 제시된 해법이다. 상호 배제, 진행, 한정 대기의 세 조건을 만족하지만 실행 시간이 너무 길어 사용할 수 없는 방법이라고 설명된다. 빵집 번호표처럼 차례를 정하지만 그 절차 자체가 지나치게 오래 걸리는 셈이다.\n\n> 그래서 일반적으로 N개의 프로세스들 사이에도 다 통용되는 방법을 사람들이 찾았는데 그렇게 해서 이제 새로운 해법으로 나온 것이 베이커리 알고리즘이다.\n>\n> — (5주차 강의 #L295)\n\n> 이 방법이 세 가지 요구사항 즉 Mutual Exclusion, Progress, Bounded Weighting 세 가지의 조건을 다 만족하지만 너무 실행시간이 길어요.\n>\n> — (5주차 강의 #L297)\n\n**왜 중요한가:** 여러 프로세스의 임계 구역 문제를 해결할 때 정확성 조건뿐 아니라 실행 시간도 고려해야 함을 보여주기 때문이다.\n\n## 45. 생산자-소비자 문제\n\n생산자-소비자 문제는 여러 생산자와 소비자가 함께 작업할 때 발생하는 경쟁 상태를 설명하는 문제이다. 6주차 예제에서는 이 문제를 세마포어 세 개를 사용하는 프로그램으로 다룬다.\n\n> 친숙한 우리들이 지금까지 여러 번 봐서 익숙해 있는 Producer Consumer Problem을 첫 번째 패턴을 이용을 해가지고 작성한 프로그램을 살펴봅시다.\n>\n> — (6주차 강의 #L197)\n\n> 이제 프로듀서 프로그램에서는 세마포어 3개를 사용했습니다.\n>\n> — (6주차 강의 #L201)\n\n**왜 중요한가:** 공유 버퍼를 사용하는 여러 프로세스의 순서와 접근을 세마포어로 조정하는 대표 사례이기 때문이다.\n\n## 46. 원자적 연산(Atomic Operation)\n\n원자적 연산은 여러 단계의 일을 도중에 나눌 수 없는 한 덩어리처럼 실행하는 것이다. 인터럽트를 비활성화한 상태에서 실행하는 것은 이러한 원자적 실행을 이용하는 방법이다.\n\n> 인터럽트가 비활성화된 상태에서 실행된다고 하는 것은 바로 Atomic Operation을 이용하는 것이죠.\n>\n> — (6주차 강의 #L7)\n\n**왜 중요한가:** 공유 자원을 바꾸는 도중 다른 실행이 끼어들지 못하게 하여 경쟁 상태를 막는 방법이기 때문이다.\n\n## 47. 원형 버퍼(Circular Buffer)\n\n원형 버퍼는 in과 out 변수를 이용해 유한한 크기의 버퍼를 원형 큐처럼 구현한 것이다. 배열의 끝에 도착하면 다시 처음으로 돌아가며 자리를 이어 쓰는 둥근 컨베이어 벨트와 비슷하다.\n\n> 그래서 inout 변수를 이용해서 b라고 하는 그 buffer를 circular q로 구현합니다.\n>\n> — (5주차 강의 #L81)\n\n> 이런 식으로 Circular Buffer를 구현을 하는 거죠.\n>\n> — (5주차 강의 #L87)\n\n> A finite-sized circular buffer\n>\n> — (5주차 04_Mutual_Exclusion_and_Synchronization p.7)\n\n**왜 중요한가:** 생산자와 소비자가 유한한 공유 버퍼를 반복해서 사용하는 구조를 이해하는 데 필요하기 때문이다.\n\n## 48. 피터슨 알고리즘\n\n피터슨 알고리즘은 임계 구역 앞의 세 줄을 이용하는 해법으로, 임계 구역 문제의 세 요구사항을 모두 만족한다. 다만 프로세스가 세 개일 때는 이 방법이 통하지 않는다.\n\n> 이 방법은 일명 피터슨스 알고리즘이다 라고도 불리는데 여기에는 지금 Critical Section 앞에 세 줄이 존재합니다.\n>\n> — (5주차 강의 #L291)\n\n> 복잡해졌지만 이 방법은 요구상 3개를 모두 만족합니다.\n>\n> — (5주차 강의 #L293)\n\n> 3개있을때는 3개 있을 때는 이 방법이 통하지가 않습니다.\n>\n> — (5주차 강의 #L293)\n\n**왜 중요한가:** 두 프로세스의 임계 구역 문제를 세 요구사항에 맞게 해결하는 방법과 그 적용 범위를 보여주기 때문이다.\n\n## 49. 공유 변수\n\n공유 변수는 여러 프로세스가 함께 바라보는 변수이다. 한 프로세스가 값을 바꾸면 다른 프로세스도 그 바뀐 값을 읽으므로, 여러 사람이 함께 보는 공용 칠판의 숫자와 비슷하다.\n\n> 지금 터는 p0나 p1이 같이 바라보고 있는 공유변수이기 때문에 p0가 1로 바꾼 값을 p1도 그 값을 바라본다 그 값을 읽는다 라는 걸 잊지 말아야 되겠습니다.\n>\n> — (5주차 강의 #L281)\n\n**왜 중요한가:** 한 프로세스의 값 변경이 다른 프로세스에도 보인다는 점이 동기화 알고리즘의 동작을 이해하는 핵심이기 때문이다.\n\n## 50. 기아(Starvation)\n\n기아는 CPU나 메모리 같은 자원을 요청한 프로세스가 자원을 배정받기까지 아주 오랫동안 기다리는 비정상적인 현상이다. 줄은 계속 움직이는데 특정 사람의 차례만 좀처럼 오지 않아 굶주리는 모습과 비슷하다.\n\n> 시스템에서 CPU라든가 메모리 같은 자원을 내가 요청을 했는데 그 자원이 바로 배정되지 않고 오랜 시간 동안 배정이 안 돼서 기다려야 되는 비정상적인 상황을 Starvation이라고 말합니다.\n>\n> — (5주차 강의 #L33)\n\n> 스타베이션을 자원을 요청을 했는데 할당되기까지 오랫동안 기다리는 현상, 자원을 받기까지 굉장히 오랫동안 기다려서 굶주리는 현상이고\n>\n> — (7주차 강의 #L155)\n\n**왜 중요한가:** 시스템이 움직이고 있어도 특정 프로세스는 자원을 오랫동안 받지 못할 수 있음을 보여주기 때문이다.\n\n## 51. 진행(Progress)\n\n진행은 임계 구역 안에 아무도 없을 때 들어가려는 프로세스가 그 임계 구역을 실행할 수 있어야 한다는 성질이다. 빈 화장실이 있는데도 문 앞의 사람이 들어가지 못하는 일이 없어야 한다는 뜻과 비슷하다.\n\n> 즉 나의 critical section을 실행할 수 있어야 된다라는 성질이 프로그레스입니다.\n>\n> — (5주차 강의 #L239)\n\n> 그럼 내가 들어갈 수 있어야 된다 라고 하는 것이 요구사항 중에 2번 프로그래스 성질인데 아무도 없는데도 불구하고, 지금 P1은 들어갈 수가 없습니다.\n>\n> — (5주차 강의 #L289)\n\n**왜 중요한가:** 상호 배제를 지키면서도 임계 구역이 비었을 때 필요한 프로세스가 실제로 일을 계속할 수 있게 보장하기 때문이다.\n\n## 52. 세마포어와 SEM wait·signal\n\n세마포어를 이해하려면 semWait와 semSignal이 하는 일을 알아야 한다. semWait는 세마포어 변수 값을 먼저 1 줄이고, semSignal은 운영체제가 그 값을 1 늘리게 한다. 자원 이용권의 남은 수를 하나 빼고 다시 하나 돌려주는 모습과 비슷하다.\n\n> 네, 그러면 세마포의 동작을 이해하기 위해서는 샘웨이트하고 샘시그널이 어떤 일을 하는지를 이것을 이해할 필요가 있습니다.\n>\n> — (6주차 강의 #L141)\n\n> same weight 함수는 세마포 변수값을 먼저 1 감소시킵니다.\n>\n> — (6주차 강의 #L143)\n\n> 사용자 프로그램이 샘시그널 함수를 이 Semsignal 함수를 부르면 운영체제가 S의 세마포 값을 1 증가시킵니다.\n>\n> — (6주차 강의 #L157)\n\n**왜 중요한가:** 세마포어가 자원의 사용 가능 여부와 기다리는 프로세스를 어떻게 조정하는지 이해하는 핵심 동작이기 때문이다.\n\n## 53. Test-and-Set 명령\n\nTest-and-Set은 값을 검사한 뒤 0이면 1로 설정하는 동작이며, 함수 전체가 원자적으로 실행된다. 문이 비었는지 확인하고 잠그는 두 일을 다른 사람이 끼어들 틈 없이 한 번에 처리하는 것과 비슷하다.\n\n> 이 함수가 실행되는 동안에는 atomic하게 실행이 됩니다.\n>\n> — (6주차 강의 #L23)\n\n> 테스트하고 나서 0인지 테스트하고 나서 0이면 1로 세트하라는 겁니다.\n>\n> — (6주차 강의 #L25)\n\n> The whole testset function is carried out atomically (not divisible)\n>\n> — (6주차 04_Mutual_Exclusion_and_Synchronization p.19)\n\n**왜 중요한가:** 검사와 값 변경 사이에 다른 프로세스가 끼어들지 못하게 하여 임계 구역 진입을 안전하게 제어할 수 있기 때문이다.\n\n## 54. 세마포어(Semaphore)\n\n세마포어는 정수형 값과 자신만의 큐를 함께 가진 특수한 변수이며, 하드웨어가 지원하는 동기화 장치로 제시된다. 자원 이용권의 수와 그 이용권을 기다리는 줄을 한데 묶어 관리하는 표지판과 비슷하다.\n\n> 스마포어는 정수형 변수와 자신만의 Q와 같이 만들어진 특수한 변수입니다.\n>\n> — (6주차 강의 #L87)\n\n> A better hardware-supported synchronization mechanism\n>\n> — (6주차 04_Mutual_Exclusion_and_Synchronization p.22)\n\n**왜 중요한가:** 프로세스가 공유 자원을 안전하게 사용하고 필요할 때 기다리도록 만드는 대표적인 동기화 수단이기 때문이다.\n\n## 55. 모니터와 조건 변수\n\n모니터는 한 번에 하나의 프로세스만 내부 데이터에 접근하게 하여 경쟁 상태를 막는다. 어떤 조건을 기다려야 하는 프로세스는 조건 변수에 딸린 큐로 나가 기다리고, 그동안 다른 프로세스가 모니터에 들어와 실행할 수 있다.\n\n> 그러면 결국 하나의 프로세스만 들어가서 모니터 내부에 선언된 데이터에 접근을 할 수가 있기 때문에 우리가 레이스 컨디션을 방지할 수 있는 겁니다.\n>\n> — (6주차 강의 #L311)\n\n> 그래서 그럴 경우에는 이 옆의 공간으로 나가서 그 조건에 딸린 Q의 들어가서 기다리고 자기는 나와서 다른 프로세스가 바깥에서 들어와서 실행될 수 있도록 conditional variable을 정의할 수 있게 되어 있습니다.\n>\n> — (6주차 강의 #L313)\n\n**왜 중요한가:** 공유 데이터 접근과 조건 대기를 한 구조 안에서 안전하게 조정할 수 있기 때문이다.\n\n## 56. 바이너리 세마포어(뮤텍스)\n\n바이너리 세마포어는 세마포어 값으로 0과 1만 가지는 특수한 형태이며, 뮤텍스라고도 부른다. 사용 중과 비어 있음만 표시하는 하나짜리 열쇠와 비슷하다.\n\n> 네, 다음 세마포의 특수한 형태로서 바이너리 세마포라는 것이 있습니다.\n>\n> — (6주차 강의 #L297)\n\n> 이 세마포어는 세마포어 변수 값을 0과 1만 갖습니다.\n>\n> — (6주차 강의 #L297)\n\n> 그래서 다른 이름으로 뮤텍스라고 부르기도 합니다.\n>\n> — (6주차 강의 #L299)\n\n**왜 중요한가:** 하나의 공유 자원에 한 번에 하나의 프로세스만 접근하도록 표현하는 간단한 도구이기 때문이다.\n\n## 57. 블록 상태와 대기 큐\n\n자원을 기다리는 프로세스는 블록 상태로 바뀌며, 이 상태는 웨이트 상태 또는 슬립 상태라고도 한다. 프로세스는 자원이 다시 생길 때까지 블록 큐에 들어가 기다린다.\n\n> 다른 말로 웨이트 상태 또는 슬립 상태라고 했었는데 그 블록 상태로 바뀌게 되는 것입니다.\n>\n> — (6주차 강의 #L95)\n\n> 그게 이제 자원이 다시 생길 때까지 웨이트하기 위해서 바로 블록 Q에 들어가는 거죠.\n>\n> — (6주차 강의 #L125)\n\n**왜 중요한가:** 자원이 없는 프로세스를 계속 실행해 CPU를 낭비하지 않고 어디에서 기다리게 하는지 설명하기 때문이다.\n\n## 58. Readers-Writers 문제\n\nReaders-Writers 문제에서는 작성자는 한 번에 하나만 임계 구역에 들어가 쓰게 하지만, 읽는 프로세스들은 여러 개가 함께 들어갈 수 있다. 한 사람이 문서를 고칠 때는 혼자 쓰고, 읽기만 할 때는 여러 사람이 함께 보는 규칙과 비슷하다.\n\n> Readerswriters Problem이라고 하는 것은 Problem이라고 하는 것은 리더와 라이터가 있는데, 라이터에 대해서는 critical section problem하고 동일하게 오직 하나만 들어가서 라이트해라 그렇게 만들어주는 것이고.\n>\n> — (6주차 강의 #L259)\n\n> 리더 프로세싱 경우에는 Critical Section에 여러 개가 들어갈 수 있도록 하나가 아니라 여러 개가 같이 들어갈 수 있도록 한 문제입니다.\n>\n> — (6주차 강의 #L259)\n\n**왜 중요한가:** 읽기와 쓰기의 충돌 가능성이 다를 때 공유 자원 접근 규칙을 어떻게 달리 정하는지 보여주기 때문이다.\n\n## 59. semWait와 semSignal\n\nsemWait는 세마포어 값을 1 감소시키고 semSignal은 그 값을 1 증가시킨다. 자원을 쓰기 전에 이용권을 하나 가져가고, 사용 후 이용권을 하나 돌려놓는 동작처럼 이해할 수 있다.\n\n> 일단 이 샘 웨이트는 1 감소시키고 샘 시그널은 1 증가시키는 역할을 하는데\n>\n> — (6주차 강의 #L133)\n\n> semWait(s) operation decreases the value of the semaphore s\n>\n> — (6주차 04_Mutual_Exclusion_and_Synchronization p.22)\n\n> semSignal(s) operation increases value of the semaphore s\n>\n> — (6주차 04_Mutual_Exclusion_and_Synchronization p.22)\n\n**왜 중요한가:** 세마포어 값을 바꾸는 두 기본 연산을 구분해야 자원 획득과 반환 과정을 따라갈 수 있기 때문이다.\n\n## 60. 독자-작성자 문제\n\n독자가 임계 구역에서 안전하게 작업하려면 작성자가 들어오지 못하게 해야 한다. 다만 독자가 이미 들어가 있는 동안에는 다른 독자들도 작성자를 걱정하지 않고 함께 들어가 읽을 수 있다.\n\n> 크리티컬 섹션에 들어가서 안전하게 작업하기 위해서는 라이터가 못 들어오게 해야 되는데 이 목적을 위해서 사용하는 세마포가 WSM이었습니다.\n>\n> — (6주차 강의 #L295)\n\n> 그리고 일단 리더가 들어가 있는 동안에는 다른 리더들은 라이터 걱정을 하지 않고 그냥 들어가서 리드를 할 수 있게 만들어진 코드죠.\n>\n> — (6주차 강의 #L297)\n\n**왜 중요한가:** 작성자와 독자의 접근을 다르게 조정하여 안전성과 여러 독자의 동시 읽기를 함께 얻는 방법이기 때문이다.\n\n## 61. 진입 구역과 퇴출 구역\n\n진입 구역은 임계 구역 코드가 나오기 직전에 추가하여 임계 구역을 보호하는 코드이다. 퇴출 구역은 임계 구역을 빠져나오는 쪽의 보호 구역으로, 임계 구역을 앞뒤에서 둘러싼 담장처럼 이해할 수 있다.\n\n> 담장으로 둘러싸는 것은 Critical Section 코드 앞에 Critical Section 코드가 나오기 직전에 Entry Section이라고 하는 코드를 추가하고\n>\n> — (6주차 강의 #L5)\n\n> entry section\n>\n> — (6주차 04_Mutual_Exclusion_and_Synchronization p.14)\n\n**왜 중요한가:** 임계 구역에 들어가기 전과 나온 뒤에 접근 제어를 어디에서 수행하는지 구분하는 기준이기 때문이다.\n\n## 62. 한정 대기(Bounded Waiting)\n\n한정 대기는 기다리는 프로세스가 끝없이 밀려나지 않게 하는 성질이다. 바이너리 세마포어에서는 나중에 온 프로세스가 먼저 차지해 새치기할 수도 있으므로, 이론적으로 한정 대기가 만족되지 않는다.\n\n> 그래서 나중에 온 프로세스가 먼저 새치기에서 이 바이너리 세마포를 차지해서 Critical Section으로 들어갈 수도 있습니다.\n>\n> — (6주차 강의 #L303)\n\n> 그래서 이론적으로는 Bounded Waiting 성질이 만족되지 않습니다.\n>\n> — (6주차 강의 #L303)\n\n**왜 중요한가:** 상호 배제를 지키더라도 특정 프로세스가 계속 차례를 얻지 못하는 문제가 생길 수 있음을 보여주기 때문이다.\n\n## 63. 식사하는 철학자 문제\n\n식사하는 철학자 문제는 교착 상태와 기아 현상을 눈에 보이게 표현하는 문제이다. 다섯 철학자가 모두 필요한 자원을 기다리며 블록되면 누구도 깨어나지 못해 교착 상태가 된다.\n\n> Dining Philosophers Problem은 데드락과 스타베이션 문제를 표현하는 그런 걸 형상화하는 문제입니다.\n>\n> — (7주차 강의 #L153)\n\n> 이 5개의 프로세스가 모두 블록되는 어느 누구도 깨어나지 못하는 이런 현상이 돼서 결국 데드락이 됩니다.\n>\n> — (7주차 강의 #L171)\n\n**왜 중요한가:** 여러 프로세스가 자원을 나누어 쓸 때 교착 상태와 기아가 어떻게 생기는지 쉽게 살펴볼 수 있는 대표 문제이기 때문이다.\n\n## 64. 비선점(No Preemption)\n\n비선점은 한 프로세스가 이미 사용 중인 자원을 다른 프로세스가 강제로 빼앗아 오지 못하는 조건이다. 누군가 도구를 쓰고 있다면 다른 사람은 도구를 낚아채지 못하고 기다려야 하는 것과 같다.\n\n> 그럼 no preemption은 그렇게 뺏어오지 않는 것이죠.\n>\n> — (7주차 강의 #L85)\n\n> 지금 이런 식으로 P1이 이미 사용하고 있으면 P2가 뺏어오지 못하고 뺏어오지 못하고 기다려야 되는 것이죠.\n>\n> — (7주차 강의 #L87)\n\n**왜 중요한가:** 교착 상태가 생길 수 있는 자원 사용 조건 가운데 하나를 이해하는 데 필요하기 때문이다.\n\n## 65. 파일 연산과 시스템 콜\n\n파일을 읽거나 쓰는 동작에는 각각 대응하는 시스템 콜이 정해져 있다. 파일 오픈은 이후의 파일 연산을 수행할 수 있도록 준비하는 과정이다.\n\n> 파일에 대해서 읽거나 쓰거나 하는 동작들을 하기 위해서 거기에 상응하는 시스템 콜들이 정해져 있습니다.\n>\n> — (7주차 강의 #L223)\n\n> 향후 operation들을 할 수 있도록 준비하는 과정이 바로 파일 오픈입니다.\n>\n> — (7주차 강의 #L233)\n\n**왜 중요한가:** 프로그램이 파일 작업을 운영체제에 어떤 방식으로 요청하고 준비하는지 보여주기 때문이다.\n\n## 66. 계층 디렉토리 구조\n\n계층 디렉토리는 디렉토리들이 나뭇가지처럼 뻗는 트리 구조이다. 제시된 디렉토리 정보에는 바이트 오프셋, 아이노드 번호, 파일 이름이 들어 있다.\n\n> 바로 바이토옵셋과 아이노드 넘버하고 파일 이름이 들어가 있다.\n>\n> — (7주차 강의 #L319)\n\n> 일명 트리 구조로 되어있는 디렉토리죠.\n>\n> — (7주차 강의 #L333)\n\n**왜 중요한가:** 파일과 디렉토리가 어떤 구조로 정리되고 식별되는지 이해하는 바탕이기 때문이다.\n\n## 67. 계층형 디렉토리와 경로명\n\n오늘날 일반적으로 사용하는 디렉토리는 계층 구조로 되어 있다. 루트에서 여러 가지를 따라 파일이 있는 곳까지 내려가는 위치 표현을 경로명(Pathname)이라고 한다.\n\n> 요즘 일반적으로 사용하는 디렉토리의 구조가 계층구조의 디렉토리입니다.\n>\n> — (7주차 강의 #L279)\n\n> 이것을 패스네임이라고 합니다.\n>\n> — (7주차 강의 #L283)\n\n**왜 중요한가:** 계층 구조 안에서 원하는 파일의 위치를 정확히 표현하고 찾아가기 위해 필요하기 때문이다.\n\n## 68. 교착 상태 처리 방법\n\n교착 상태에 대처하는 방법은 크게 세 가지로 요약할 수 있다. 강의에 따르면 Unix, Windows, Linux 같은 대부분의 상용 운영체제는 교착 상태에 대해 아무것도 하지 않는 방법을 사용한다.\n\n> 데드락 현상에 대처하는 방법은 크게 세 가지로 요약할 수 있습니다.\n>\n> — (7주차 강의 #L97)\n\n> 네, 그래서 대부분의 상용 운영 체제, 지금 Unix, Windows, Linux와 같이 요즘 많이 이용되는 상용 운영 체제에서는 이렇게 데드락에 대해서 아무것도 하지 않는 방법을 이용합니다.\n>\n> — (7주차 강의 #L107)\n\n**왜 중요한가:** 운영체제가 교착 상태라는 위험을 실제로 어떤 관점에서 다루는지 이해하는 기준이기 때문이다.\n\n## 69. 디바이스 파일과 장치 번호\n\n디바이스 파일의 장치 번호에서 메이저 번호는 장치 종류를 나타내고, 마이너 번호는 그 종류에 속한 개별 장치를 구분한다. 메이저 번호가 제품군 이름이라면 마이너 번호는 각 제품의 번호표와 비슷하다.\n\n> 이 앞에 있는 번호가 메이저 넘버라고 하는 것이고.\n>\n> — (7주차 강의 #L239)\n\n> 그리고 마이너 넘버는 그 장치 종류 중에서 하나하나를 구분하는 넘버입니다.\n>\n> — (7주차 강의 #L239)\n\n**왜 중요한가:** 운영체제가 장치의 종류와 개별 장치를 어떤 번호로 구분하는지 알려주기 때문이다.\n\n## 70. 뱅커스 알고리즘(Banker's Algorithm)\n\n뱅커스 알고리즘은 자원을 실제로 할당하기 전에 그 결과로 시스템이 안전할지를 조사하고, 안전하다고 나온 경우에만 자원을 할당하는 방법이다. 은행이 돈을 빌려주기 전에 위험을 따져 보는 모습과 비슷하다.\n\n> 또 다른 접근 방식은 뱅커스 알고리즘이라고 불리는 알고리즘을 사용을 해서 대표적인 알고리즘이 뱅커스 알고리즘입니다.\n>\n> — (7주차 강의 #L111)\n\n> 시스템이 세이프할지 안 할지를 미리 자원을 할당하기 전에 조사해보고 safe하다고 알고리즘 실행 결과로 나오는 경우에만 자원을 할당하는 방법이 있습니다.\n>\n> — (7주차 강의 #L113)\n\n**왜 중요한가:** 자원을 주기 전에 교착 상태로 이어질 위험을 미리 살피는 대표적인 방법이기 때문이다.\n\n## 71. 세마포어 기반 교착 상태 예방\n\n초깃값이 4인 room 세마포어를 추가하면 동시에 포크를 집으려는 철학자의 수를 최대 네 명으로 제한할 수 있다. 식사를 마친 뒤 room에 값을 돌려주는 방식으로 프로그래밍하면 교착 상태가 발생하지 않는다.\n\n> 다른 점은 룸이라고 하는 초기값이 4인 세마포가 추가가 된 것입니다.\n>\n> — (7주차 강의 #L173)\n\n> 동시에 이제 식사를 하려고 포크를 짓는 철학자의 수가 최대 4명으로 제한한다라고 하는 거죠.\n>\n> — (7주차 강의 #L173)\n\n> 다시 룸에 돌을 집어넣는 식으로 프로그래밍을 하면 데드락이 발생하지 않습니다.\n>\n> — (7주차 강의 #L177)\n\n**왜 중요한가:** 동시에 자원을 잡으려는 프로세스 수를 제한하여 교착 상태를 피하는 실제 방법을 보여주기 때문이다.\n\n## 72. 순환 대기(Circular Wait)\n\n순환 대기는 프로세스들이 꼬리에 꼬리를 물듯 다음 프로세스가 가진 자원을 기다리는 상태이다. 사람들이 원을 이루어 각자 옆 사람이 가진 열쇠만 기다리는 모습과 비슷하다.\n\n> 프로세스들이 꼬리에 꼬리를 물듯이 서로 다른 프로세스가 가진 자원을 기다리는 이런 경우입니다.\n>\n> — (7주차 강의 #L87)\n\n> 그게 바로 Circular Weight입니다.\n>\n> — (7주차 강의 #L89)\n\n**왜 중요한가:** 교착 상태를 만드는 자원 대기 관계가 어떤 모양인지 이해하는 데 필요하기 때문이다.\n\n## 73. 아이노드(inode)\n\n아이노드는 Unix와 Linux 운영체제에서 파일 제어 블록(FCB)을 부르는 이름이며, FCB의 고유 식별자이다. 파일의 관리 카드를 구별하는 고유 번호표처럼 생각할 수 있다.\n\n> 아이노드라고 하는 것이 유닉스 리눅스 운영체제에서 FCB 파일 컨트롤 블록을 부르는 이름입니다.\n>\n> — (7주차 강의 #L291)\n\n> FCB의 고유 식별자입니다.\n>\n> — (7주차 강의 #L291)\n\n**왜 중요한가:** Unix와 Linux가 파일의 관리 정보와 그 식별자를 어떻게 표현하는지 알려주기 때문이다.\n\n## 74. 엔트리 카운트 솔루션\n\n엔트리 카운트 솔루션은 파일을 가리키는 링크가 생길 때마다 카운트를 늘리고, 링크가 지워질 때마다 줄이는 방법이다. 감소한 값이 0이면 파일 시스템에서 그 파일을 가리키는 링크가 없으므로 파일 자체를 지운다.\n\n> 엔트리 카운트 솔루션이라는 방법인데요.\n>\n> — (7주차 강의 #L343)\n\n> 이런 식으로 파일의 링크가 만들어질 때마다 엔트리 카운터 값을 증가시키고 그다음에 파일이 지워질 때는 엔트리 카운트 값을 1 감소시키고 감소시킨 다음에 0인지를 비교해서 0이면 이제는 파일 시스템 내에서 더 이상 이 파일을 가리키고 있는 게 없는 거니까 파일 자체를 지워줍니다.\n>\n> — (7주차 강의 #L351)\n\n**왜 중요한가:** 여러 링크가 같은 파일을 가리킬 때 파일을 언제 실제로 삭제해야 하는지 판단하게 해 주기 때문이다.\n\n## 75. 자원 할당 그래프(Resource Allocation Graph)\n\n자원 할당 그래프는 자원과 프로세스로 이루어진 시스템 상태를 체계적으로 나타내는 방향 그래프이다. 프로세스에서 자원으로 향하는 화살표는 요청을, 자원에서 프로세스로 향하는 화살표는 할당을 뜻한다.\n\n> 그러면서 연구를 하면서 우선 데드락을 체계적으로 표현해보기 위해서 지금 여기 슬라이드에 있는 것처럼 Resource Allocation Graph를 생각해냈습니다.\n>\n> — (7주차 강의 #L65)\n\n> 그리고 프로세스에서부터 자원 쪽으로 가는 이런 화살표는 자원을 요청한다, request한다라는 뜻이고 자원에서부터 process 쪽으로 가는 화살표는 이것이 요청을 해가지고 할당이 됐다.\n>\n> — (7주차 강의 #L67)\n\n**왜 중요한가:** 복잡한 자원 요청과 할당 관계를 그림으로 나타내 교착 상태를 분석할 수 있게 해 주기 때문이다.\n\n## 76. 파일과 파일 시스템\n\n파일은 보조기억장치에 저장되어 전원이 없어도 지워지지 않는 정보의 저장 공간이다. 파일 시스템은 개별 파일뿐 아니라 파일들이 모인 집단을 체계적으로 관리하기 위해 필요하다.\n\n> 파일이란 보조, 기억 장치 내부에 저장돼서 전원이 없어도 지워지지 않는 정보의 저장란이죠.\n>\n> — (7주차 강의 #L183)\n\n> 이렇게 파일 하나를 관리하는 것도 중요하지만 파일들이 모여있는 그 집단을 잘 관리할 수 있는 체계가 있어야 됩니다.\n>\n> — (7주차 강의 #L199)\n\n**왜 중요한가:** 전원이 꺼져도 남는 정보를 운영체제가 어떤 단위와 체계로 관리하는지 설명하기 때문이다.\n\n## 77. 파일 링크와 댕글링 포인터\n\n파일 링크를 사용하면 원래의 트리 경로 밖에 있는 다른 위치에서도 같은 파일을 직접 가리킬 수 있다. 그러나 원래 대상이 사라진 뒤에도 링크가 남는 문제가 생길 수 있으며, 이를 댕글링 포인터 문제라고 한다.\n\n> 원래는 앞에서 본 것처럼 이렇게 트리로 쭉 뻗어나가는 모양이지만 링크라고 하는 걸 쓰기 때문에 예를 들어서 MNT에서도 이 파일을 이렇게 직접 가리킬 수가 있습니다.\n>\n> — (7주차 강의 #L335)\n\n> 그래서 이것을 Dangling Pointer 문제라고 합니다.\n>\n> — (7주차 강의 #L341)\n\n**왜 중요한가:** 파일을 여러 위치에서 가리킬 때 대상이 사라져 잘못된 링크가 남는 위험을 이해하게 해 주기 때문이다.\n\n## 78. 파일 접근 권한\n\n파일 접근 권한은 특정 파일에 대해 누가 무엇을 할 수 있는지를 명시한다. 운영체제는 보통 동작을 읽기·쓰기·실행으로, 사용자를 소유자·그룹·공용 사용자로 구분한다.\n\n> 접근 권한은 어떤 특정 파일에 대해서 누가 무엇을 할 수 있느냐를 명시하는 겁니다.\n>\n> — (7주차 강의 #L365)\n\n> 보통 운영체제는 접근 권한을 읽기, 쓰기, 그리고 실행하기 이 세 가지 종류로 분류를 합니다.\n>\n> — (7주차 강의 #L367)\n\n> 바로 오너그룹 퍼블릭 또는 퍼블릭은 다른 말로 어더즈라고 합니다.\n>\n> — (7주차 강의 #L369)\n\n**왜 중요한가:** 파일을 읽고 바꾸고 실행할 수 있는 사람을 구분하여 파일을 보호하는 기준이기 때문이다.\n\n## 79. 파일 제어 블록(FCB)과 파일 속성\n\n파일 제어 블록(FCB)은 파일 속성들을 저장하는 자료 구조이다. 사람의 신분증에 이름과 여러 정보가 모여 있듯, 파일을 관리하는 데 필요한 정보가 FCB에 들어간다.\n\n> 그것이 파일 컨트롤 블록입니다.\n>\n> — (7주차 강의 #L199)\n\n> 이와 같은 파일 attribute들이 FCB라고 하는 자료 구조에 들어가서 저장이 된다는 겁니다.\n>\n> — (7주차 강의 #L203)\n\n**왜 중요한가:** 운영체제가 개별 파일에 관한 관리 정보를 어디에 저장하는지 알려주기 때문이다.\n\n## 80. 파일 컨트롤 블록과 아이노드\n\n파일 내용이 어떤 블록에 들어 있는지와 같은 정보는 파일 컨트롤 블록에 담긴다. Unix나 Linux에서는 이 블록을 아이노드라고 부르며, 파일을 찾으려면 그 식별자를 알아야 한다.\n\n> 이것이 파일에 대한 정보이기 때문에 파일 컨트롤 블록에 그 파일의 내용이 어떤 블록에 들어가 있다.\n>\n> — (7주차 강의 #L313)\n\n> 바로 파일 컨트롤 블록 즉 유닉스나 리눅스의 경우에 아이노드라고 하는 것의 식별자를 알아야 됩니다.\n>\n> — (7주차 강의 #L315)\n\n> 유닉스 운영 체제의 경우에 이 루트 노드는 아이노드 넘버가 2번이라고 미리 정해져 있습니다.\n>\n> — (7주차 강의 #L315)\n\n**왜 중요한가:** 파일 이름을 실제 파일 정보와 저장 블록으로 연결하는 데 필요한 관리 구조를 이해하게 해 주기 때문이다.\n\n## 81. 경로 탐색과 파일 오픈\n\n파일을 열려면 먼저 주어진 경로에 파일이 있는지 확인해야 한다. 해당 파일의 파일 제어 블록을 읽어 주기억장치로 가져오면 파일 오픈이 끝난다.\n\n> 이러면 제일 먼저 파일이 있는지 없는지부터 봐야 된다라고 했었죠.\n>\n> — (7주차 강의 #L301)\n\n> 42번의 파일 컨트롤 블록을 읽어서 메인 메모리로 가져오면 그러면 파일 오픈이 끝나게 됩니다.\n>\n> — (7주차 강의 #L333)\n\n**왜 중요한가:** 경로명으로 지정한 파일을 찾아 실제 연산을 준비하는 과정을 이해하는 데 필요하기 때문이다.\n\n## 82. 교착 상태 복구와 프로세스 종료\n\n교착 상태에 빠진 프로세스를 하나만 종료해도 얽힌 대기 관계가 풀릴 수 있다. 프로세스를 한 번에 모두 종료하지 않고 하나씩 점진적으로 종료해 보는 방식이 더 현실적인 방법으로 제시된다.\n\n> 이런 식으로 데드락을 하나만 죽여봐도 데드락이 풀릴 수 있습니다.\n>\n> — (7주차 강의 #L147)\n\n> 이런 식으로 점진적으로 하나씩 죽여보는 방법이 이 두 번째 방법이고 이게 더 현실적인 방법입니다.\n>\n> — (7주차 강의 #L147)\n\n**왜 중요한가:** 이미 발생한 교착 상태를 실제로 풀기 위해 어떤 희생을 선택할 수 있는지 보여주기 때문이다.\n\n## 83. 소비성 자원(Consumable Resource)\n\n소비성 자원은 한 프로세스가 한 번 사용하면 없어져 다른 프로세스가 다시 사용할 수 없는 자원이다. 한 번 먹으면 사라지는 음식처럼 사용과 함께 소모되는 자원이다.\n\n> 소비성 자원이라고 하는 것은 어느 프로세스가 자원을 한번 사용하면 없어져서 다른 프로세스에 의해서 다시 사용할 수 없는 것입니다.\n>\n> — (7주차 강의 #L49)\n\n> Created (produced) and destroyed (consumed)\n>\n> — (7주차 05_Deadlock_and_Starvation p.5)\n\n**왜 중요한가:** 사용 후 돌려주는 자원과 사용하면 사라지는 자원을 구별해야 자원 대기 문제를 올바르게 분석할 수 있기 때문이다.\n\n## 84. 재사용 가능 자원(Reusable Resource)\n\n재사용 가능 자원은 프로세스가 사용해도 없어지지 않으며, 사용을 마친 뒤 다른 프로세스가 다시 사용할 수 있는 자원이다. 빌려 쓴 뒤 반납하는 공용 도구와 비슷하다.\n\n> 재사용 가능 자원이라고 하는 것은 프로세스가 그 자원을 사용한다고 해서 없어지는 것이 아니죠.\n>\n> — (7주차 강의 #L47)\n\n> Processes obtain resources that they later release for reuse by other processes\n>\n> — (7주차 05_Deadlock_and_Starvation p.4)\n\n**왜 중요한가:** 프로세스가 자원을 얻고 반납하는 흐름을 이해해야 교착 상태의 원인을 분석할 수 있기 때문이다.\n\n## 85. 점유 대기(Hold-and-Wait)\n\n점유 대기는 교착 상태에 관련된 프로세스가 이미 어떤 자원을 가진 채로 다른 자원을 요청하며 기다리는 조건이다. 한 손에 도구를 쥔 사람이 그 도구를 놓지 않고 다른 도구가 생기기만 기다리는 모습과 비슷하다.\n\n> Hold and Weight는 데드락에 개입된 프로세스가 어떤 자원을 가진 상태에서 다른 자원을 요청한다는 말입니다.\n>\n> — (7주차 강의 #L81)\n\n> A process may hold allocated resources while awaiting assignment of others\n>\n> — (7주차 05_Deadlock_and_Starvation p.6)\n\n**왜 중요한가:** 프로세스들이 자원을 놓지 않은 채 추가 자원을 기다리면 교착 상태로 이어질 수 있음을 보여주기 때문이다."
+  },
+  "questions": [
+    {
+      "id": "w7-c-운영체제-동기화-q1",
+      "q": "프로세스 Pi에 문장 A가 있고 Pk에 문장 B가 있다. CPU를 어느 프로세스가 먼저 받는지와 무관하게 항상 A 다음 B의 순서로 실행되게 하려면 무엇을 사용해야 하며, 그 목적은 무엇인가?",
+      "a": "세마포어를 이용한 프로세스 간 동기화를 사용해야 한다. 목적은 서로 신호를 주고받아 스케줄링 결과와 무관하게 A가 먼저, B가 나중에 실행되도록 순서를 제어하는 것이다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "apply",
+      "reasoning": "강의는 Pi와 Pk 중 누가 CPU를 먼저 받아도 세마포어로 A 다음 B의 순서를 보장할 수 있다고 설명했다. 강조 신호가 2회이며 구체적인 적용 장면이 제시되어 응용형 출제가 가능하다.",
+      "sources": [
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L253",
+          "quote": "그러니까 pi가 cpu를 먼저 받건 pk가 먼저 받건 이렇게 세마포를 이용을 해 가지고 서로 신호를 해주면 항상 우리가 원하는 대로 A가 먼저 실행되고 B가 나중에 실행되도록 프로그램이 동작하는 그런 효과를 얻을 수 있는 것입니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L245",
+          "quote": "뭔가 이게 스케줄링 결과와 상관없이 프로그래머의 의도대로 반드시 A가 먼저 실행되고 난 후에 B가 실행되도록 하려면 프로세스들 사이에 동기화 방법을 써가지고 즉 순서를 제어해주는 메커니즘을 써서 언제나 이런 식으로 A 다음에 B가 실행되도록 강제로 그렇게 동작하도록 만들어줘야 됩니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L235",
+          "quote": "지금 보는 슬라이드는 세마포어가 어떤 프로그램 문장들의 실행 순서를 제어하는 데도 이용될 수 있음을 보여주는 그림입니다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-동기화-q2",
+      "q": "다음 중 강의에서 설명한 동기화의 효과를 가장 정확히 나타내는 것은? ① CPU 스케줄링 결과에 실행 순서를 맡긴다. ② 프로그래머가 의도한 문장 실행 순서를 스케줄링 결과와 무관하게 강제한다. ③ 두 문장 A와 B가 항상 동시에 실행되게 한다. ④ 프로세스 사이의 신호 교환을 없앤다.",
+      "a": "② 프로그래머가 의도한 문장 실행 순서를 스케줄링 결과와 무관하게 강제한다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "강의는 동기화를 '순서를 제어해 언제나 A 다음 B가 실행되게 하는 메커니즘'으로 설명했다. 강조 신호 2회를 반영해 동기화의 목적을 오개념과 구별하도록 했다.",
+      "sources": [
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L253",
+          "quote": "그러니까 pi가 cpu를 먼저 받건 pk가 먼저 받건 이렇게 세마포를 이용을 해 가지고 서로 신호를 해주면 항상 우리가 원하는 대로 A가 먼저 실행되고 B가 나중에 실행되도록 프로그램이 동작하는 그런 효과를 얻을 수 있는 것입니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L245",
+          "quote": "뭔가 이게 스케줄링 결과와 상관없이 프로그래머의 의도대로 반드시 A가 먼저 실행되고 난 후에 B가 실행되도록 하려면 프로세스들 사이에 동기화 방법을 써가지고 즉 순서를 제어해주는 메커니즘을 써서 언제나 이런 식으로 A 다음에 B가 실행되도록 강제로 그렇게 동작하도록 만들어줘야 됩니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L235",
+          "quote": "지금 보는 슬라이드는 세마포어가 어떤 프로그램 문장들의 실행 순서를 제어하는 데도 이용될 수 있음을 보여주는 그림입니다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-마이크로커널-q1",
+      "q": "다음 중 강의에서 마이크로커널에 반드시 남아야 한다고 설명한 기능이 아닌 것은? ① 하드웨어를 직접 제어하는 코드 ② 프로세스 메모리 영역 보호 ③ 프로세스 간 통신 ④ 모든 운영체제 기능을 커널 내부에 유지",
+      "a": "④ 모든 운영체제 기능을 커널 내부에 유지",
+      "difficulty": "medium",
+      "cognitiveLevel": "analyze",
+      "reasoning": "강의는 하드웨어 제어, 메모리 보호, 프로세스 간 통신, 스케줄링을 반드시 남겨야 할 기능으로 열거했다. 시험 언급 신호가 1회 있어 구성 요소를 구별하는 문제가 출제될 수 있다.",
+      "sources": [
+        {
+          "type": "transcript",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "#L31",
+          "quote": "단점은, 모놀로틱 보다 실행속도가 느리다."
+        },
+        {
+          "type": "transcript",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "#L10",
+          "quote": "하드웨어에 종속적인, 직접 제어해야하는 코드들, 프로세스 메모리 영역을 보호하는 기능들, 프로세스 간 통신 기능들, 어느 프로세스를 실행할지 스케줄링 기능은 꼭 남아야 한다."
+        },
+        {
+          "type": "transcript",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "#L8",
+          "quote": "커널의 크기가 작기 때문에 마이크로라는 이름이 붙었다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-마이크로커널-q2",
+      "q": "마이크로커널이 '마이크로'라고 불리는 이유와 모놀로틱 방식과 비교한 실행속도상의 단점을 함께 설명하라.",
+      "a": "커널의 크기가 작아서 마이크로커널이라고 부르며, 모놀로틱 방식보다 실행속도가 느리다는 단점이 있다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "명칭의 근거와 모놀로틱 대비 단점이 강의에서 직접 제시되었다. 강조 신호 1회와 시험 언급 신호 1회를 바탕으로 두 특징을 연결하는 문제가 예상된다.",
+      "sources": [
+        {
+          "type": "transcript",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "#L31",
+          "quote": "단점은, 모놀로틱 보다 실행속도가 느리다."
+        },
+        {
+          "type": "transcript",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "#L10",
+          "quote": "하드웨어에 종속적인, 직접 제어해야하는 코드들, 프로세스 메모리 영역을 보호하는 기능들, 프로세스 간 통신 기능들, 어느 프로세스를 실행할지 스케줄링 기능은 꼭 남아야 한다."
+        },
+        {
+          "type": "transcript",
+          "unit": "2주차",
+          "unitOrder": 2,
+          "locator": "#L8",
+          "quote": "커널의 크기가 작기 때문에 마이크로라는 이름이 붙었다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-상호배제mutualexclusion-q1",
+      "q": "프로세스 P1이 자원 R을 사용 중일 때 P2도 동시에 R을 사용하도록 허용한다면, 상호 배제 조건이 성립하는가? 이유를 설명하라.",
+      "a": "성립하지 않는다. 상호 배제에서는 한 번에 하나의 프로세스만 자원을 사용할 수 있어야 하기 때문이다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "apply",
+      "reasoning": "강의에서 자원의 독점적 사용을 반복 강조했으며 강조 신호가 5회다. 데드락 발생 상황의 선행 성질로도 직접 언급되었다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "7주차",
+          "unitOrder": 7,
+          "locator": "05_Deadlock_and_Starvation p.6",
+          "quote": "Only one process may use a resource at a time"
+        },
+        {
+          "type": "transcript",
+          "unit": "7주차",
+          "unitOrder": 7,
+          "locator": "#L77",
+          "quote": "데드락이 발생하는상황에서 자원을 할당받은 프로세스가 그 자원을 독점적으로 사용한다라는 거죠."
+        },
+        {
+          "type": "transcript",
+          "unit": "7주차",
+          "unitOrder": 7,
+          "locator": "#L77",
+          "quote": "먼저 mutual exclusion이라는 성질이 있어야 됩니다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-상호배제mutualexclusion-q2",
+      "q": "다음 중 상호 배제를 가장 정확히 나타내는 것은? ① 여러 프로세스가 한 자원을 동시에 사용한다. ② 한 번에 하나의 프로세스만 자원을 사용한다. ③ 자원을 할당받은 프로세스가 즉시 자원을 반환한다. ④ 모든 프로세스가 자원을 사용하지 않는다.",
+      "a": "② 한 번에 하나의 프로세스만 자원을 사용한다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "슬라이드의 핵심 문장인 'Only one process may use a resource at a time'을 상황별 보기와 구별하도록 구성했다. 강조 신호가 5회로 높아 핵심 조건을 판별하는 문제가 출제될 가능성이 높다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "7주차",
+          "unitOrder": 7,
+          "locator": "05_Deadlock_and_Starvation p.6",
+          "quote": "Only one process may use a resource at a time"
+        },
+        {
+          "type": "transcript",
+          "unit": "7주차",
+          "unitOrder": 7,
+          "locator": "#L77",
+          "quote": "데드락이 발생하는상황에서 자원을 할당받은 프로세스가 그 자원을 독점적으로 사용한다라는 거죠."
+        },
+        {
+          "type": "transcript",
+          "unit": "7주차",
+          "unitOrder": 7,
+          "locator": "#L77",
+          "quote": "먼저 mutual exclusion이라는 성질이 있어야 됩니다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-세마포어와semwaitsignal-q1",
+      "q": "세마포어 S의 초깃값이 3일 때 SEM wait(S)를 한 번 수행한 직후와 이어서 SEM signal(S)를 한 번 수행한 직후의 S 값을 각각 구하라.",
+      "a": "SEM wait 직후에는 2이고, 이어서 SEM signal까지 수행한 직후에는 3이다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "apply",
+      "reasoning": "강의에서 SEM wait는 값을 먼저 1 감소시키고 SEM signal은 1 증가시킨다고 설명했으며 강조 신호가 4회다. 두 연산의 차이를 계산에 적용하는 기본 문제가 유력하다.",
+      "sources": [
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L157",
+          "quote": "사용자 프로그램이 샘시그널 함수를 이 Semsignal 함수를 부르면 운영체제가 S의 세마포 값을 1 증가시킵니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L143",
+          "quote": "same weight 함수는 세마포 변수값을 먼저 1 감소시킵니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L141",
+          "quote": "네, 그러면 세마포의 동작을 이해하기 위해서는 샘웨이트하고 샘시그널이 어떤 일을 하는지를 이것을 이해할 필요가 있습니다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-세마포어와semwaitsignal-q2",
+      "q": "다음 중 SEM wait와 SEM signal의 동작을 반대로 설명한 것은? ① SEM wait는 세마포 값을 먼저 1 감소시킨다. ② SEM signal은 운영체제가 세마포 값을 1 증가시킨다. ③ SEM wait는 세마포 값을 먼저 1 증가시킨다. ④ 두 연산을 이해하는 것은 세마포 동작 이해에 필요하다.",
+      "a": "③ SEM wait는 세마포 값을 먼저 1 증가시킨다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "analyze",
+      "reasoning": "강의가 두 함수의 역할 이해를 세마포 동작 이해의 핵심으로 강조했다. 강조 신호 4회를 반영해 서로 반대되는 증감 동작을 구별하도록 출제했다.",
+      "sources": [
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L157",
+          "quote": "사용자 프로그램이 샘시그널 함수를 이 Semsignal 함수를 부르면 운영체제가 S의 세마포 값을 1 증가시킵니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L143",
+          "quote": "same weight 함수는 세마포 변수값을 먼저 1 감소시킵니다."
+        },
+        {
+          "type": "transcript",
+          "unit": "6주차",
+          "unitOrder": 6,
+          "locator": "#L141",
+          "quote": "네, 그러면 세마포의 동작을 이해하기 위해서는 샘웨이트하고 샘시그널이 어떤 일을 하는지를 이것을 이해할 필요가 있습니다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-프로세스제어블록pcb-q1",
+      "q": "새 프로세스를 생성할 때 가장 먼저 PCB를 만들어야 하는 이유는 무엇인가?",
+      "a": "새로 생성될 프로세스의 정보를 담을 공간이 필요하기 때문에 가장 먼저 해당 프로세스의 PCB를 만들어야 한다.",
+      "difficulty": "easy",
+      "cognitiveLevel": "understand",
+      "reasoning": "강의에서 새 프로세스를 만들 때 가장 먼저 할 일로 PCB 생성을 직접 제시했다. 강조 신호 2회이며 생성 절차와 PCB의 역할을 연결하는 핵심 질문이다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "02_Process_description_and_Control p.12",
+          "quote": "Process Control Block (PCB)"
+        },
+        {
+          "type": "transcript",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "#L138",
+          "quote": "가장 먼저 해야할 일은 새로 만들어져야하는 프로세스의 정보를 담기 위해서 PCB를 만들어야한다."
+        },
+        {
+          "type": "transcript",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "#L7",
+          "quote": "그리고 프로세스에 대한 정보를 저장하는 PCB들이 시스템 컨텍스트를 구성한다."
+        }
+      ]
+    },
+    {
+      "id": "w7-c-운영체제-프로세스제어블록pcb-q2",
+      "q": "다음 중 PCB와 시스템 컨텍스트의 관계를 강의 내용에 맞게 설명한 것은? ① PCB는 프로세스 정보를 저장하며, 이러한 PCB들이 시스템 컨텍스트를 구성한다. ② PCB는 프로세스 정보를 저장하지만 시스템 컨텍스트와는 관계없다. ③ 시스템 컨텍스트가 PCB 내부의 한 항목이다. ④ PCB는 새 프로세스가 종료된 뒤에 처음 생성된다.",
+      "a": "① PCB는 프로세스 정보를 저장하며, 이러한 PCB들이 시스템 컨텍스트를 구성한다.",
+      "difficulty": "medium",
+      "cognitiveLevel": "analyze",
+      "reasoning": "강의는 프로세스 정보를 저장하는 PCB들이 시스템 컨텍스트를 구성한다고 명시했다. 강조 신호 2회를 반영해 PCB의 개별 역할과 시스템 수준의 관계를 함께 판별하도록 했다.",
+      "sources": [
+        {
+          "type": "slide",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "02_Process_description_and_Control p.12",
+          "quote": "Process Control Block (PCB)"
+        },
+        {
+          "type": "transcript",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "#L138",
+          "quote": "가장 먼저 해야할 일은 새로 만들어져야하는 프로세스의 정보를 담기 위해서 PCB를 만들어야한다."
+        },
+        {
+          "type": "transcript",
+          "unit": "3주차",
+          "unitOrder": 3,
+          "locator": "#L7",
+          "quote": "그리고 프로세스에 대한 정보를 저장하는 PCB들이 시스템 컨텍스트를 구성한다."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,759 @@
+{
+  "subject": "데이터통신",
+  "unit": "3주차",
+  "unitOrder": 3,
+  "bySource": {
+    "transcript": {
+      "concepts": [
+        {
+          "name": "아날로그-디지털 변환",
+          "importance": 77,
+          "examSignal": 100
+        },
+        {
+          "name": "주파수",
+          "importance": 63,
+          "examSignal": 100
+        },
+        {
+          "name": "IP 주소",
+          "importance": 41,
+          "examSignal": 55
+        },
+        {
+          "name": "헤르츠",
+          "importance": 40,
+          "examSignal": 47
+        },
+        {
+          "name": "PCM(펄스 코드 변조)",
+          "importance": 31,
+          "examSignal": 47
+        },
+        {
+          "name": "푸리에 변환",
+          "importance": 43,
+          "examSignal": 42
+        },
+        {
+          "name": "변조/복조",
+          "importance": 27,
+          "examSignal": 40
+        },
+        {
+          "name": "포트 번호",
+          "importance": 31,
+          "examSignal": 31
+        },
+        {
+          "name": "계층별 식별자",
+          "importance": 29,
+          "examSignal": 22
+        },
+        {
+          "name": "광케이블/파장",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "모스 부호",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "아스키 코드",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "디지털 신호",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "오류 탐지와 복구",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "사인파",
+          "importance": 27,
+          "examSignal": 14
+        },
+        {
+          "name": "샘플링(샘플)",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "아날로그 신호",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "양자화",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "진폭(크기)",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "WAV 파일 포맷",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "리드-솔로몬 코드",
+          "importance": 12,
+          "examSignal": 8
+        },
+        {
+          "name": "MAC 주소",
+          "importance": 22,
+          "examSignal": 7
+        },
+        {
+          "name": "사인 함수",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "프레임",
+          "importance": 18,
+          "examSignal": 0
+        },
+        {
+          "name": "위상",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "물리 계층",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [
+        {
+          "quote": "지난주에 이거 잘 기억해야 됩니다.",
+          "locator": "02:07",
+          "concept": "계층별 식별자"
+        },
+        {
+          "quote": "여러분들이 이런 거는 코드 이렇게 GPT 시켜도 여러분들이 의미는 알아야 될 게 3학년이죠.",
+          "locator": "23:21",
+          "concept": "사인파"
+        },
+        {
+          "quote": "라이브러리 중에 우리 제일 많이 쓰는 거 그래서 사인 하우스 이렇게 만드는 걸 연습을 해봐야 됩니다.",
+          "locator": "24:39",
+          "concept": "사인파"
+        },
+        {
+          "quote": "그렇죠 그래서 사인 함수의 속성 크기 주파수 위상 세 가지를 꼭 잘 기억해야 그래서 이 만드는 자체는 통신 이런 쪽에서 전문적으로 합니다.",
+          "locator": "29:13",
+          "concept": "사인 함수"
+        },
+        {
+          "quote": "이게 핵심 이게 통신의 원리입니다.",
+          "locator": "42:46",
+          "concept": "디지털 신호"
+        },
+        {
+          "quote": "그래서 데이터 통신에서는 오류 탐지가 기본이다.",
+          "locator": "53:32",
+          "concept": "오류 탐지와 복구"
+        },
+        {
+          "quote": "기억이 그게 모르면 안 돼 이것도 오늘 할 건 아니고 일단 용어가 후회라는 게 있고",
+          "locator": "55:52",
+          "concept": "푸리에 변환"
+        },
+        {
+          "quote": "오늘의 하이라이트입니다.",
+          "locator": "1:03:55",
+          "concept": "푸리에 변환"
+        },
+        {
+          "quote": "그 알 수 있게 해주는 수학적인 도구가 프레이 변화는 이게 왜 중요하냐 사실 모든 통신이 다 써요.",
+          "locator": "1:08:12",
+          "concept": "푸리에 변환"
+        },
+        {
+          "quote": "중에 제일 중요한 게 멀티미디어 비디오 오디오 다룰 때는 정보의 양이 너무 커서 압축을 합니다.",
+          "locator": "1:18:57",
+          "concept": "PCM(펄스 코드 변조)"
+        },
+        {
+          "quote": "이 두 가지 변수는 앞으로 여러 가지 데이터를 표현할 때 자주 나옵니다.",
+          "locator": "1:20:06",
+          "concept": "헤르츠"
+        }
+      ],
+      "examHints": [
+        {
+          "quote": "와이파이 시험이다 시험 근데 무선 우리 여러 번 얘기했고요.",
+          "locator": "10:08",
+          "concept": "주파수"
+        }
+      ],
+      "questionIds": [
+        "w3-c-데이터통신-ip주소-q1",
+        "w3-c-데이터통신-ip주소-q2",
+        "w3-c-데이터통신-아날로그디지털변환-q1",
+        "w3-c-데이터통신-아날로그디지털변환-q2",
+        "w3-c-데이터통신-주파수-q1",
+        "w3-c-데이터통신-헤르츠-q1",
+        "w3-c-데이터통신-헤르츠-q2"
+      ]
+    },
+    "slide": {
+      "concepts": [
+        {
+          "name": "나이퀴스트 샘플링 정리",
+          "importance": 22,
+          "examSignal": 32
+        },
+        {
+          "name": "모스 부호",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "아스키 코드",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "디지털 신호",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "샘플링(샘플)",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "아날로그 신호",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "양자화",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "진폭(크기)",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "사인 함수",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "위상",
+          "importance": 10,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": []
+    },
+    "exam": {
+      "concepts": [
+        {
+          "name": "아날로그-디지털 변환",
+          "importance": 77,
+          "examSignal": 100
+        },
+        {
+          "name": "대역폭",
+          "importance": 71,
+          "examSignal": 100
+        },
+        {
+          "name": "주파수",
+          "importance": 63,
+          "examSignal": 100
+        },
+        {
+          "name": "IP 주소",
+          "importance": 41,
+          "examSignal": 55
+        },
+        {
+          "name": "헤르츠",
+          "importance": 40,
+          "examSignal": 47
+        },
+        {
+          "name": "PCM(펄스 코드 변조)",
+          "importance": 31,
+          "examSignal": 47
+        },
+        {
+          "name": "도커(Docker)",
+          "importance": 38,
+          "examSignal": 44
+        },
+        {
+          "name": "OSI 7계층",
+          "importance": 31,
+          "examSignal": 40
+        },
+        {
+          "name": "변조/복조",
+          "importance": 27,
+          "examSignal": 40
+        },
+        {
+          "name": "네트워크 계층 구조",
+          "importance": 33,
+          "examSignal": 39
+        },
+        {
+          "name": "나이퀴스트 샘플링 정리",
+          "importance": 22,
+          "examSignal": 32
+        },
+        {
+          "name": "포트 번호",
+          "importance": 31,
+          "examSignal": 31
+        },
+        {
+          "name": "가상화(Virtualization)",
+          "importance": 31,
+          "examSignal": 29
+        },
+        {
+          "name": "이더넷",
+          "importance": 32,
+          "examSignal": 24
+        },
+        {
+          "name": "DNS",
+          "importance": 32,
+          "examSignal": 24
+        },
+        {
+          "name": "UDP",
+          "importance": 31,
+          "examSignal": 24
+        },
+        {
+          "name": "네트워크 인터페이스(ifconfig/ipconfig)",
+          "importance": 26,
+          "examSignal": 23
+        },
+        {
+          "name": "계층별 식별자",
+          "importance": 29,
+          "examSignal": 22
+        },
+        {
+          "name": "도커 네트워킹",
+          "importance": 22,
+          "examSignal": 16
+        },
+        {
+          "name": "라우팅 테이블",
+          "importance": 22,
+          "examSignal": 16
+        },
+        {
+          "name": "ping/traceroute",
+          "importance": 20,
+          "examSignal": 16
+        },
+        {
+          "name": "광케이블/파장",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "모스 부호",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "아스키 코드",
+          "importance": 16,
+          "examSignal": 16
+        },
+        {
+          "name": "디지털 신호",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "오류 탐지와 복구",
+          "importance": 17,
+          "examSignal": 15
+        },
+        {
+          "name": "샘플링(샘플)",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "아날로그 신호",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "양자화",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "진폭(크기)",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "WAV 파일 포맷",
+          "importance": 13,
+          "examSignal": 8
+        },
+        {
+          "name": "리드-솔로몬 코드",
+          "importance": 12,
+          "examSignal": 8
+        }
+      ],
+      "emphasis": [],
+      "examHints": [
+        {
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층",
+          "locator": "2025-Q1",
+          "concept": "계층별 식별자"
+        },
+        {
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층",
+          "locator": "2025-Q1",
+          "concept": "네트워크 계층 구조"
+        },
+        {
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층",
+          "locator": "2025-Q1",
+          "concept": "포트 번호"
+        },
+        {
+          "quote": "-tn은 전송계층, -rn은 네트워크 계층",
+          "locator": "2025-Q1",
+          "concept": "라우팅 테이블"
+        },
+        {
+          "quote": "시간당 전송된 비트 수 = 대역폭",
+          "locator": "2025-Q2",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "시간당 전송된 비트 수 = 대역폭",
+          "locator": "2025-Q2",
+          "concept": "헤르츠"
+        },
+        {
+          "quote": "대역폭을 이용한 계산 문제",
+          "locator": "2025-Q3",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "대역폭을 이용한 계산 문제",
+          "locator": "2025-Q3",
+          "concept": "나이퀴스트 샘플링 정리"
+        },
+        {
+          "quote": "대역폭을 이용한 계산 문제",
+          "locator": "2025-Q3",
+          "concept": "헤르츠"
+        },
+        {
+          "quote": "전화 다중화는 T1 ~ T4",
+          "locator": "2025-Q4",
+          "concept": "PCM(펄스 코드 변조)"
+        },
+        {
+          "quote": "전화 다중화는 T1 ~ T4",
+          "locator": "2025-Q4",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "해저 케이블로 이동하는 시간은 전파 지연 시간(거리)",
+          "locator": "2025-Q5",
+          "concept": "광케이블/파장"
+        },
+        {
+          "quote": "해저 케이블로 이동하는 시간은 전파 지연 시간(거리)",
+          "locator": "2025-Q5",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "CIDR 문제 꼭 풀어보기 (컴퓨터융합학부 할당, 인공지능 할당…)",
+          "locator": "2025-Q6",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "실습: THRESHOLD보다 커야 소리로 인식",
+          "locator": "2025-Q7",
+          "concept": "진폭(크기)"
+        },
+        {
+          "quote": "실습: THRESHOLD보다 커야 소리로 인식",
+          "locator": "2025-Q7",
+          "concept": "아날로그-디지털 변환"
+        },
+        {
+          "quote": "실습: THRESHOLD보다 커야 소리로 인식",
+          "locator": "2025-Q7",
+          "concept": "WAV 파일 포맷"
+        },
+        {
+          "quote": "iperf는 bandwidth를 측정해 주는 것",
+          "locator": "2025-Q8",
+          "concept": "대역폭"
+        },
+        {
+          "quote": "UDP는 연결 과정 필요 없음",
+          "locator": "2025-Q9",
+          "concept": "UDP"
+        },
+        {
+          "quote": "네트워크 5계층에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q1",
+          "concept": "OSI 7계층"
+        },
+        {
+          "quote": "네트워크 5계층에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q1",
+          "concept": "네트워크 계층 구조"
+        },
+        {
+          "quote": "아날로그와 디지털에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q2",
+          "concept": "아날로그 신호"
+        },
+        {
+          "quote": "아날로그와 디지털에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q2",
+          "concept": "디지털 신호"
+        },
+        {
+          "quote": "아날로그와 디지털에 대한 설명으로 틀린 것은?",
+          "locator": "2022-Q2",
+          "concept": "아날로그-디지털 변환"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "나이퀴스트 샘플링 정리"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "샘플링(샘플)"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "PCM(펄스 코드 변조)"
+        },
+        {
+          "quote": "사람 목소리 전송 비트레이트 계산 문제",
+          "locator": "2022-Q3",
+          "concept": "양자화"
+        },
+        {
+          "quote": "TDM 계산 문제",
+          "locator": "2022-Q4",
+          "concept": "PCM(펄스 코드 변조)"
+        },
+        {
+          "quote": "OSI 7계층 나열 순서",
+          "locator": "2023-Q1",
+          "concept": "OSI 7계층"
+        },
+        {
+          "quote": "노이즈가 있는 신호에서 최대 비트 전송률",
+          "locator": "2023-Q2",
+          "concept": "나이퀴스트 샘플링 정리"
+        },
+        {
+          "quote": "노이즈가 있는 신호에서 최대 비트 전송률",
+          "locator": "2023-Q2",
+          "concept": "헤르츠"
+        },
+        {
+          "quote": "전화 연결 방식 T1에 대한 것으로 옳은 것",
+          "locator": "2023-Q3",
+          "concept": "PCM(펄스 코드 변조)"
+        },
+        {
+          "quote": "QAM에서 8개의 신호를 구분 가능할 때 1초에 N개의 신호를 보내고 있다면 최대 비트 전송률은?",
+          "locator": "2023-Q4",
+          "concept": "변조/복조"
+        },
+        {
+          "quote": "QAM에서 8개의 신호를 구분 가능할 때 1초에 N개의 신호를 보내고 있다면 최대 비트 전송률은?",
+          "locator": "2023-Q4",
+          "concept": "나이퀴스트 샘플링 정리"
+        },
+        {
+          "quote": "학과 순서대로 서브넷 주소 할당을 위한 IP의 CIDR 표기",
+          "locator": "2023-Q5",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "도커 연결 실습 빈 칸",
+          "locator": "2023-Q6",
+          "concept": "도커(Docker)"
+        },
+        {
+          "quote": "도커 연결 실습 빈 칸",
+          "locator": "2023-Q6",
+          "concept": "도커 네트워킹"
+        },
+        {
+          "quote": "모스 부호 전송 실습 빈 칸",
+          "locator": "2023-Q7",
+          "concept": "모스 부호"
+        },
+        {
+          "quote": "다중화(multiplexing) 시간을 나누어서 다중화하는 TDM은 이더넷에서 사용되지 않는다(다음 중 옳은 것은? 문제 정답)",
+          "locator": "2023-Q1",
+          "concept": "이더넷"
+        },
+        {
+          "quote": "다중화(multiplexing) 시간을 나누어서 다중화하는 TDM은 이더넷에서 사용되지 않는다(다음 중 옳은 것은? 문제 정답)",
+          "locator": "2023-Q1",
+          "concept": "PCM(펄스 코드 변조)"
+        },
+        {
+          "quote": "요구 조건을 만족하는 IP 주소범위를 CIDR로 표기",
+          "locator": "2023-Q2",
+          "concept": "IP 주소"
+        },
+        {
+          "quote": "영화 매트릭스 관련 문제 2개 나옴",
+          "locator": "2023-Q3",
+          "concept": "가상화(Virtualization)"
+        },
+        {
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)",
+          "locator": "2025-Q1",
+          "concept": "네트워크 인터페이스(ifconfig/ipconfig)"
+        },
+        {
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)",
+          "locator": "2025-Q1",
+          "concept": "DNS"
+        },
+        {
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)",
+          "locator": "2025-Q1",
+          "concept": "포트 번호"
+        },
+        {
+          "quote": "네트워크 분석에 사용되는 도구 중 다음 명령어들에 대한 설명으로 옳지 않은 것을 골라라 (ipconfig, netstat, nslookup)",
+          "locator": "2025-Q1",
+          "concept": "라우팅 테이블"
+        },
+        {
+          "quote": "traceroute (어떤 해외 사이트 누구cd.jp) 명령어의 결과cmd창을 보여주고, 어디서 지연이 크게 발생하였는지",
+          "locator": "2025-Q2",
+          "concept": "ping/traceroute"
+        },
+        {
+          "quote": "블루투스의 특징과 활용되는 사례에 대한 설명으로 옳지 않은 것 고르기 (FHSS, 블루투스가 대역폭이 넓어 대역폭인지 등 알아야 함)",
+          "locator": "2025-Q3",
+          "concept": "주파수"
+        },
+        {
+          "quote": "블루투스의 특징과 활용되는 사례에 대한 설명으로 옳지 않은 것 고르기 (FHSS, 블루투스가 대역폭이 넓어 대역폭인지 등 알아야 함)",
+          "locator": "2025-Q3",
+          "concept": "변조/복조"
+        },
+        {
+          "quote": "음성 데이터 통신의 활용 사례에 대한 설명으로 옳지 않은 것 고르기, 스타벅스 사이렌 오더나 고무줄놀이 노래할 때 쓰는 거 고르기",
+          "locator": "2025-Q4",
+          "concept": "변조/복조"
+        },
+        {
+          "quote": "음성 데이터 통신의 활용 사례에 대한 설명으로 옳지 않은 것 고르기, 스타벅스 사이렌 오더나 고무줄놀이 노래할 때 쓰는 거 고르기",
+          "locator": "2025-Q4",
+          "concept": "아날로그-디지털 변환"
+        },
+        {
+          "quote": "RF 주파수 대역별 활용사례에 대하여 옳지 않은 것 고르기 (라디오는 몇 대역폭을 쓰고, GPS는 몇 대역폭을 쓰고 등등)",
+          "locator": "2025-Q5",
+          "concept": "주파수"
+        },
+        {
+          "quote": "RF 주파수 대역별 활용사례에 대하여 옳지 않은 것 고르기 (라디오는 몇 대역폭을 쓰고, GPS는 몇 대역폭을 쓰고 등등)",
+          "locator": "2025-Q5",
+          "concept": "헤르츠"
+        },
+        {
+          "quote": "WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함",
+          "locator": "2025-Q6",
+          "concept": "변조/복조"
+        },
+        {
+          "quote": "WIFI 기술과 연관이 없는 것을 골라라 (QAM, PSK, 엔벨로프 인코딩, AM 중 멘토스터 인코딩이 정답). WIFI는 디지털 데이터를 아날로그 정보로 전송하는 기술임. 즉 DAC의 의미에는 QAM, PSK,ASK,FSK 등이 있음. AM의 경우 AAC인데, 와이파이 기술이 결국 아날로그 신호를 전송하니 이름 변조한 AM사용될 수도 있음. 엔벨로프 인코딩은 DDC에 해당함",
+          "locator": "2025-Q6",
+          "concept": "아날로그-디지털 변환"
+        },
+        {
+          "quote": "MFSK를 활용하여 16진수 유니코드를 전송하는 실습에 대하여 틀린 설명은?",
+          "locator": "2025-Q7",
+          "concept": "변조/복조"
+        },
+        {
+          "quote": "MFSK를 활용하여 16진수 유니코드를 전송하는 실습에 대하여 틀린 설명은?",
+          "locator": "2025-Q7",
+          "concept": "아스키 코드"
+        },
+        {
+          "quote": "MFSK를 활용하여 16진수 유니코드를 전송하는 실습에 대하여 틀린 설명은?",
+          "locator": "2025-Q7",
+          "concept": "주파수"
+        },
+        {
+          "quote": "모스코드 소리로 통신하는 실습과 유니코드 소리로 전송하는 실습을 비교한 것으로 틀린 설명은? 햇갈리 선지: 둘 다 송수신에 뭔들 사용해야만 정확히 송수신을 할 수 있다(x 모스코드 실습은 그렇지 않음). 두 실습의 두 비가비인데도 ...",
+          "locator": "2025-Q8",
+          "concept": "모스 부호"
+        },
+        {
+          "quote": "모스코드 소리로 통신하는 실습과 유니코드 소리로 전송하는 실습을 비교한 것으로 틀린 설명은? 햇갈리 선지: 둘 다 송수신에 뭔들 사용해야만 정확히 송수신을 할 수 있다(x 모스코드 실습은 그렇지 않음). 두 실습의 두 비가비인데도 ...",
+          "locator": "2025-Q8",
+          "concept": "아스키 코드"
+        },
+        {
+          "quote": "pied piper 프로젝트에 대한 설명으로 옳지 않은 것은? RSC 복구기술이 사용된 것이 아니라 FEC 솔로몬이 사용되었음",
+          "locator": "2025-Q9",
+          "concept": "리드-솔로몬 코드"
+        },
+        {
+          "quote": "pied piper 프로젝트에 대한 설명으로 옳지 않은 것은? RSC 복구기술이 사용된 것이 아니라 FEC 솔로몬이 사용되었음",
+          "locator": "2025-Q9",
+          "concept": "오류 탐지와 복구"
+        },
+        {
+          "quote": "자연시간의 요소: 전파시간(거리)과 진파지연시간을 명확히 구분해야 함",
+          "locator": "2025-Q10",
+          "concept": "광케이블/파장"
+        }
+      ],
+      "questionIds": []
+    }
+  }
+}

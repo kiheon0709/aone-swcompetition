@@ -1,0 +1,170 @@
+{
+  "subject": "운영체제",
+  "unit": "2주차",
+  "unitOrder": 2,
+  "bySource": {
+    "transcript": {
+      "concepts": [
+        {
+          "name": "마이크로커널",
+          "importance": 14,
+          "examSignal": 19
+        },
+        {
+          "name": "프로세스 중단 상태와 스와핑",
+          "importance": 18,
+          "examSignal": 14
+        },
+        {
+          "name": "프로세스 관리",
+          "importance": 23,
+          "examSignal": 7
+        },
+        {
+          "name": "사용자 모드와 커널 모드",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 5-상태 모델",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 제어 블록(PCB)",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "디스패처",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "컨텍스트 스위치",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "모놀리틱 커널",
+          "importance": 8,
+          "examSignal": 0
+        },
+        {
+          "name": "실행 컨텍스트",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [
+        {
+          "quote": "하드웨어에 종속적인, 직접 제어해야하는 코드들, 프로세스 메모리 영역을 보호하는 기능들, 프로세스 간 통신 기능들, 어느 프로세스를 실행할지 스케줄링 기능은 꼭 남아야 한다.",
+          "locator": "#L10",
+          "concept": "마이크로커널"
+        },
+        {
+          "quote": "<중요>",
+          "locator": "#L57",
+          "concept": "사용자 모드와 커널 모드"
+        },
+        {
+          "quote": "이 상태도는 완전히 외울것!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+          "locator": "#L171",
+          "concept": "프로세스 5-상태 모델"
+        },
+        {
+          "quote": "suspended 의미, 쓰는 이유를 알아야한다.z",
+          "locator": "#L201",
+          "concept": "프로세스 중단 상태와 스와핑"
+        },
+        {
+          "quote": "suspended 핵심은 메모리에서 쫓아내자는거임.",
+          "locator": "#L209",
+          "concept": "프로세스 중단 상태와 스와핑"
+        },
+        {
+          "quote": "중요한건 프로세스마다 하나의 PCB를 할당한다는 점을 잊지말아야한다.",
+          "locator": "#L246",
+          "concept": "프로세스 제어 블록(PCB)"
+        }
+      ],
+      "examHints": [
+        {
+          "quote": "[심화] 페이지 시험범위는 아님",
+          "locator": "#L28",
+          "concept": "마이크로커널"
+        }
+      ],
+      "questionIds": [
+        "w2-c-운영체제-마이크로커널-q1",
+        "w2-c-운영체제-마이크로커널-q2",
+        "w2-c-운영체제-사용자모드와커널모드-q1",
+        "w2-c-운영체제-사용자모드와커널모드-q2",
+        "w2-c-운영체제-프로세스관리-q1",
+        "w2-c-운영체제-프로세스관리-q2",
+        "w2-c-운영체제-프로세스중단상태와스와핑-q1",
+        "w2-c-운영체제-프로세스중단상태와스와핑-q2"
+      ]
+    },
+    "slide": {
+      "concepts": [
+        {
+          "name": "프로세스 중단 상태와 스와핑",
+          "importance": 18,
+          "examSignal": 14
+        },
+        {
+          "name": "프로세스 관리",
+          "importance": 23,
+          "examSignal": 7
+        },
+        {
+          "name": "사용자 모드와 커널 모드",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 5-상태 모델",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "프로세스 제어 블록(PCB)",
+          "importance": 14,
+          "examSignal": 7
+        },
+        {
+          "name": "디스패처",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "컨텍스트 스위치",
+          "importance": 10,
+          "examSignal": 0
+        },
+        {
+          "name": "실행 컨텍스트",
+          "importance": 8,
+          "examSignal": 0
+        }
+      ],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": [
+        "w2-c-운영체제-사용자모드와커널모드-q1",
+        "w2-c-운영체제-사용자모드와커널모드-q2",
+        "w2-c-운영체제-프로세스관리-q1",
+        "w2-c-운영체제-프로세스관리-q2",
+        "w2-c-운영체제-프로세스중단상태와스와핑-q1",
+        "w2-c-운영체제-프로세스중단상태와스와핑-q2"
+      ]
+    },
+    "exam": {
+      "concepts": [],
+      "emphasis": [],
+      "examHints": [],
+      "questionIds": []
+    }
+  }
+}
