@@ -126,6 +126,15 @@ interface Proactive {
   questionIds?: string[];
 }
 
+/** 전역 에이전트 화면용 — 어느 수업에서 나온 제안인지까지 담은 능동 제안 */
+interface ProactiveItem extends Proactive {
+  subject: string;
+  unit: string;
+  unitOrder: number;
+  /** "데이터통신 · 3주차" */
+  lectureName: string;
+}
+
 interface QuestionSource {
   type: string;
   /** 근거가 나온 수업(unit) 이름 */
@@ -840,6 +849,8 @@ export default function Home() {
   const [allConcepts, setAllConcepts] = useState<
     (Concept & { lectureName: string })[]
   >([]);
+  /** 전 수업의 능동 제안 — 에이전트 화면 상단 카드 */
+  const [allProactive, setAllProactive] = useState<ProactiveItem[]>([]);
   const [consoleOpen, setConsoleOpen] = useState(false);
 
   // 완료 안내 — 새로 만들어진 예상문제 수 (퀴즈 탭 NEW 배지)
@@ -1242,19 +1253,30 @@ export default function Home() {
       const proactive = new Set<string>();
       const activities: (Activity & { lectureName: string })[] = [];
       const concepts: (Concept & { lectureName: string })[] = [];
-      for (const { subject, unit, folderKey, data } of results) {
+      // 에이전트 화면용 — 전 수업의 능동 제안을 병합 (본문 중복은 제거)
+      const proactiveItems: ProactiveItem[] = [];
+      const seenProactive = new Set<string>();
+      for (const { subject, unit, order, folderKey, data } of results) {
         if (!data) continue;
         const name = `${subject} · ${unit}`;
         if (data.proactive.length > 0) proactive.add(folderKey);
         for (const a of data.activities) activities.push({ ...a, lectureName: name });
         for (const c of data.concepts) concepts.push({ ...c, lectureName: name });
+        for (const p of data.proactive) {
+          if (seenProactive.has(p.text)) continue;
+          seenProactive.add(p.text);
+          proactiveItems.push({ ...p, subject, unit, unitOrder: order, lectureName: name });
+        }
       }
       // 시각 역순 — 최근 활동이 위로
       activities.sort((a, b) => b.ts.localeCompare(a.ts));
       concepts.sort((a, b) => b.examSignal - a.examSignal);
+      // 최신 주차가 위로 (같은 주차면 원래 순서 유지)
+      proactiveItems.sort((a, b) => b.unitOrder - a.unitOrder);
       setProactiveKeys(proactive);
       setAllActivities(activities);
       setAllConcepts(concepts);
+      setAllProactive(proactiveItems);
     });
     return () => {
       cancelled = true;
@@ -4198,6 +4220,12 @@ export default function Home() {
                 onStop={handleStopRun}
                 activities={allActivities}
                 concepts={allConcepts}
+                proactive={allProactive}
+                onOpenQuestion={(p, questionId) => {
+                  // 제안이 나온 수업의 퀴즈 탭을 열고 해당 문항을 펼친다
+                  selectUnit(p.subject, p.unit, "questions");
+                  setOpenQuestion(questionId);
+                }}
                 consoleOpen={consoleOpen}
                 onToggleConsole={() => setConsoleOpen((v) => !v)}
               />
@@ -6594,6 +6622,8 @@ function AgentGlobalView({
   onStop,
   activities,
   concepts,
+  proactive,
+  onOpenQuestion,
   consoleOpen,
   onToggleConsole,
 }: {
@@ -6616,10 +6646,15 @@ function AgentGlobalView({
   onStop: () => void;
   activities: (Activity & { lectureName: string })[];
   concepts: (Concept & { lectureName: string })[];
+  /** 전 수업 병합 능동 제안 — 에이전트가 먼저 건넨 말 */
+  proactive: ProactiveItem[];
+  onOpenQuestion: (p: ProactiveItem, questionId: string) => void;
   consoleOpen: boolean;
   onToggleConsole: () => void;
 }) {
   const running = runState === "running" || slideGenState === "running";
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
+  const suggestions = showAllSuggestions ? proactive : proactive.slice(0, 5);
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <div className="border-b border-black/[0.05] px-8 pb-5 pt-7">
@@ -6628,11 +6663,67 @@ function AgentGlobalView({
           에이전트
         </h1>
         <p className="mt-0.5 text-sm font-medium text-gray-400">
-          모든 수업의 분석 활동을 한곳에서 확인하세요
+          자료를 넣어두면 에이전트가 읽고, 시험에 나올 만한 것을 먼저 알려드려요
         </p>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto p-8">
+        {/* 에이전트가 먼저 건넨 말 — 능동 제안 카드 */}
+        {proactive.length > 0 && (
+          <section className="mb-8" data-testid="agent-proactive">
+            <h2 className="mb-1 text-sm font-semibold tracking-tight text-gray-900">
+              에이전트가 먼저 건넨 말 · {proactive.length}
+            </h2>
+            <p className="mb-3 text-xs text-gray-400">
+              묻지 않았는데 에이전트가 스스로 판단해 알려준 내용이에요
+            </p>
+            <ul className="space-y-2">
+              {suggestions.map((p, i) => {
+                const chip = toProactiveChip(p);
+                return (
+                  <li
+                    key={`${p.lectureName}-${i}`}
+                    className="glass-card rounded-2xl border border-primary/20 bg-primary/[0.06] px-5 py-3.5"
+                  >
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                      <span className="text-sm font-semibold text-gray-900">
+                        {chip.concept}
+                      </span>
+                      <span className="text-[11px] text-gray-400">
+                        {chip.evidence}
+                      </span>
+                      <span className="ml-auto shrink-0 text-[11px] font-medium text-gray-400">
+                        {p.lectureName}
+                      </span>
+                    </div>
+                    <p className="mt-1.5 text-[13px] leading-relaxed text-gray-700">
+                      {p.text}
+                    </p>
+                    {chip.questionIds.length > 0 && (
+                      <button
+                        onClick={() => onOpenQuestion(p, chip.questionIds[0])}
+                        className="press-scale mt-2 text-xs font-medium text-primary underline-offset-2 transition-opacity duration-200 hover:underline"
+                      >
+                        준비된 예상문제 보기 →
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+            {proactive.length > 5 && (
+              <button
+                onClick={() => setShowAllSuggestions((v) => !v)}
+                className="press-scale mt-2.5 rounded-xl px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors duration-200 hover:text-gray-800"
+              >
+                {showAllSuggestions
+                  ? "접기 ↑"
+                  : `${proactive.length - 5}개 더 보기 ↓`}
+              </button>
+            )}
+          </section>
+        )}
+
         {/* 현재 실행 상태 */}
         <section className="mb-8">
           <h2 className="mb-3 text-sm font-semibold tracking-tight text-gray-900">
@@ -6746,11 +6837,15 @@ function AgentGlobalView({
           )}
         </section>
 
-        {/* 전체 활동 이력 — 모든 수업 병합, 시각 역순 */}
+        {/* 전체 활동 이력 — 모든 수업 병합, 시각 역순. 기본 접힘(개발자용 상세) */}
         <section>
-          <h2 className="mb-3 text-sm font-semibold tracking-tight text-gray-900">
-            전체 활동 이력 · {activities.length}
-          </h2>
+          <details>
+            <summary className="mb-3 cursor-pointer list-none text-sm font-semibold tracking-tight text-gray-900 transition-colors duration-200 hover:text-primary">
+              전체 활동 이력 · {activities.length}
+              <span className="ml-1.5 text-xs font-normal text-gray-400">
+                펼치기 ↓
+              </span>
+            </summary>
           <ul className="space-y-2.5" data-testid="agent-all-activities">
             {activities.map((a, i) => (
               <li key={i} className="glass-card glass-card-hover rounded-xl p-3.5">
@@ -6772,6 +6867,7 @@ function AgentGlobalView({
               </li>
             )}
           </ul>
+          </details>
         </section>
       </div>
     </div>
