@@ -154,3 +154,60 @@ HEADER 1:08:12 at line 534
    `78d38a0`으로 실제 반영했다.
 
 ---
+
+## 2단계 — `/debug/figures` 배포 제외
+
+**커밋** — `PENDING`
+
+### 사전 확인 — 정말 미참조인가
+
+```
+=== who references slide-figures ===
+app/debug/figures/page.tsx:11:import { extractFigures, type SlideFigure } from "@/lib/slide-figures";
+=== who references debug/figures ===
+(none)
+```
+
+`lib/slide-figures.ts`를 쓰는 곳은 이 디버그 페이지 하나뿐이고, 이 페이지를 링크하는 곳은 없다.
+지시서의 "코드 어디서도 참조되지 않는다"가 실측으로 맞다.
+
+### 택한 방법과 이유
+
+`app/debug/figures/page.tsx` → **`app/_debug/figures-page.tsx`로 이동**했다.
+
+Next App Router는 **밑줄로 시작하는 폴더(`_debug`)를 private folder로 보고 라우트로 잡지 않는다.**
+그래서 `next build`가 아예 export하지 않는다. 고른 이유:
+
+- **"페이지만 제거"보다 나은 점** — 파일을 지우면 FIX 12를 이어서 할 때 디버그 화면을 다시 짜야 한다.
+  이동은 코드를 100% 보존하면서 라우트만 없앤다.
+- **"개발 환경에서만 열리게"보다 나은 점** — `output: "export"`는 정적 산출물이라 런타임 환경 분기가 없다.
+  `process.env.NODE_ENV`로 가려도 **HTML은 그대로 export되어 URL이 살아 있다.**
+  즉 "가리는 방식"이라 외부 노출이 실제로 안 없어진다. 반면 private folder는 산출물 자체가 안 생긴다.
+- 되돌리는 방법을 파일 헤더 주석에 적어뒀다 (`app/debug/figures/page.tsx`로 되돌리면 `/debug/figures` 부활).
+
+**그림 추출 로직은 손대지 않았다** — `lib/slide-figures.ts` 242줄 그대로.
+
+### 완료 기준
+
+| 항목 | 판정 | 실측 근거 |
+|---|---|---|
+| 라우트 목록에서 사라짐 | `[O]` | 빌드 로그 라우트가 4개→3개. `Generating static pages (6/6)` → `(5/5)`. `/debug/figures` 줄 없음 |
+| `out/`에 debug 경로 없음 | `[O]` | `ls out/debug` → `No such file or directory`. `find out -ipath "*debug*"` → **0건** |
+| 추출 로직 보존 | `[O]` | `wc -l lib/slide-figures.ts` → `242` |
+| 타입 검사 통과 | `[O]` | `npx tsc --noEmit` exit 0 |
+
+빌드 로그:
+
+```
+✓ Generating static pages (5/5)
+✓ Exporting (2/2)
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    81.7 kB         190 kB
+├ ○ /_not-found                            993 B         104 kB
+└ ○ /settings/engines                    5.91 kB         114 kB
+```
+
+배포는 6단계에서 3~5단계 결과와 함께 한 번에 한다 (지시서 6단계가 재배포를 담당).
+
+---

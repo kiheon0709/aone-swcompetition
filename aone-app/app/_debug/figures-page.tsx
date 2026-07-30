@@ -5,6 +5,12 @@
  * 잘림·오검출을 눈으로 확인하기 위한 임시 화면이며, 학습 카드에는 아직 연결하지 않는다.
  *
  * 확인 대상: 데이터통신 3주차 PDF 3개 (practice_01 / theory_01 / theory_02)
+ *
+ * ── 라우트가 아니다 (2단계) ──
+ * `app/_debug/`는 밑줄로 시작하므로 Next App Router가 라우트로 잡지 않는다.
+ * 그래서 `next build`가 이 화면을 export하지 않고, 배포 산출물에도 들어가지 않는다.
+ * FIX 12를 이어서 할 때는 이 파일을 `app/debug/figures/page.tsx`로 되돌리면
+ * `/debug/figures`로 다시 열린다. 추출 로직(`lib/slide-figures.ts`)은 그대로 둔다.
  */
 
 import { useEffect, useState } from "react";
