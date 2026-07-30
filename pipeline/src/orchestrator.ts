@@ -24,7 +24,7 @@ export interface UnitEvent {
   key: UnitKey;
 }
 
-interface TaskCtx {
+export interface TaskCtx {
   db: AoneDb;
   engine: LlmEngine;
   cfg: PipelineConfig;
@@ -35,13 +35,22 @@ interface TaskCtx {
   detail?: string;
 }
 
-interface Task {
+export interface Task {
   id: string;
   layer: "L0" | "L1" | "L2" | "L3" | "L4";
   deps: string[];
   /** 콘솔 시작 줄에 표시할 한국어 작업명 */
   title: string;
   run: (ctx: TaskCtx) => Promise<void>;
+}
+
+/** DAG 실행 결과 — 부분 실패를 호출부가 구분할 수 있게 (R7) */
+export interface DagResult {
+  done: Set<string>;
+  /** 태스크 id → 실패 메시지 */
+  failed: Map<string, string>;
+  /** 선행 실패로 실행하지 못한 태스크 id */
+  skipped: Set<string>;
 }
 
 /** unit 투입 이벤트에 대한 태스크 DAG 정의 */
@@ -222,7 +231,15 @@ function buildDag(cfg: PipelineConfig, hasExamUpload: boolean): Task[] {
       title: "학습노트 조립",
       run: async (ctx) => {
         const r = await composeNote(ctx.db, ctx.engine, ctx.cfg, ctx.key);
-        if (r.skipped) {
+        if (r.failed?.inherited) {
+          // LLM은 실패했지만 직전 노트를 승계했다 — 화면이 "낡은 노트"로 구분해야 한다 (R7)
+          ctx.db.log(
+            ctx.key,
+            "L4",
+            `통합 학습노트 실패 — 직전 노트 승계 (${r.markdownChars}자). 사유: ${r.failed.reason}`,
+          );
+          ctx.detail = `노트 생성 실패 → 직전 노트 승계 (${r.markdownChars}자)`;
+        } else if (r.skipped) {
           ctx.db.log(
             ctx.key,
             "L4",
@@ -283,21 +300,57 @@ function engineLabel(name: string): string {
  * DAG 실행기: 의존성 충족 순서대로 태스크를 실행하는 단순 상태머신.
  * 각 태스크의 시작/완료를 `[LN]` 접두사로 콘솔에 출력한다 (앱 에이전트 콘솔이 파싱).
  */
-async function runDag(tasks: Task[], ctx: TaskCtx): Promise<void> {
+// export는 테스트용 — 실패 주입으로 DAG 격리를 검증한다 (R7)
+export async function runDag(tasks: Task[], ctx: TaskCtx): Promise<DagResult> {
   const done = new Set<string>();
+  /** 실패한 태스크 — 이것에 의존하는 태스크는 건너뛴다 */
+  const failed = new Map<string, string>();
+  /** 선행 실패로 실행하지 못한 태스크 */
+  const skipped = new Set<string>();
   const pending = [...tasks];
+
   while (pending.length > 0) {
+    // 실행 가능 = 모든 선행이 성공. 선행이 실패·스킵된 태스크는 스킵으로 옮긴다.
+    // 스킵이 또 다른 스킵을 낳으므로(C→B→A) 더 이상 안 늘 때까지 반복한다.
+    for (;;) {
+      const blocked = pending.filter((t) =>
+        t.deps.some((d) => failed.has(d) || skipped.has(d)),
+      );
+      if (blocked.length === 0) break;
+      for (const t of blocked) {
+        skipped.add(t.id);
+        pending.splice(pending.indexOf(t), 1);
+        console.warn(`[${t.layer}] 건너뜀 — ${t.title} (선행 태스크 실패)`);
+      }
+    }
+
     const ready = pending.filter((t) => t.deps.every((d) => done.has(d)));
     if (ready.length === 0) {
+      if (pending.length === 0) break;
       throw new Error(`DAG 교착: 남은 태스크 ${pending.map((t) => t.id).join(", ")}`);
     }
+
     for (const task of ready) {
       const t0 = Date.now();
       const callsBefore = ctx.engine.usage?.calls ?? 0;
       ctx.detail = undefined;
       console.log(`[${task.layer}] ${task.title} — ${engineLabel(ctx.engine.name)} 호출 중…`);
 
-      await task.run(ctx);
+      // 태스크 하나가 실패해도 DAG 전체를 죽이지 않는다 (R7).
+      // 예전에는 여기 try/catch가 없어서 L4.note 실패가 L4.proactive까지 삼키고,
+      // 호출부의 `run && export`가 export를 아예 실행하지 않아 L2·L3 산출물이
+      // 화면에 도달하지 못했다.
+      try {
+        await task.run(ctx);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        failed.set(task.id, msg);
+        pending.splice(pending.indexOf(task), 1);
+        console.error(
+          `[${task.layer}] 실패 — ${task.title}: ${msg} (다른 태스크는 계속 진행)`,
+        );
+        continue;
+      }
 
       const calls = (ctx.engine.usage?.calls ?? 0) - callsBefore;
       const suffix = `(호출 ${calls}회, ${secs(Date.now() - t0)})`;
@@ -306,6 +359,8 @@ async function runDag(tasks: Task[], ctx: TaskCtx): Promise<void> {
       pending.splice(pending.indexOf(task), 1);
     }
   }
+
+  return { done, failed, skipped };
 }
 
 /** 이벤트 처리 진입점: unit 자료 투입 → DAG 실행 */
@@ -330,14 +385,25 @@ export async function handleUnitEvent(
     `[오케스트레이터] ${folderKeyOf(key)} 자료 ${materials}개 감지 — 태스크 ${dag.length}개 계획 (${layerPlan})`,
   );
 
-  await runDag(dag, { db, engine, cfg, key });
+  const result = await runDag(dag, { db, engine, cfg, key });
 
   const c = db.countsForUnit(key);
+  // 부분 실패를 화면이 구분할 수 있게 로그에 남긴다 (R7).
+  // 예: "노트만 없음" — 개념·문항은 살아 있는데 L4.note만 실패한 경우.
+  const failedIds = [...result.failed.keys()];
+  const partial =
+    failedIds.length > 0
+      ? ` · 실패 태스크 ${failedIds.join(", ")}` +
+        (result.skipped.size > 0 ? ` · 건너뜀 ${[...result.skipped].join(", ")}` : "")
+      : "";
   db.log(
     key,
     "orchestrator",
-    `${key.unit} 처리 완료 — 누적 개념 ${c.concepts}개, 이번 unit 신호 ${c.signals}건, 검증 통과 문항 ${c.questions}건`,
+    `${key.unit} 처리 ${failedIds.length > 0 ? "부분 완료" : "완료"} — 누적 개념 ${c.concepts}개, 이번 unit 신호 ${c.signals}건, 검증 통과 문항 ${c.questions}건${partial}`,
   );
+  for (const [id, msg] of result.failed) {
+    db.log(key, "orchestrator", `태스크 실패 — ${id}: ${msg}`);
+  }
 
   const calls = (engine.usage?.calls ?? 0) - callsBefore;
   console.log(

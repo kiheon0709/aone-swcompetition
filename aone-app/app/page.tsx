@@ -2018,6 +2018,29 @@ export default function Home() {
   }, [snapshot]);
 
   /** 카드 파싱이 되면 카드로, 안 되면 기존 통짜 마크다운으로 폴백한다 */
+  /**
+   * "노트만 없음"인가 (R7).
+   *
+   * L4.note가 실패하면 그 unit의 다른 산출물(개념·문항)은 살아 있는데 노트만 비어 있다.
+   * 그냥 "아직 없습니다"라고 하면 분석을 안 돌린 것처럼 보여, 사용자가 다시 돌려도
+   * 같은 자리에서 또 실패한다. 무엇이 됐고 무엇이 안 됐는지 구분해 보여준다.
+   *
+   * 판별 — 개념·문항은 있는데 노트가 없다. (분석 자체를 안 돌렸으면 개념도 0이다)
+   */
+  const noteOnlyMissing = useMemo(() => {
+    if (!snapshot || snapshot.note?.markdown) return false;
+    return snapshot.concepts.length > 0 || snapshot.questions.length > 0;
+  }, [snapshot]);
+
+  /** 노트 실패 사유 — 오케스트레이터가 활동 로그에 남긴다 (R7) */
+  const noteFailureReason = useMemo(() => {
+    if (!noteOnlyMissing) return null;
+    const hit = (snapshot?.activities ?? []).find(
+      (a) => /태스크 실패 — L4\.note|학습노트 실패/.test(a.text)
+    );
+    return hit?.text ?? null;
+  }, [noteOnlyMissing, snapshot]);
+
   const noteHasCards = useMemo(
     () =>
       snapshot?.note?.markdown
@@ -6158,8 +6181,13 @@ export default function Home() {
                                   className="h-6 w-6 text-gray-300"
                                   aria-hidden
                                 />,
-                                "강의 요약이 아직 없습니다",
-                                "자료를 넣으면 에이전트가 알아서 분석합니다. 지금 바로 실행할 수도 있어요.",
+                                noteOnlyMissing
+                                  ? "학습노트만 만들어지지 않았어요"
+                                  : "강의 요약이 아직 없습니다",
+                                noteOnlyMissing
+                                  ? `개념 ${snapshot?.concepts.length ?? 0}개와 예상문제 ${snapshot?.questions.length ?? 0}개는 정상적으로 만들어졌습니다. 학습노트 생성만 실패했어요 — 다시 실행하면 노트만 다시 만듭니다.` +
+                                    (noteFailureReason ? ` (${noteFailureReason})` : "")
+                                  : "자료를 넣으면 에이전트가 알아서 분석합니다. 지금 바로 실행할 수도 있어요.",
                                 analyzeButton,
                                 "note-empty"
                               )

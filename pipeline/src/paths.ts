@@ -13,6 +13,7 @@
  *   usage.json= <PROJECT_ROOT>/../aone-app/public/snapshots/usage.json
  *   export    = aone-app/public/snapshots|slides (플랫)
  */
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { UnitKey } from "./folders.js";
@@ -53,6 +54,19 @@ export function usagePath(): string {
   return process.env.AONE_DATA
     ? path.join(process.env.AONE_DATA, "usage.json")
     : path.resolve(PROJECT_ROOT, "..", "aone-app", "public", "snapshots", "usage.json");
+}
+
+/**
+ * LLM 실패 덤프 디렉토리 (R7).
+ * 모델이 실제로 뭘 반환했는지 남기지 않아 원인 규명이 매번 막혔다.
+ * env AONE_DATA/logs, 없으면 pipeline/logs.
+ */
+export function logsDir(): string {
+  const dir = process.env.AONE_DATA
+    ? path.join(process.env.AONE_DATA, "logs")
+    : path.join(PROJECT_ROOT, "logs");
+  fs.mkdirSync(dir, { recursive: true });
+  return dir;
 }
 
 /** 개발 폴백 슬라이드 병합 디렉토리 (플랫) */

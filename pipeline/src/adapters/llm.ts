@@ -17,6 +17,7 @@ import os from "node:os";
 import path from "node:path";
 import { z } from "zod";
 import type { Utterance, SlideDoc, PastExamItem } from "../layers/l1-normalize.js";
+import { logsDir } from "../paths.js";
 
 // ─────────────────────────────────────────────────────────────
 // 공통 인터페이스
@@ -972,7 +973,7 @@ class ClaudeCliEngine extends RetryingCliEngine {
             if (envelope.is_error) {
               throw new Error(`claude-cli 오류 응답: ${String(envelope.result).slice(0, 300)}`);
             }
-            resolve(req.schema.parse(extractJson(envelope.result ?? stdout)));
+            resolve(parseOrDump(req.schema, envelope.result ?? stdout, req.task, this.name));
           } catch (e) {
             reject(e);
           }
@@ -1049,7 +1050,7 @@ class CodexCliEngine extends RetryingCliEngine {
               throw new Error("codex-cli: 출력 파일이 생성되지 않음 — GPT 연결 필요 (설정에서 연결)");
             }
             const lastMessage = fs.readFileSync(outFile, "utf8");
-            resolve(req.schema.parse(extractJson(lastMessage)));
+            resolve(parseOrDump(req.schema, lastMessage, req.task, this.name));
           } catch (e) {
             reject(e);
           } finally {
@@ -1159,7 +1160,7 @@ class GeminiApiEngine extends RetryingCliEngine {
 
     const text = (data.candidates?.[0]?.content?.parts ?? []).map((p) => p.text ?? "").join("");
     if (!text.trim()) throw new Error(`gemini-api: 응답 텍스트가 비어 있음 (${bodyText.slice(0, 200)})`);
-    return req.schema.parse(extractJson(text));
+    return parseOrDump(req.schema, text, req.task, this.name);
   }
 }
 
@@ -1191,6 +1192,59 @@ export const TimetableOutput = z.object({
 export type TimetableOutputT = z.infer<typeof TimetableOutput>;
 
 /** 모델 응답 텍스트에서 JSON 본문 추출 (코드펜스/전후 잡음 허용) */
+/**
+ * 모델 응답을 파싱하되, **실패하면 원문을 파일로 덤프한다** (R7).
+ *
+ * 예전에는 `req.schema.parse(extractJson(text))`가 예외만 던지고 원문을 버려서
+ * "모델이 실제로 뭘 반환했는지"가 어디에도 남지 않았다. 에러 메시지도 160자로 잘린다.
+ * 그래서 지난 배치에서 6·7주차 노트 실패 원인을 끝내 규명하지 못했다.
+ *
+ * 덤프 위치: `logsDir()/llm-fail-{task}-{n}.txt` (AONE_DATA/logs 또는 pipeline/logs)
+ */
+export function parseOrDump<T>(
+  schema: { parse: (v: unknown) => T },
+  text: string,
+  task: string,
+  engine: string,
+): T {
+  try {
+    return schema.parse(extractJson(text));
+  } catch (e) {
+    const reason = e instanceof Error ? e.message : String(e);
+    let dumped = "";
+    try {
+      // 같은 task가 여러 번 실패해도 덮어쓰지 않게 순번을 붙인다
+      const dir = logsDir();
+      const safe = task.replace(/[^\w.-]/g, "_");
+      let n = 1;
+      let file = path.join(dir, `llm-fail-${safe}-${n}.txt`);
+      while (fs.existsSync(file) && n < 100) {
+        n += 1;
+        file = path.join(dir, `llm-fail-${safe}-${n}.txt`);
+      }
+      fs.writeFileSync(
+        file,
+        [
+          `task: ${task}`,
+          `engine: ${engine}`,
+          `error: ${reason}`,
+          `bytes: ${text.length}`,
+          "",
+          "──── 모델 응답 원문 ────",
+          text,
+        ].join("\n"),
+      );
+      dumped = file;
+    } catch {
+      // 덤프 실패가 본 오류를 가리면 안 된다 — 조용히 넘어간다
+    }
+    throw new Error(
+      `${task} 응답 파싱 실패: ${reason}` +
+        (dumped ? ` — 응답 원문: ${dumped}` : " (원문 덤프 실패)"),
+    );
+  }
+}
+
 export function extractJson(text: string): unknown {
   const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/);
   const body = fenced ? fenced[1] : text;

@@ -384,6 +384,11 @@ export interface NoteResult {
   markdownChars: number;
   /** true면 델타 없음으로 LLM 호출을 건너뛰고 직전 노트를 유지 */
   skipped: boolean;
+  /**
+   * LLM 호출이 실패해 직전 노트를 승계했는가 (R7).
+   * 화면이 "노트만 없음/낡음"을 구분해 표시할 수 있게 실패 사유를 함께 싣는다.
+   */
+  failed?: { reason: string; inherited: boolean };
 }
 
 /**
@@ -477,12 +482,30 @@ export async function composeNote(
         "출력은 markdown 필드 하나의 JSON으로만.",
       ].join("\n");
 
-  const out = await engine.call({
-    task: "compose_note",
-    payload,
-    schema: ComposeNoteOutput,
-    prompt: buildPrompt("compose_note", instructions, payload, `{"markdown":"# ..."}`),
-  });
+  // LLM 호출 실패가 이 unit 전체를 삼키지 않게 한다 (R7).
+  // 실패해도 직전 노트를 승계해 화면에 "빈 노트" 대신 "낡은 노트"가 남게 한다.
+  // 승계할 노트조차 없으면 그때만 throw한다 (호출부가 태스크 실패로 처리).
+  let out: { markdown: string };
+  try {
+    out = await engine.call({
+      task: "compose_note",
+      payload,
+      schema: ComposeNoteOutput,
+      prompt: buildPrompt("compose_note", instructions, payload, `{"markdown":"# ..."}`),
+    });
+  } catch (e) {
+    const reason = e instanceof Error ? e.message : String(e);
+    if (prior && prior.trim() !== "") {
+      db.upsertNote(key, prior);
+      return {
+        concepts: 0,
+        markdownChars: prior.length,
+        skipped: true,
+        failed: { reason, inherited: true },
+      };
+    }
+    throw e;
+  }
 
   db.upsertNote(key, out.markdown);
   return { concepts: payload.concepts.length, markdownChars: out.markdown.length, skipped: false };

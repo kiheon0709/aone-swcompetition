@@ -187,16 +187,20 @@ fn build_analysis_cmd(
     out_dir: Option<&std::path::Path>,
 ) -> Result<Command, String> {
     let conc = concurrency_flag(cli_engine);
+    // `run && export`였다 — run이 실패하면 export가 아예 안 돌아서
+    // L2·L3가 DB에 저장한 개념·근거·문항이 화면에 도달하지 못했다 (R7).
+    // 이제 run 결과와 무관하게 export를 돌리고, run의 종료 코드는 보존해
+    // 호출부가 완전 실패/부분 실패를 구분할 수 있게 한다.
     let script = match out_dir {
         None => format!(
-            "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} {conc} \
-             && npx tsx src/cli.ts export --subject \"$1\" --unit \"$2\""
+            "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} {conc}; \
+             rc=$?; npx tsx src/cli.ts export --subject \"$1\" --unit \"$2\"; exit $rc"
         ),
         Some(out) => {
             let out = out.to_string_lossy();
             format!(
-                "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} {conc} \
-                 && npx tsx src/cli.ts export --subject \"$1\" --unit \"$2\" --out '{out}'"
+                "npx tsx src/cli.ts run --subject \"$1\" --unit \"$2\" --engine {cli_engine} {conc}; \
+                 rc=$?; npx tsx src/cli.ts export --subject \"$1\" --unit \"$2\" --out '{out}'; exit $rc"
             )
         }
     };
@@ -236,7 +240,9 @@ fn build_analysis_cmd(
             )
         }
     };
-    let script = format!("{run} && {export}");
+    // `&&`가 아니다 — run이 실패해도 export가 돌아야 부분 산출물이 화면에 도달한다 (R7).
+    // run의 종료 코드(errorlevel)를 보존해 호출부가 실패를 구분한다.
+    let script = format!("{run} & set RC=%ERRORLEVEL% & {export} & exit /b %RC%");
     let mut cmd = Command::new("cmd");
     cmd.args(["/C", &script]);
     Ok(cmd)
