@@ -35,10 +35,8 @@ interface ExamImage {
   label: string;
 }
 
-const EXAM_IMAGES: ExamImage[] = [
-  { src: "/exams/exam-2018-1.png", label: "2018 중간 · 문제지" },
-  { src: "/exams/exam-2012-1.jpg", label: "2012 중간 · 문제지" },
-];
+// 모듈 상수였다 — 어떤 과목의 족보를 열어도 데이터통신 스캔 2장이 떴고,
+// 사용자가 올린 스캔은 어디에도 안 나왔다. 이제 props로 받는다 (R7-7).
 
 /**
  * 문제 문장에서 관련 개념 태그 추출.
@@ -52,13 +50,16 @@ interface ExamViewerProps {
   raw: string | null;
   /** 스냅샷 개념명 — 문항 태그 매칭용 */
   concepts: string[];
+  /** 이 폴더의 실제 스캔 이미지 (매니페스트에서 온다) */
+  images?: ExamImage[];
 }
 
 /**
  * 기출 뷰어 — 연도별 카드 + 이미지 갤러리.
  * 원시 JSON은 절대 노출하지 않는다. 파싱 실패 시 안내 문구만 보여준다.
  */
-export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
+export default function ExamViewer({ raw, concepts, images }: ExamViewerProps) {
+  const EXAM_IMAGES = images ?? [];
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   // 라이트박스: ←/→/Esc
@@ -89,6 +90,11 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
 
   // 연도 내림차순 (최신 기출 먼저)
   const exams = doc ? [...doc.exams].sort((a, b) => b.year - a.year) : [];
+  /** 텍스트 족보 문항 총수 — "36문항" 표기의 근거 */
+  const totalQuestions = exams.reduce(
+    (n, e) => n + (Array.isArray(e.example_questions) ? e.example_questions.length : 0),
+    0
+  );
 
   return (
     <div className="space-y-8" data-testid="exam-viewer">
@@ -109,7 +115,10 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
       <section>
         <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-gray-900">
           <ScrollText className="h-4 w-4 text-primary" aria-hidden />
-          연도별 기출 · {exams.length}건
+          텍스트 족보 · {totalQuestions}문항
+          <span className="font-normal text-gray-400">
+            ({exams.length}개 연도)
+          </span>
         </h3>
 
         {raw === null ? (
@@ -194,15 +203,17 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
         )}
       </section>
 
-      {/* 이미지 족보 갤러리 */}
+      {/* 스캔 족보 갤러리 — 폴더의 실제 이미지 파일. 없으면 섹션 자체를 숨긴다 */}
+      {EXAM_IMAGES.length > 0 && (
       <section data-testid="exam-gallery">
         <h3 className="mb-1 flex items-center gap-2 text-sm font-semibold tracking-tight text-gray-900">
           <Images className="h-4 w-4 text-primary" aria-hidden />
-          2012~2018 기출 (이미지)
+          스캔 족보 · {EXAM_IMAGES.length}장
         </h3>
-        <p className="mb-3 text-xs text-gray-400">
-          스캔·촬영한 족보 이미지도 그대로 올려두면 함께 보관됩니다 · 이미지{" "}
-          {EXAM_IMAGES.length}장
+        {/* 위 "텍스트 족보 N문항"과 나란히 있으면 문항 수에 스캔이 포함된다고
+            오해된다. 스캔은 파이프라인을 거치지 않아 분석에 쓰이지 않는다. */}
+        <p className="mb-3 text-xs text-amber-700">
+          참고용 · 분석에 사용되지 않음 — 스캔·촬영한 족보는 원본 그대로 보관만 합니다
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {EXAM_IMAGES.map((img, i) => (
@@ -217,7 +228,9 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
               <img
                 src={img.src}
                 alt={img.label}
-                loading="lazy"
+                /* 이 앱은 본문이 내부 스크롤 컨테이너라 loading="lazy"가 발동하지 않는다
+                   (실측: 뷰포트 안인데 currentSrc가 null). eager로 바꾸면 즉시 로드된다. */
+                loading="eager"
                 className="h-32 w-full object-cover object-top"
               />
               <span className="block truncate px-2 py-1.5 text-[11px] font-medium text-gray-500 group-hover:text-gray-900">
@@ -227,6 +240,7 @@ export default function ExamViewer({ raw, concepts }: ExamViewerProps) {
           ))}
         </div>
       </section>
+      )}
 
       {/* 라이트박스 — 확대 + 좌우 이동 */}
       {lightbox !== null && (

@@ -180,6 +180,16 @@
           "order": 7,
           "files": [
             {
+              "name": "exam-2012-1.jpg",
+              "kind": "past_exam",
+              "size": 580729
+            },
+            {
+              "name": "exam-2018-1.png",
+              "kind": "past_exam",
+              "size": 928873
+            },
+            {
               "name": "past_exam_2025_raw.txt",
               "size": 84,
               "kind": "past_exam"

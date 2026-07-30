@@ -2077,6 +2077,23 @@ export default function Home() {
     return displayFilesByKey.get(lecture.folderKey) ?? [];
   }, [lecture, displayFilesByKey]);
 
+  /**
+   * 족보 폴더의 스캔 이미지 (R7-7).
+   * 예전에는 `ExamViewer`에 모듈 상수로 박혀 있어 **어떤 과목의 족보를 열어도**
+   * 데이터통신 스캔 2장이 떴고, 사용자가 올린 스캔은 어디에도 안 나왔다.
+   * 이제 매니페스트의 실제 파일에서 만든다.
+   */
+  const examImages = useMemo(() => {
+    if (!lecture) return [];
+    return lectureEntries
+      .filter((f) => /\.(png|jpe?g|webp)$/i.test(f.name))
+      .map((f) => ({
+        src: docUrl(lecture.folderKey, f.name),
+        // 파일명이 곧 라벨이다 — 확장자만 뗀다 (사용자가 붙인 이름을 존중)
+        label: f.name.replace(/\.[^.]+$/, ""),
+      }));
+  }, [lecture, lectureEntries]);
+
   /** 족보 폴더 안의 past_exam 원본 파일 (연도별 카드용 raw) */
   const examFolderFile = useMemo(
     () => lectureFiles.find((d) => isPastExam(d.entry, lectureFolder)) ?? null,
@@ -5139,6 +5156,7 @@ export default function Home() {
                                         concepts={
                                           snapshot?.concepts.map((c) => c.name) ?? []
                                         }
+                                        images={examImages}
                                       />
                                     )}
                                   </div>
@@ -5267,6 +5285,7 @@ export default function Home() {
                                 concepts={
                                   snapshot?.concepts.map((c) => c.name) ?? []
                                 }
+                                images={examImages}
                               />
                             )}
                           </section>
