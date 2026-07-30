@@ -13,7 +13,7 @@ import NoteCards from "./NoteCards";
 // 연습 모드(퀴즈 탭)와 같은 답 입력칸·출처 목록을 쓴다 (FIX 5)
 import { AnswerInput, SourceList } from "./QuizTab";
 import { parseNoteCards } from "@/lib/note-cards";
-import { parseConceptSource } from "@/lib/transcript";
+import { parseConceptSource, parsePageSource } from "@/lib/transcript";
 import {
   AlertTriangle,
   CalendarPlus,
@@ -371,13 +371,15 @@ interface Props {
   onGoUnit: (subject: string, unit: string) => void;
   /** 발화 시각 근거 클릭 → 그 수업 전사본의 해당 블록으로 (FIX 14) */
   onGoEvidence?: (subject: string, unit: string, anchor: string) => void;
+  /** 페이지 근거 클릭 → 그 슬라이드 문서의 해당 쪽으로 */
+  onGoPage?: (subject: string, unit: string, doc: string, page: number) => void;
 }
 
 /**
  * 시험 대비 화면 — 학기 데이터가 쌓인 뒤의 결말.
  * 우선 복습 개념 TOP 10 · 전 범위 학습노트(내보내기) · 전 범위 모의고사.
  */
-export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit, onGoEvidence }: Props) {
+export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit, onGoEvidence, onGoPage }: Props) {
   const [segment, setSegment] = useState<Segment>("guide");
   const [snapshots, setSnapshots] = useState<LoadedSnapshot[] | null>(null);
   /** 시험 범위 — 선택된 unit 이름 집합. null = 전체 */
@@ -975,6 +977,11 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit, onGoEvid
                 ? (unit, anchor) => onGoEvidence(exam.subject, unit, anchor)
                 : undefined
             }
+            onGoPage={
+              onGoPage
+                ? (unit, doc, page) => onGoPage(exam.subject, unit, doc, page)
+                : undefined
+            }
           />
         ) : segment === "note" ? (
           <NoteSection
@@ -1030,6 +1037,7 @@ function ConceptCard({
   merged,
   onGoUnit,
   onGoEvidence,
+  onGoPage,
 }: {
   concept: GuideDoc["concepts"][number];
   index: number;
@@ -1038,6 +1046,7 @@ function ConceptCard({
   merged?: MergedConcept;
   onGoUnit: (unit: string) => void;
   onGoEvidence?: (unit: string, anchor: string) => void;
+  onGoPage?: (unit: string, doc: string, page: number) => void;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -1090,22 +1099,34 @@ function ConceptCard({
           {concept.source &&
             (() => {
               // 발화 시각 근거면 전사본으로 이동한다 (FIX 14).
-              // 매칭이 안 되는 근거는 링크를 걸지 않고 회색 텍스트로 둔다.
               const ev = parseConceptSource(concept.source);
-              if (!ev || !onGoEvidence)
+              if (ev && onGoEvidence)
                 return (
-                  <p className="mt-2 text-[11px] text-gray-400">
-                    근거 · {concept.source}
-                  </p>
+                  <button
+                    onClick={() => onGoEvidence(ev.unit, ev.anchor)}
+                    data-testid="concept-evidence-link"
+                    className="press-scale mt-2 text-[11px] font-medium text-primary underline-offset-2 transition-opacity duration-200 hover:underline"
+                  >
+                    근거 · {concept.source} →
+                  </button>
                 );
+              // 페이지 근거면 그 슬라이드 문서의 해당 쪽을 연다.
+              const pg = parsePageSource(concept.source);
+              if (pg && onGoPage)
+                return (
+                  <button
+                    onClick={() => onGoPage(pg.unit, pg.doc, pg.page)}
+                    data-testid="concept-page-link"
+                    className="press-scale mt-2 text-[11px] font-medium text-primary underline-offset-2 transition-opacity duration-200 hover:underline"
+                  >
+                    근거 · {concept.source} →
+                  </button>
+                );
+              // 어느 쪽으로도 해석 안 되는 근거는 링크를 걸지 않는다 (억지 연결 금지)
               return (
-                <button
-                  onClick={() => onGoEvidence(ev.unit, ev.anchor)}
-                  data-testid="concept-evidence-link"
-                  className="press-scale mt-2 text-[11px] font-medium text-primary underline-offset-2 transition-opacity duration-200 hover:underline"
-                >
-                  근거 · {concept.source} →
-                </button>
+                <p className="mt-2 text-[11px] text-gray-400">
+                  근거 · {concept.source}
+                </p>
               );
             })()}
 
@@ -1232,6 +1253,7 @@ function GuideSection({
   mergedByName,
   onGoUnit,
   onGoEvidence,
+  onGoPage,
 }: {
   guide: GuideSnapshot | null;
   /** 이 시험 범위의 전체 개념 수 — 배너 숫자와 같은 대상 (가이드 상위 N과 구분) */
@@ -1249,6 +1271,7 @@ function GuideSection({
   mergedByName: Map<string, MergedConcept>;
   onGoUnit: (unit: string) => void;
   onGoEvidence?: (unit: string, anchor: string) => void;
+  onGoPage?: (unit: string, doc: string, page: number) => void;
 }) {
   const logLine = guideLogTail.trim().split("\n").filter(Boolean).pop() ?? "";
 
@@ -1381,6 +1404,7 @@ function GuideSection({
                   merged={mergedByName.get(c.name)}
                   onGoUnit={onGoUnit}
                   onGoEvidence={onGoEvidence}
+                  onGoPage={onGoPage}
                 />
               ))}
             </ol>

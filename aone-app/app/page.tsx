@@ -844,6 +844,17 @@ export default function Home() {
   const [pendingDocOpen, setPendingDocOpen] = useState<{
     folderKey: string;
     doc: string;
+    /** 페이지 근거로 들어온 경우 그 페이지까지 이동한다 (없으면 1쪽) */
+    page?: number;
+  } | null>(null);
+
+  /**
+   * 페이지 근거로 들어온 목표 쪽 — 문서가 열린 뒤에 적용한다.
+   * `slideDocKey`가 바뀌면 `docPage`가 1로 초기화되므로 그 다음 커밋에서 넣어야 한다.
+   */
+  const [pendingDocPage, setPendingDocPage] = useState<{
+    doc: string;
+    page: number;
   } | null>(null);
 
   // 진행 스트립 — 실행 중인 수업 · 현재 단계 · 경과 시간 · LLM 호출 수
@@ -1452,8 +1463,25 @@ export default function Home() {
       ) ?? lectureEntries.find((f) => docKeyOf(f.name) === pendingDocOpen.doc);
     setSlideDocKey(pendingDocOpen.doc);
     if (entry) setOpenFile(entry);
+    // 페이지 근거로 들어왔으면 그 쪽으로 이동한다.
+    // slideDocKey 변경 effect가 docPage를 1로 되돌리므로 여기서 바로 넣으면 덮인다.
+    // 문서가 실제로 열린 뒤 적용하도록 보류해 둔다 (pendingTranscript와 같은 방식).
+    setPendingDocPage(
+      pendingDocOpen.page && pendingDocOpen.page > 1
+        ? { doc: pendingDocOpen.doc, page: pendingDocOpen.page }
+        : null
+    );
     setPendingDocOpen(null);
   }, [pendingDocOpen, lecture, lectureEntries]);
+
+  // 페이지 근거 목표 쪽 적용 — 문서가 실제로 바뀐 뒤에 넣는다.
+  // ("문서를 바꾸면 1페이지부터" effect보다 뒤에 선언되어 같은 커밋에서 이긴다)
+  useEffect(() => {
+    if (!pendingDocPage) return;
+    if (slideDocKey !== pendingDocPage.doc) return;
+    setDocPage(pendingDocPage.page);
+    setPendingDocPage(null);
+  }, [pendingDocPage, slideDocKey]);
 
   // 전사문 원문 로드 (전사 탭)
   useEffect(() => {
@@ -4310,6 +4338,15 @@ export default function Home() {
                   setPendingTranscript({
                     folderKey: folderKeyOf(subject, unit),
                     anchor,
+                  });
+                }}
+                onGoPage={(subject, unit, doc, page) => {
+                  // 페이지 근거 — 그 슬라이드 문서를 열고 해당 쪽으로 이동한다
+                  selectUnit(subject, unit);
+                  setPendingDocOpen({
+                    folderKey: folderKeyOf(subject, unit),
+                    doc,
+                    page,
                   });
                 }}
               />

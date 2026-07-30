@@ -65,7 +65,7 @@ export const isTranscriptLocator = (locator: string): boolean =>
  * 개념 카드의 source 문자열을 수업+앵커로 쪼갠다.
  *   "1주차 03:38"  → { unit: "1주차", anchor: "t-03:38" }
  *   "5주차 #L19"   → { unit: "5주차", anchor: "l-19" }
- *   "2주차 (이론)… p.7" → null (페이지 근거는 이 경로가 아니다)
+ *   "2주차 (이론)… p.7" → null (페이지 근거는 parsePageSource가 맡는다)
  */
 export const parseConceptSource = (
   source: string,
@@ -74,6 +74,24 @@ export const parseConceptSource = (
   if (!m) return null;
   const anchor = locatorToAnchor(m[2]);
   return anchor ? { unit: m[1], anchor } : null;
+};
+
+/**
+ * 페이지 근거 source를 수업 + 문서명 + 페이지로 쪼갠다.
+ *   "2주차 (이론) 1-1-데이터통신-layer-packet-signal-공개 p.6"
+ *     → { unit: "2주차", doc: "(이론) 1-1-데이터통신-layer-packet-signal-공개", page: 6 }
+ *
+ * 문서명은 files.json의 파일명에서 ".pdf"만 뗀 것과 같다(실측 확인).
+ * 발화 시각 근거가 아닌 것만 여기로 온다.
+ */
+export const parsePageSource = (
+  source: string,
+): { unit: string; doc: string; page: number } | null => {
+  const m = source.trim().match(/^(\S+주차)\s+(.+?)\s+p\.(\d+)$/);
+  if (!m) return null;
+  const page = Number(m[3]);
+  if (!Number.isFinite(page) || page < 1) return null;
+  return { unit: m[1], doc: m[2], page };
 };
 
 /**
