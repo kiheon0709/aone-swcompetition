@@ -237,7 +237,50 @@ const formatClock = (sec: number) => {
  * 표시 조각
  * ══════════════════════════════════════════════════════════════ */
 
-function SourceList({ sources }: { sources: QuestionSource[] }) {
+/**
+ * 서술형 답 입력칸 (FIX 5에서 분리) — 연습 모드와 모의고사가 같은 것을 쓴다.
+ * 채점이 끝났거나 복습 화면이면 입력 대신 쓴 답을 그대로 보여준다.
+ */
+export function AnswerInput({
+  questionId,
+  answer,
+  onAnswer,
+  readOnly,
+}: {
+  questionId: string;
+  answer: string;
+  onAnswer: (v: string) => void;
+  readOnly: boolean;
+}) {
+  return (
+    <div className="mt-6">
+      <label
+        className="mb-2 block text-xs font-semibold text-gray-700"
+        htmlFor={`ans-${questionId}`}
+      >
+        내 답안
+      </label>
+      {readOnly ? (
+        <p className="whitespace-pre-wrap rounded-xl bg-black/[0.03] px-4 py-3 text-[15px] leading-relaxed text-gray-700">
+          {answer.trim() ? answer : "(빈 답안)"}
+        </p>
+      ) : (
+        <textarea
+          id={`ans-${questionId}`}
+          data-testid="quiz-answer-input"
+          rows={4}
+          value={answer}
+          onChange={(e) => onAnswer(e.target.value)}
+          placeholder="답을 자유롭게 적어보세요. 확인을 누르면 모범답안과 대조합니다."
+          className="w-full resize-y rounded-xl border border-black/[0.08] bg-white/70 px-4 py-3 text-[15px] leading-relaxed text-gray-800 outline-none transition-colors duration-200 placeholder:text-gray-300 focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
+        />
+      )}
+    </div>
+  );
+}
+
+/** 근거 출처 접기 목록 — 모의고사(ExamPrep)에서도 같은 것을 쓴다 (FIX 5) */
+export function SourceList({ sources }: { sources: QuestionSource[] }) {
   const [open, setOpen] = useState(false);
   if (sources.length === 0) return null;
   return (
@@ -514,29 +557,12 @@ function QuestionCard({
 
       {/* ── 서술·계산형 — 입력 + 모범답안 대조 + 자기채점 ── */}
       {parsed.kind === "open" && (
-        <div className="mt-6">
-          <label
-            className="mb-2 block text-xs font-semibold text-gray-700"
-            htmlFor={`ans-${question.id}`}
-          >
-            내 답안
-          </label>
-          {graded || review ? (
-            <p className="whitespace-pre-wrap rounded-xl bg-black/[0.03] px-4 py-3 text-[15px] leading-relaxed text-gray-700">
-              {answer.trim() ? answer : "(빈 답안)"}
-            </p>
-          ) : (
-            <textarea
-              id={`ans-${question.id}`}
-              data-testid="quiz-answer-input"
-              rows={4}
-              value={answer}
-              onChange={(e) => onAnswer(e.target.value)}
-              placeholder="답을 자유롭게 적어보세요. 확인을 누르면 모범답안과 대조합니다."
-              className="w-full resize-y rounded-xl border border-black/[0.08] bg-white/70 px-4 py-3 text-[15px] leading-relaxed text-gray-800 outline-none transition-colors duration-200 placeholder:text-gray-300 focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
-            />
-          )}
-        </div>
+        <AnswerInput
+          questionId={question.id}
+          answer={answer}
+          onAnswer={onAnswer}
+          readOnly={graded || review}
+        />
       )}
 
       {/* ── 행동 버튼 ── */}

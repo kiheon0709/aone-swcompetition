@@ -10,6 +10,8 @@ import {
 } from "react";
 import { marked } from "marked";
 import NoteCards from "./NoteCards";
+// 연습 모드(퀴즈 탭)와 같은 답 입력칸·출처 목록을 쓴다 (FIX 5)
+import { AnswerInput, SourceList } from "./QuizTab";
 import { parseNoteCards } from "@/lib/note-cards";
 import { parseConceptSource } from "@/lib/transcript";
 import {
@@ -173,6 +175,8 @@ interface MockQuestion extends Question {
   unitOrder: number;
   /** 선별 점수 (시험신호 × 난이도) */
   score: number;
+  /** 문항 문장·해설에서 매칭된 개념 이름 — 결과 요약의 복습 목록에 쓴다 (FIX 5) */
+  concepts: string[];
 }
 
 export interface ExamInfo {
@@ -240,6 +244,8 @@ type Grade = "correct" | "wrong";
 interface MockState {
   /** 채점 결과 (제출 전에도 누적 저장) */
   grades: Record<string, Grade>;
+  /** 문항별로 쓴 답 (FIX 5) — 화면을 옮겨도 남아야 하므로 함께 저장한다 */
+  answers: Record<string, string>;
   /** 제출 완료 여부 */
   submitted: boolean;
   /** 소요 시간 (초) */
@@ -248,6 +254,7 @@ interface MockState {
 
 const emptyMockState = (): MockState => ({
   grades: {},
+  answers: {},
   submitted: false,
   elapsed: 0,
 });
@@ -260,6 +267,11 @@ const loadMockState = (): MockState => {
     return {
       grades:
         parsed.grades && typeof parsed.grades === "object" ? parsed.grades : {},
+      // answers는 v1 이후에 추가됐다 — 옛 저장분에는 없으므로 빈 객체로 시작한다
+      answers:
+        parsed.answers && typeof parsed.answers === "object"
+          ? parsed.answers
+          : {},
       submitted: Boolean(parsed.submitted),
       elapsed: typeof parsed.elapsed === "number" ? parsed.elapsed : 0,
     };
@@ -686,9 +698,12 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit, onGoEvid
         // 문항 id는 "w3-c-개념id-q1" 꼴 — 개념 이름으로 직접 맞추기 어려우니
         // 근거(sources)에 걸린 개념 신호 대신 문항이 인용한 개념 신호의 최대치를 쓴다.
         let signal = 0;
+        // 매칭된 개념 이름도 모아둔다 — 결과 요약의 "틀린 문항 개념"에 쓴다 (FIX 5)
+        const concepts: string[] = [];
         for (const [name, s] of signalOf) {
           if (q.q.includes(name) || q.reasoning.includes(name)) {
             signal = Math.max(signal, s);
+            concepts.push(name);
           }
         }
         // 기출(exam) 근거가 있으면 재출제 가능성이 높다
@@ -698,7 +713,7 @@ export default function ExamPrep({ exams, subjects, onGoHome, onGoUnit, onGoEvid
           signal +
           (DIFFICULTY_WEIGHT[q.difficulty] ?? 0) +
           examRefs * 20;
-        pool.push({ ...q, unit, unitOrder, score });
+        pool.push({ ...q, unit, unitOrder, score, concepts });
       }
     }
     return pool
@@ -1609,6 +1624,18 @@ function MockSection({ questions }: { questions: MockQuestion[] }) {
   const correct = Object.values(state.grades).filter(
     (g) => g === "correct"
   ).length;
+  const wrong = Object.values(state.grades).filter((g) => g === "wrong").length;
+  const ungraded = questions.length - graded;
+
+  /** 틀린 문항에 걸린 개념 (중복 제거) — 결과 요약의 복습 목록 (FIX 5) */
+  const wrongConcepts = useMemo(() => {
+    const names = new Set<string>();
+    for (const q of questions) {
+      if (state.grades[q.id] !== "wrong") continue;
+      for (const name of q.concepts) names.add(name);
+    }
+    return [...names];
+  }, [questions, state.grades]);
 
   const grade = (g: Grade) => {
     if (!current) return;
@@ -1653,9 +1680,30 @@ function MockSection({ questions }: { questions: MockQuestion[] }) {
             <span className="text-2xl text-gray-400">점</span>
           </p>
           <p className="mt-2 text-sm text-gray-500">
-            {questions.length}문항 중 {correct}문항 정답 · 소요{" "}
+            총 {questions.length}문항 · 맞음 {correct} · 틀림 {wrong}
+            {ungraded > 0 && ` · 미채점 ${ungraded}`} · 소요{" "}
             {fmtElapsed(state.elapsed)}
           </p>
+
+          {/* 틀린 문항의 개념 — 다시 볼 것 (FIX 5) */}
+          {wrongConcepts.length > 0 && (
+            <div className="mt-5 text-left" data-testid="examprep-mock-weak">
+              <p className="mb-2 text-xs font-semibold text-gray-700">
+                다시 볼 개념 · {wrongConcepts.length}개
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {wrongConcepts.map((name) => (
+                  <span
+                    key={name}
+                    className="rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-semibold text-red-500"
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           <button
             onClick={reset}
             data-testid="examprep-mock-reset"
@@ -1708,7 +1756,17 @@ function MockSection({ questions }: { questions: MockQuestion[] }) {
                 <p className="text-sm font-semibold leading-relaxed text-gray-900">
                   {q.q}
                 </p>
-                <p className="mt-2 whitespace-pre-wrap rounded-xl bg-black/[0.03] px-4 py-3 text-[13px] leading-relaxed text-gray-600">
+                {/* 내가 쓴 답 — 모범답안과 나란히 두고 다시 대조할 수 있게 (FIX 5) */}
+                <p className="mt-2 text-[11px] font-semibold text-gray-400">
+                  내 답안
+                </p>
+                <p className="mt-1 whitespace-pre-wrap rounded-xl bg-white/70 px-4 py-3 text-[13px] leading-relaxed text-gray-700">
+                  {(state.answers[q.id] ?? "").trim() || "(빈 답안)"}
+                </p>
+                <p className="mt-3 text-[11px] font-semibold text-primary">
+                  모범답안
+                </p>
+                <p className="mt-1 whitespace-pre-wrap rounded-xl bg-black/[0.03] px-4 py-3 text-[13px] leading-relaxed text-gray-600">
                   {q.a}
                 </p>
               </li>
@@ -1775,13 +1833,44 @@ function MockSection({ questions }: { questions: MockQuestion[] }) {
             {current.q}
           </p>
 
+          {/* 답 입력 — 연습 모드와 같은 컴포넌트를 쓴다 (FIX 5) */}
+          <AnswerInput
+            questionId={current.id}
+            answer={state.answers[current.id] ?? ""}
+            onAnswer={(v) =>
+              persist({
+                ...state,
+                answers: { ...state.answers, [current.id]: v },
+              })
+            }
+            readOnly={revealed}
+          />
+
           {revealed ? (
             <>
-              <p className="mt-5 whitespace-pre-wrap rounded-xl bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-gray-700">
-                {current.a}
-              </p>
+              <div className="mt-5 space-y-4 rounded-2xl bg-black/[0.025] p-5">
+                <div>
+                  <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                    모범답안
+                  </p>
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
+                    {current.a}
+                  </p>
+                </div>
+                {current.reasoning && (
+                  <div>
+                    <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                      왜 나올까
+                    </p>
+                    <p className="text-sm leading-relaxed text-gray-600">
+                      {current.reasoning}
+                    </p>
+                  </div>
+                )}
+                <SourceList sources={current.sources ?? []} />
+              </div>
               <p className="mt-4 text-xs font-medium text-gray-400">
-                스스로 채점하세요 — 맞았나요?
+                모범답안과 대조해 채점하세요 — 맞았나요?
               </p>
               <div className="mt-2 flex gap-2">
                 <button
@@ -1803,13 +1892,22 @@ function MockSection({ questions }: { questions: MockQuestion[] }) {
               </div>
             </>
           ) : (
-            <button
-              onClick={() => setRevealed(true)}
-              data-testid="examprep-mock-reveal"
-              className="press-scale mt-5 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover"
-            >
-              정답 확인
-            </button>
+            /* 답을 쓰기 전에는 정답을 열 수 없다 (FIX 5) */
+            <div className="mt-5 flex flex-wrap items-center gap-2.5">
+              <button
+                onClick={() => setRevealed(true)}
+                disabled={(state.answers[current.id] ?? "").trim() === ""}
+                data-testid="examprep-mock-reveal"
+                className="press-scale rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors duration-200 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                제출
+              </button>
+              {(state.answers[current.id] ?? "").trim() === "" && (
+                <span className="text-xs text-gray-400">
+                  답을 입력하면 모범답안과 대조할 수 있어요.
+                </span>
+              )}
+            </div>
           )}
 
           {/* 문항 이동 */}
