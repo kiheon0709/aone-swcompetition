@@ -40,6 +40,36 @@ export interface UnitInputs {
   transcriptMeta: { title: string | null; header: string | null };
   slides: SlideDoc[];
   pastExams: PastExamItem[];
+  /**
+   * 전사본 인식 결과 (R5). 화면·로그가 "왜 발화 근거가 0인가"를 설명할 수 있게 한다.
+   * `file`이 null이면 전사본을 못 찾았다는 뜻이고, 그때 `warning`에 사유가 담긴다.
+   */
+  transcriptSource: {
+    /** 채택한 전사본 파일명 (없으면 null) */
+    file: string | null;
+    /** 후보로 인식된 파일 전부 (2개 이상이면 선택 근거가 필요하다) */
+    candidates: string[];
+    /** 사용자에게 보여줄 경고 — 없으면 null */
+    warning: string | null;
+  };
+}
+
+/**
+ * 전사본 파일 판정 — **앱(Rust `classify`)과 같은 기준** (R5).
+ *
+ * 예전에는 `transcript.txt` 고정이었다. 앱은 `files.rs:133`에서
+ * `txt|md` 중 이름에 `transcript`·`전사`·`녹음`이 있으면 전사본으로 분류하고
+ * 원본 파일명 그대로 복사한다. 그래서 `데이터통신_1주차_전사.txt`를 넣으면
+ * **앱 UI는 "강의 녹음" 카드로 보여주는데 파이프라인은 발화 0건으로 돌았다.**
+ * 판정 규칙이 두 곳에 갈라져 있던 것 자체가 문제다.
+ *
+ * 규칙을 바꿀 때는 `aone-app/src-tauri/src/commands/files.rs`의 `classify`와
+ * `aone-app/lib/file-kind.ts`도 함께 고쳐야 한다.
+ */
+export function isTranscriptFileName(name: string): boolean {
+  const n = nfc(name).toLowerCase();
+  if (!/\.(txt|md)$/.test(n)) return false;
+  return ["transcript", "전사", "녹음"].some((w) => n.includes(w));
 }
 
 const SPEAKER_RE = /^참석자\s*\d+\s+(\d{1,2}:\d{2}(?::\d{2})?)\s*$/;
@@ -232,12 +262,47 @@ export function loadUnitInputs(goldsetDir: string, key: UnitKey, extractedDir?: 
 
   let transcript: Utterance[] = [];
   let transcriptMeta: UnitInputs["transcriptMeta"] = { title: null, header: null };
-  const transcriptPath = path.join(dir, "transcript.txt");
-  if (fs.existsSync(transcriptPath)) {
-    const parsed = parseTranscript(fs.readFileSync(transcriptPath, "utf8"));
+
+  // 전사본 탐색 — 앱과 같은 기준으로 찾는다 (R5).
+  // 여러 개면 "transcript.txt" > 가장 큰 파일 순으로 하나만 쓴다 (아래 근거).
+  const entries = fs.readdirSync(dir).filter((f) => !f.startsWith("."));
+  const candidates = entries.filter(isTranscriptFileName).sort();
+  let chosen: string | null = null;
+  let warning: string | null = null;
+
+  if (candidates.length === 0) {
+    warning =
+      "전사본이 인식되지 않아 강의 발화 근거 없이 분석됩니다. " +
+      "파일 이름에 'transcript'·'전사'·'녹음' 중 하나가 들어간 .txt/.md 파일을 넣어주세요.";
+  } else {
+    // 선택 규칙: 정확히 "transcript.txt"가 있으면 그것(기존 동작 보존),
+    // 없으면 가장 큰 파일. 전사본은 길수록 온전한 원본일 가능성이 높고,
+    // 잘린 발췌본·메모가 함께 있을 때 원본을 고르게 된다.
+    const exact = candidates.find((f) => nfc(f).toLowerCase() === "transcript.txt");
+    chosen =
+      exact ??
+      candidates
+        .map((f) => ({ f, size: fs.statSync(path.join(dir, f)).size }))
+        .sort((a, b) => b.size - a.size)[0].f;
+
+    if (candidates.length > 1) {
+      warning =
+        `전사본 후보가 ${candidates.length}개입니다 (${candidates.join(", ")}). ` +
+        `'${chosen}' 하나만 사용합니다.`;
+    }
+
+    const parsed = parseTranscript(fs.readFileSync(path.join(dir, chosen), "utf8"));
     transcript = parsed.utterances;
     transcriptMeta = { title: parsed.title, header: parsed.header };
+
+    if (transcript.length === 0) {
+      warning =
+        `전사본 '${chosen}'에서 발화를 하나도 읽지 못했습니다. ` +
+        "강의 발화 근거 없이 분석됩니다 (파일이 비었거나 형식이 다를 수 있습니다).";
+    }
   }
+
+  if (warning) console.warn(`  경고: ${warning}`);
 
   const slides: SlideDoc[] = [];
   for (const f of fs.readdirSync(dir).sort()) {
@@ -289,5 +354,12 @@ export function loadUnitInputs(goldsetDir: string, key: UnitKey, extractedDir?: 
     }
   }
 
-  return { key, transcript, transcriptMeta, slides, pastExams };
+  return {
+    key,
+    transcript,
+    transcriptMeta,
+    slides,
+    pastExams,
+    transcriptSource: { file: chosen, candidates, warning },
+  };
 }

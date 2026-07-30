@@ -94,6 +94,11 @@ function buildDag(cfg: PipelineConfig, hasExamUpload: boolean): Task[] {
           `${ctx.key.unit} 자료 정규화 — 전사 발화 ${ctx.inputs.transcript.length}건, 슬라이드 ${ctx.inputs.slides.length}종 ${slidePages}페이지` +
             (ctx.inputs.pastExams.length > 0 ? `, 기출 문항 ${ctx.inputs.pastExams.length}건` : ""),
         );
+        // 전사본 경고를 활동 로그에 남긴다 — 화면(에이전트 탭·활동 이력)이 읽는다 (R5).
+        // 조용히 통과시키면 "분석 완료"인데 발화 근거가 0인 상태를 사용자가 알 수 없다.
+        if (ctx.inputs.transcriptSource.warning) {
+          ctx.db.log(ctx.key, "L1", `전사본 경고 — ${ctx.inputs.transcriptSource.warning}`);
+        }
         ctx.detail =
           `전사 발화 ${ctx.inputs.transcript.length}건, 슬라이드 ${ctx.inputs.slides.length}종 ${slidePages}페이지` +
           (ctx.inputs.pastExams.length > 0 ? `, 기출 ${ctx.inputs.pastExams.length}건` : "");

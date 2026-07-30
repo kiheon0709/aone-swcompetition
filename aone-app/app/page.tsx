@@ -2137,6 +2137,17 @@ export default function Home() {
 
   /** 지금 열린 수업의 실패 정보 — 수업 화면 상단 실패 배너 (S5) */
   const lectureFailure = lecture ? failures[lecture.folderKey] ?? null : null;
+
+  /**
+   * 전사본 경고 (R5) — 파이프라인이 활동 로그에 남긴 것을 화면으로 끌어올린다.
+   * 이게 없으면 "분석 완료"인데 발화 근거가 0인 상태를 사용자가 알 수 없다.
+   */
+  const transcriptWarning = useMemo(() => {
+    const hit = (snapshot?.activities ?? []).find((a) =>
+      a.text.startsWith("전사본 경고 — ")
+    );
+    return hit ? hit.text.replace("전사본 경고 — ", "") : null;
+  }, [snapshot]);
   /** 에이전트 화면에 보여줄 전체 실패 목록 */
   const failureList = useMemo(() => Object.values(failures), [failures]);
 
@@ -4904,6 +4915,22 @@ export default function Home() {
                         )}
 
                         {/* 실패 배너 (S5) — 원인별 안내 + 다시 분석 / 설정 열기 */}
+                        {/* 전사본 경고 — 분석은 됐지만 발화 근거가 빠졌다 (R5) */}
+                        {transcriptWarning && !readerMode && (
+                          <div
+                            className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-amber-300/60 bg-amber-50 px-5 py-3"
+                            data-testid="transcript-warning-banner"
+                          >
+                            <AlertTriangle
+                              className="h-4 w-4 shrink-0 text-amber-600"
+                              aria-hidden
+                            />
+                            <p className="min-w-0 flex-1 text-sm font-medium leading-relaxed text-amber-800">
+                              {transcriptWarning}
+                            </p>
+                          </div>
+                        )}
+
                         {lectureFailure && !readerMode && (
                           <div
                             className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-red-200 bg-red-50 px-5 py-3"
