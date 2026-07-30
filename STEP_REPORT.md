@@ -6,7 +6,7 @@
 
 ## 1단계 — 배포
 
-**커밋** — `78d38a0` (선행 정리), 배포는 코드 변경 없음
+**커밋** — `deeec9b` (이 보고서) / `78d38a0` (선행 정리). 배포 자체는 코드 변경 없음
 **배포 URL** — https://aone-five.vercel.app (별칭) / https://aone-1gw49cnbj-ghdrlgjs11-4877s-projects.vercel.app
 
 ### projectName 대조 (멈춤 조건)
@@ -157,7 +157,7 @@ HEADER 1:08:12 at line 534
 
 ## 2단계 — `/debug/figures` 배포 제외
 
-**커밋** — `PENDING`
+**커밋** — `097984f`
 
 ### 사전 확인 — 정말 미참조인가
 
@@ -209,5 +209,138 @@ Route (app)                                 Size  First Load JS
 ```
 
 배포는 6단계에서 3~5단계 결과와 함께 한 번에 한다 (지시서 6단계가 재배포를 담당).
+
+---
+
+## 3단계 — 파이프라인 가중치 단일화
+
+**커밋** — `PENDING3`
+
+### 1. 사본이 어떤 경로로 만들어지는가 — **빌드 스크립트다** (손으로 넣은 게 아니다)
+
+`scripts/stage-sidecar.sh:36`:
+
+```bash
+# 2) pipeline (소스+의존성, 데이터·로그 제외)
+rsync -a \
+  --exclude "aone.db*" --exclude "*.log" --exclude ".DS_Store" \
+  --exclude "exports/" --exclude "node_modules/.cache" \
+  "$ROOT/pipeline/" "$DEST/pipeline/"
+```
+
+`DEST`는 `aone-app/src-tauri/resources`. 즉 `.dmg` 빌드 전에 이 스크립트가
+`pipeline/`을 통째로 rsync해서 사본을 만든다. 근거 3가지:
+
+- `.gitignore:17`에 `aone-app/src-tauri/resources/` — **git 추적 대상이 아니다.** `git ls-files`가 0건.
+  그래서 `git log --follow`로 사본 이력이 아예 안 나온다(= 손으로 커밋한 파일이 아니다).
+- 파일 시각: 사본 `Jul 14 22:36`, 개발본 `Jul 21 21:49`. 포화 수정 커밋 `a92015b`가
+  7/21에 개발본에만 들어갔고, **그 뒤로 스테이징을 안 돌렸다.**
+- `tauri.conf.json:51`의 `"resources": ["resources"]`가 이 폴더를 번들에 싣고,
+  `src-tauri/src/lib.rs:46`이 런타임에 `resources/pipeline`을 찾아 `AONE_PIPELINE_DIR`로 주입한다.
+
+**결론** — 이중화는 설계상 의도된 스테이징이고, 문제는 "구조"가 아니라 **스테이징을 잊은 것**이다.
+그래서 큰 구조 변경은 하지 않았다(지시서 3-3의 "최소 침습").
+
+### 어긋난 범위가 가중치보다 넓었다
+
+지시서는 가중치 4개를 지적했지만, 실측하니 **`src` 트리 전체가 1주일 뒤처져 있었다.**
+
+```
+Files pipeline/src/adapters/llm.ts and …/resources/pipeline/src/adapters/llm.ts differ
+Files pipeline/src/cli.ts and …/resources/pipeline/src/cli.ts differ
+Files pipeline/src/config.ts and …/resources/pipeline/src/config.ts differ
+Files pipeline/src/db.ts and …/resources/pipeline/src/db.ts differ
+Files pipeline/src/layers/l1-normalize.ts and …/resources/pipeline/src/layers/l1-normalize.ts differ
+Files pipeline/src/layers/l2-knowledge.ts and …/resources/pipeline/src/layers/l2-knowledge.ts differ
+Only in pipeline/src/layers: l3-prereqs.ts
+Only in pipeline/src/layers: l3-transcript-match.ts
+Files pipeline/src/layers/l4-artifacts.ts and …/resources/pipeline/src/layers/l4-artifacts.ts differ
+Files pipeline/src/orchestrator.ts and …/resources/pipeline/src/orchestrator.ts differ
+Files pipeline/src/paths.ts and …/resources/pipeline/src/paths.ts differ
+```
+
+`.ts` 파일 수 18개 vs 16개 — **L3 레이어 2개(`l3-prereqs.ts`·`l3-transcript-match.ts`)가 사본에 아예 없었다.**
+데스크톱 앱은 포화된 점수만 쓴 게 아니라 **선수개념·전사본 매칭 기능이 빠진 파이프라인**을 갖고 있었다.
+가중치만 손으로 고치면 이 두 파일은 계속 없는 상태로 남으므로, 스크립트와 같은 방식(rsync)으로 전체를 맞췄다.
+
+### 2. resources 쪽을 개발본 값으로 맞췄다
+
+`stage-sidecar.sh`와 **똑같은 rsync 명령**을 돌렸다(스크립트가 하는 일을 그대로 재현):
+
+```
+$ diff pipeline/src/config.ts aone-app/src-tauri/resources/pipeline/src/config.ts
+IDENTICAL
+$ diff -rq pipeline/src aone-app/src-tauri/resources/pipeline/src
+SRC TREE IDENTICAL
+```
+
+사본의 현재 값 (`resources/pipeline/src/config.ts`):
+
+```
+scoreWeights: {
+  importancePerWeekSeen: 6,
+  importancePerEvidence: 1.2,
+  importancePerEmphasis: 4,
+  importancePerExamMatch: 2.2,
+  examSignalPerEmphasis: 7,
+  examSignalPerExamHint: 12,
+  examSignalPerExamMatch: 8,
+},
+proactiveExamSignalThreshold: 55,
+```
+
+지시서가 요구한 `6 / 1.2 / 4 / 2.2`, examSignal `7 / 12 / 8`, 임계 `55` 그대로다.
+
+참고 — 이전 사본의 `examSignalPerExamMatch`는 **26**이었다. 지시서 요약(`14 / 3 / 5 / 6`)에는
+importance 4개만 적혀 있었는데, examSignal 쪽 격차가 더 컸다(26 → 8, 3배 이상).
+
+### 3. 다시 갈라지지 않게 — 검사 2겹 (이번에 넣었다)
+
+**(a) 테스트** `pipeline/test/config-drift.test.ts` (신규)
+
+두 파일을 문자열 비교해 다르면 실패한다. 사본은 gitignore 대상이라 CI·클론 환경엔 없는 게 정상이므로
+**없으면 조용히 통과**시키고, 있는데 다를 때만 실패시킨다.
+
+검사가 실제로 작동하는지 확인 — 일부러 사본만 `importancePerWeekSeen: 14`로 바꿔봤다:
+
+```
+=== 일부러 어긋나게 만든 뒤 ===
+not ok 1 - 번들 사본 config.ts가 개발본과 같다
+# fail 1
+=== 복원 후 ===
+ok 1 - 번들 사본 config.ts가 개발본과 같다
+# pass 1
+```
+
+**(b) 스테이징 스크립트** `scripts/stage-sidecar.sh`에 5단계 추가
+
+rsync 직후 `diff -q`로 대조하고 다르면 `exit 1`. 제외 규칙이 늘거나 순서가 바뀌어
+조용히 어긋나는 경우를 배포 시점에 막는다.
+
+### 구조 개선 제안 (이번엔 하지 않음 — 지시서 3-3 "큰 구조 변경은 제안만")
+
+지금은 "사본을 만들고 검사한다"이지 "한 곳에만 존재한다"가 아니다. 진짜 단일화는 두 갈래다.
+
+1. **`tauri.conf.json`이 `../pipeline`을 직접 번들한다.** 사본이 사라진다.
+   막는 것: Tauri `resources`가 프로젝트 루트 밖 상위 경로를 참조할 때 경로 해석·심볼릭 링크
+   처리가 다르고, 지금 `stage-sidecar.sh`가 하는 후처리(npm/npx 래퍼 생성, `.bin/tsx` 링크 교체,
+   `node_modules/.cache` 제외)를 대신할 자리가 없다. 검증 없이 바꾸면 `.dmg`가 조용히 깨진다.
+2. **가중치만 JSON으로 빼고 양쪽이 같은 파일을 읽는다.** 코드 사본은 남지만 **설정값은 진짜로 한 곳**이 된다.
+   `config.ts`가 `scoreWeights`를 `weights.json`에서 읽고, 그 JSON 하나만 번들에 싣는 방식.
+   이게 침습이 적고 목표에 더 가깝다. 다음 배치에서 권한다.
+
+### 완료 기준
+
+| 항목 | 판정 | 실측 근거 |
+|---|---|---|
+| 사본 생성 경로 규명 | `[O]` | `scripts/stage-sidecar.sh:36` rsync. gitignore·mtime·`git ls-files` 0건으로 교차 확인 |
+| resources를 `6/1.2/4/2.2`·`7/12/8`·`55`로 맞춤 | `[O]` | 위 config 인용 |
+| diff로 같아짐을 보임 | `[O]` | `diff` → 출력 없음, `diff -rq pipeline/src …` → 출력 없음 |
+| 어긋나면 실패하는 검사 추가 | `[O]` | 테스트 신규 1건 + 스테이징 스크립트 `exit 1`. 고의 드리프트로 `not ok` 재현 확인 |
+| 기존 테스트 회귀 없음 | `[O]` | `npm test` → `# tests 61 / # pass 61 / # fail 0` |
+| 스크립트 문법 | `[O]` | `bash -n scripts/stage-sidecar.sh` exit 0 |
+
+부수 사항 — rsync가 `node_modules/.bin/tsx`를 원래 심볼릭 링크로 되돌려놨다.
+`stage-sidecar.sh` 3단계가 매 빌드마다 실제 래퍼로 교체하므로 `.dmg` 빌드에는 영향이 없다.
 
 ---

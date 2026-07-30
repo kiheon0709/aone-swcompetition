@@ -54,4 +54,13 @@ else
   echo "경고: 데모 시드($DEMO_SRC) 없음 — 데모 없이 스테이징 (빈 첫 실행)"
 fi
 
+# 5) 사본이 정말 개발본과 같아졌는지 확인 (3단계).
+#    rsync 제외 규칙이 늘거나 순서가 바뀌면 조용히 어긋날 수 있어 여기서 못 박는다.
+if ! diff -q "$ROOT/pipeline/src/config.ts" "$DEST/pipeline/src/config.ts" > /dev/null; then
+  echo "실패: 번들 사본 config.ts가 개발본과 다릅니다 — 가중치가 갈라진 상태로 배포됩니다." >&2
+  diff "$ROOT/pipeline/src/config.ts" "$DEST/pipeline/src/config.ts" >&2 || true
+  exit 1
+fi
+echo "설정 동일 확인: pipeline/src/config.ts"
+
 echo "스테이징 완료: $(du -sh "$DEST" | cut -f1)"
