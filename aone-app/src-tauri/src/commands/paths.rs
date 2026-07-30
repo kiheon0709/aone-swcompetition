@@ -119,6 +119,7 @@ mod tests {
         let tmp = tempfile::tempdir().expect("tempdir");
         let root = tmp.path().to_path_buf();
         // 안전: 테스트 프로세스 안에서만 set/remove.
+        let _guard = crate::commands::ENV_LOCK.lock().unwrap_or_else(|e| e.into_inner());
         env::set_var("AONE_ROOT", &root);
         env::remove_var("AONE_DATA");
 
@@ -167,6 +168,7 @@ mod tests {
         assert_eq!(pipeline_dir(), PathBuf::from(DEV_PIPELINE_DIR));
 
         let tmp = tempfile::tempdir().expect("tempdir");
+        let _guard = crate::commands::ENV_LOCK.lock().unwrap_or_else(|e| e.into_inner());
         env::set_var("AONE_PIPELINE_DIR", tmp.path());
         assert_eq!(pipeline_dir(), tmp.path());
         env::remove_var("AONE_PIPELINE_DIR");

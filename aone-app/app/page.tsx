@@ -93,6 +93,8 @@ import {
   type RejectedFile,
   loadSnapshot,
   loadDocUrl,
+  loadDocText,
+  docExists,
   userErrorMessage,
 } from "@/lib/fs-bridge";
 import FileIcon, { fileIconTypeOf, type FileIconType } from "@/components/FileIcon";
@@ -1180,8 +1182,16 @@ export default function Home() {
     []
   );
 
-  // 파일 매니페스트(§7) 로드 — 파일시스템(goldset)이 단일 진실
+  // 파일 매니페스트(§7) 로드 — 파일시스템(goldset)이 단일 진실.
+  //
+  // 웹에서만 정적 파일을 읽는다 (R3). 데스크톱에서는 아래 watcher effect의 rescanFiles()가
+  // 실제 파일시스템을 스캔해 매니페스트를 만든다. 둘 다 무조건 돌면 순서 보장이 없어,
+  // 정적 fetch가 나중에 끝나면 **낡은 빌드 시점 매니페스트로 덮어쓴다**
+  // (사용자가 넣은 파일이 목록에서 사라진다). 런타임별로 하나만 돌게 한다.
   useEffect(() => {
+    // `desktop` state는 다른 effect에서 비동기로 채워져 첫 렌더에 false다.
+    // 여기서는 동기 판정(isTauriRuntime)을 직접 써서 경합 자체를 없앤다.
+    if (isTauriRuntime()) return;
     fetch("/files.json")
       .then((res) => (res.ok ? res.json() : null))
       .then((data: unknown) => {
@@ -1269,15 +1279,10 @@ export default function Home() {
     (async () => {
       for (const cand of AUDIO_CANDIDATES) {
         const url = docUrl(folderKey, cand);
-        try {
-          const res = await fetch(url, { method: "HEAD" });
-          const ct = res.headers.get("content-type") ?? "";
-          if (res.ok && !ct.includes("text/html")) {
-            if (!cancelled) setAudioSrc(url);
-            return;
-          }
-        } catch {
-          // 다음 후보 시도
+        // Tauri는 커맨드로 존재 확인, 웹은 HEAD (R3)
+        if (await docExists(folderKey, cand, url)) {
+          if (!cancelled) setAudioSrc(url);
+          return;
         }
       }
     })();
@@ -1445,17 +1450,14 @@ export default function Home() {
   useEffect(() => {
     if (!recDoc || recDoc.text !== null || !lecture) return;
     let cancelled = false;
-    fetch(docUrl(lecture.folderKey, recDoc.name))
-      .then((res) => {
-        if (!res.ok) throw new Error(`${res.status}`);
-        return res.text();
-      })
-      .then((text) => {
-        if (!cancelled) setRecDoc((d) => (d ? { ...d, text } : d));
-      })
-      .catch(() => {
-        if (!cancelled) setRecDoc((d) => (d ? { ...d, text: "" } : d));
-      });
+    // Tauri에선 커맨드로, 웹에선 정적 경로로 (R3)
+    loadDocText(
+      lecture.folderKey,
+      recDoc.name,
+      docUrl(lecture.folderKey, recDoc.name)
+    ).then((text) => {
+      if (!cancelled) setRecDoc((d) => (d ? { ...d, text: text ?? "" } : d));
+    });
     return () => {
       cancelled = true;
     };
@@ -1499,12 +1501,13 @@ export default function Home() {
     const entry = lectureEntries.find((f) => isTranscript(f, lectureFolder));
     if (!entry) return;
     let cancelled = false;
-    fetch(docUrl(lecture.folderKey, entry.name))
-      .then((res) => (res.ok ? res.text() : null))
-      .then((text) => {
-        if (!cancelled && text !== null) setTranscriptText(text);
-      })
-      .catch(() => {});
+    loadDocText(
+      lecture.folderKey,
+      entry.name,
+      docUrl(lecture.folderKey, entry.name)
+    ).then((text) => {
+      if (!cancelled && text !== null) setTranscriptText(text);
+    });
     return () => {
       cancelled = true;
     };
@@ -1519,17 +1522,15 @@ export default function Home() {
     let cancelled = false;
     setDocText(null);
     setDocError(null);
-    fetch(docUrl(lecture.folderKey, openFile.name))
-      .then((res) => {
-        if (!res.ok) throw new Error(`${res.status}`);
-        return res.text();
-      })
-      .then((text) => {
-        if (!cancelled) setDocText(text);
-      })
-      .catch((err: Error) => {
-        if (!cancelled) setDocError(err.message);
-      });
+    loadDocText(
+      lecture.folderKey,
+      openFile.name,
+      docUrl(lecture.folderKey, openFile.name)
+    ).then((text) => {
+      if (cancelled) return;
+      if (text === null) setDocError("파일을 읽지 못했습니다");
+      else setDocText(text);
+    });
     return () => {
       cancelled = true;
     };
@@ -1870,15 +1871,10 @@ export default function Home() {
       if (docs.length === 0) return;
       const slug = slugOf(subject, unit);
       let existing: SlideSummary[] = [];
-      try {
-        const res = await fetch(
-          `/slides/${encodeURIComponent(slug)}.json?r=${Date.now()}`
-        );
-        const data = res.ok ? await res.json() : null;
-        if (Array.isArray(data)) existing = data;
-      } catch {
-        // 요약 파일이 없으면 전부 신규로 취급
-      }
+      // 정적 경로가 아니라 Tauri 커맨드를 경유해야 데스크톱에서 중복 판정이 된다 (R3).
+      // 이게 안 되면 같은 자료를 매번 다시 LLM 요약한다.
+      const data = await loadSnapshot("slides", subject, unit, Date.now());
+      if (Array.isArray(data)) existing = data as SlideSummary[];
       for (const name of docs) {
         const doc = slideDocTagOf(name);
         if (existing.some((s) => s.doc === doc)) continue; // 이미 요약 있음 → 스킵
@@ -2072,14 +2068,13 @@ export default function Home() {
     }
     let cancelled = false;
     setExamFolderRaw(null);
-    fetch(docUrl(lecture.folderKey, examFolderFile.entry.name))
-      .then((res) => (res.ok ? res.text() : Promise.reject(new Error(`${res.status}`))))
-      .then((text) => {
-        if (!cancelled) setExamFolderRaw(text);
-      })
-      .catch(() => {
-        if (!cancelled) setExamFolderRaw(null);
-      });
+    loadDocText(
+      lecture.folderKey,
+      examFolderFile.entry.name,
+      docUrl(lecture.folderKey, examFolderFile.entry.name)
+    ).then((text) => {
+      if (!cancelled) setExamFolderRaw(text);
+    });
     return () => {
       cancelled = true;
     };
@@ -2625,6 +2620,35 @@ export default function Home() {
 
   /** PdfViewer에 넘길 실제 URL (blob 우선, 준비 전엔 웹 URL) */
   const pdfViewUrl = pdfBlobUrl ?? activeDocPdf?.file ?? "";
+
+  /**
+   * 원본 파일 열기/내려받기 (R3).
+   * 데스크톱에선 `/uploads/...`·`/docs/...` 정적 경로가 없어 404였다.
+   * Tauri에서는 원본 바이트를 blob으로 받아 내려준다. 웹은 기존 URL 그대로.
+   */
+  const openOriginalDoc = useCallback(
+    async (doc: { file: string; title: string }) => {
+      if (!lecture) return;
+      try {
+        const { url, revoke } = await loadDocUrl(
+          lecture.folderKey,
+          doc.title,
+          doc.file
+        );
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = doc.title;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        // blob URL은 다운로드가 시작된 뒤 해제한다 (즉시 해제하면 취소된다)
+        window.setTimeout(revoke, 10_000);
+      } catch {
+        showToast("원본 파일을 열지 못했습니다");
+      }
+    },
+    [lecture, showToast]
+  );
 
   /** 지금 보고 있는 자료의 전체 요약 (없으면 null — 구 분석본) */
   const activeDocSummary = useMemo(
@@ -5424,15 +5448,15 @@ export default function Home() {
                           >
                             <div className="mb-4 flex items-center justify-end gap-3">
                               {activeDocPdf && (
-                                <a
-                                  href={activeDocPdf.file}
-                                  download={activeDocPdf.title}
+                                <button
+                                  onClick={() => void openOriginalDoc(activeDocPdf)}
+                                  data-testid="open-original-doc"
                                   className="press-scale flex items-center gap-1.5 rounded-xl border border-black/[0.06] bg-white/70 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors duration-200 hover:bg-white hover:text-gray-900"
                                   title="원본 슬라이드 파일 열기/다운로드"
                                 >
                                   <FileText className="h-3.5 w-3.5" aria-hidden />
                                   원본 파일 열기
-                                </a>
+                                </button>
                               )}
                             </div>
 

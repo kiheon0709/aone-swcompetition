@@ -272,6 +272,9 @@ pub fn read_snapshot(kind: String, subject: String, unit: Option<String>) -> Res
                 let u = unit_n.clone().ok_or("unit이 필요합니다")?;
                 root.join(&subject).join(&u).join(".aone").join("doc-summaries.json")
             }
+            // LLM 사용량 — 과목/unit과 무관한 전역 파일. 파이프라인이 여기에 쓴다
+            // (pipeline/src/paths.ts usagePath → AONE_DATA/usage.json). R3.
+            "usage" => super::paths::data_dir().join("usage.json"),
             other => return Err(format!("알 수 없는 스냅샷 종류: {other}")),
         }
     } else {
@@ -296,6 +299,7 @@ pub fn read_snapshot(kind: String, subject: String, unit: Option<String>) -> Res
                 public.join("slides").join(format!("docsum_{}.json", slug(&subject, &u)))
             }
             "guide" => public.join("snapshots").join(format!("guide_{subject}.json")),
+            "usage" => public.join("snapshots").join("usage.json"),
             other => return Err(format!("알 수 없는 스냅샷 종류: {other}")),
         }
     };
@@ -867,6 +871,49 @@ mod tests {
         assert_eq!(json["copied"][0], "ok.pdf");
         assert_eq!(json["rejected"][0]["reason"], "audio");
         assert_eq!(json["rejected"][1]["name"], "bad.zip");
+    }
+
+    /// R3 — read_doc_bytes로 사용자가 넣은 전사본 원문을 실제로 읽는다.
+    /// 웹은 `/docs/...` 정적 경로가 있어 동작했지만 데스크톱에는 그 경로가 없다.
+    /// `AONE_ROOT`를 임시 폴더로 두고 커맨드 경로 전체를 태운다.
+    #[test]
+    fn read_doc_bytes_reads_user_file() {
+        let tmp = std::env::temp_dir().join(format!("aone-r3-{}", std::process::id()));
+        let unit = tmp.join("신호처리").join("1주차");
+        fs::create_dir_all(&unit).unwrap();
+        let body = "참석자 1 00:00\n사용자가 직접 넣은 전사본입니다.\n";
+        fs::write(unit.join("신호처리_1주차_전사.txt"), body).unwrap();
+
+        // env는 프로세스 전역 — 다른 테스트와 겹치지 않게 직렬화한다
+        let _guard = crate::commands::ENV_LOCK.lock().unwrap_or_else(|e| e.into_inner());
+        unsafe { std::env::set_var("AONE_ROOT", &tmp) };
+        let got = read_doc_bytes("신호처리/1주차".into(), "신호처리_1주차_전사.txt".into())
+            .expect("사용자 전사본을 읽지 못했다");
+        unsafe { std::env::remove_var("AONE_ROOT") };
+        let _ = fs::remove_dir_all(&tmp);
+
+        assert_eq!(String::from_utf8(got).unwrap(), body);
+    }
+
+    /// R3 — usage 스냅샷 kind가 추가됐다. 없으면 Ok(None)이어야 한다(에러가 아니다).
+    #[test]
+    fn read_snapshot_accepts_usage_kind() {
+        let tmp = std::env::temp_dir().join(format!("aone-r3u-{}", std::process::id()));
+        fs::create_dir_all(tmp.join(".aone")).unwrap();
+        let _guard = crate::commands::ENV_LOCK.lock().unwrap_or_else(|e| e.into_inner());
+        unsafe { std::env::set_var("AONE_ROOT", &tmp) };
+
+        // 파일이 없을 때 — 에러가 아니라 None
+        let none = read_snapshot("usage".into(), "".into(), None);
+        assert!(matches!(none, Ok(None)), "없으면 Ok(None): {none:?}");
+
+        // 파일이 있으면 그 내용을 준다
+        fs::write(tmp.join(".aone").join("usage.json"), r#"{"totals":{"calls":7}}"#).unwrap();
+        let some = read_snapshot("usage".into(), "".into(), None).unwrap();
+        unsafe { std::env::remove_var("AONE_ROOT") };
+        let _ = fs::remove_dir_all(&tmp);
+
+        assert!(some.unwrap().contains("\"calls\":7"));
     }
 
     /// folder 파라미터 검증 — 탈출·benchmark 금지, 정상 folderKey 허용.

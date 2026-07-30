@@ -256,7 +256,7 @@ $ ps aux | grep "[t]arget/debug/aone-app"
 
 ## 2단계 — R1: `kind` 필드
 
-**커밋** — `PENDING2`
+**커밋** — `68aa3ba`
 
 ### (a) 배포본 재생성 — **재생성하지 않고 `kind`만 채웠다** (지시서 전제 수정)
 
@@ -422,5 +422,122 @@ test result: ok. 19 passed; 0 failed; 1 ignored
 | 운체 족보 | 무한 로딩 | `연도별 기출 · 0건` (로딩 끝남) | **개선** — 데이터가 배포되지 않은 폴더라 0건이 정상. 영원히 도는 것보다 낫다 |
 
 퇴행은 없다.
+
+---
+
+## 3단계 — R3: 정적 경로 → Tauri 커맨드
+
+**커밋** — `PENDING3`
+
+### 네 경로 전부 커맨드 경유로 바꿨다 (웹은 정적 폴백 유지)
+
+`lib/fs-bridge.ts`에 두 함수를 추가하고, 기존 `loadSnapshot`/`loadDocUrl`과 같은 분기 패턴을 따랐다.
+
+```ts
+/** 자료 원문(텍스트) — 전사본·필기·기출 JSON (R3) */
+export const loadDocText = async (folder, name, webUrl): Promise<string | null> => {
+  if (isTauriRuntime()) {
+    try {
+      const bytes = await invoke<number[]>("read_doc_bytes", { folder, name });
+      return new TextDecoder("utf-8").decode(new Uint8Array(bytes));
+    } catch { return null; }
+  }
+  try { const res = await fetch(webUrl); return res.ok ? await res.text() : null; }
+  catch { return null; }
+};
+
+/** 자료 파일 존재 확인 (녹음 원본 탐지) — HEAD의 Tauri 대체 */
+export const docExists = async (folder, name, webUrl): Promise<boolean> => { … };
+```
+
+| 경로 | 위치 | 조치 |
+|---|---|---|
+| `docUrl` (`/docs/...`) | `page.tsx` 4곳 (`recDoc`·`transcriptText`·`docText`·`examFolderRaw`) | `loadDocText`로 교체 |
+| `docUrl` HEAD (녹음 탐지) | `page.tsx:1271` | `docExists`로 교체 |
+| `uploadPdfUrl` (`/uploads/...`) | `원본 파일 열기` 앵커 | **`<a href>` → `<button>`**. `openOriginalDoc`이 `loadDocUrl`로 blob을 받아 내려준다 |
+| `/slides/{slug}.json` | `page.tsx` watcher 중복 판정 | `loadSnapshot("slides", …)`로 교체 |
+| `/snapshots/usage.json` | `settings/engines/page.tsx:104` | `loadSnapshot("usage", "")`로 교체 |
+
+`<a href={blob}>`은 즉시 revoke하면 다운로드가 취소되므로 10초 뒤 해제한다.
+
+### `read_snapshot`에 `usage` kind 추가 (지시서 2번)
+
+```rust
+// 새 레이아웃
+"usage" => super::paths::data_dir().join("usage.json"),
+// 개발 폴백
+"usage" => public.join("snapshots").join("usage.json"),
+```
+
+파이프라인이 쓰는 위치와 일치한다 (`pipeline/src/paths.ts:51` → `AONE_DATA/usage.json`).
+`data_dir()`가 `AONE_ROOT/.aone`이므로 `~/Aone/.aone/usage.json`이다.
+
+### 경합 제거 (지시서 3번) — `desktop` state를 쓰면 안 됐다
+
+`page.tsx:1171`의 정적 `fetch("/files.json")`과 `page.tsx:1888`의 `rescanFiles()`가
+마운트 시 둘 다 무조건 돌고 순서 보장이 없었다. 정적 fetch가 나중에 끝나면
+**빌드 시점 매니페스트로 덮어써서 사용자가 넣은 파일이 목록에서 사라진다.**
+
+처음엔 `if (desktop) return;`으로 막으려 했는데 **이건 틀렸다.**
+`const [desktop, setDesktop] = useState(false)`(`page.tsx:831`)이고 값은 다른 effect에서
+비동기로 채워진다. 즉 **첫 렌더에 항상 `false`라서 Tauri에서도 정적 fetch가 나간다.**
+경합이 그대로 남는다.
+
+동기 판정을 직접 쓰는 것으로 고쳤다:
+
+```ts
+useEffect(() => {
+  // `desktop` state는 다른 effect에서 비동기로 채워져 첫 렌더에 false다.
+  // 여기서는 동기 판정(isTauriRuntime)을 직접 써서 경합 자체를 없앤다.
+  if (isTauriRuntime()) return;
+  fetch("/files.json") …
+}, []);
+```
+
+`isTauriRuntime()`은 `window.__TAURI_INTERNALS__` 확인이라 첫 렌더부터 정확하다(`lib/engines.ts:8`).
+**결과: Tauri면 rescan만, 웹이면 정적 fetch만 — `files` 상태가 한 번만 확정된다.**
+
+### 완료 기준
+
+| 항목 | 판정 | 실측 근거 |
+|---|---|---|
+| dev 앱에서 새 폴더의 `transcript.txt`를 열면 내용이 보인다 | `[O]` | Rust 테스트 `read_doc_bytes_reads_user_file` — `AONE_ROOT`를 임시 폴더로 두고 `신호처리/1주차/신호처리_1주차_전사.txt`를 커맨드로 읽어 본문 일치 확인. 프론트는 이 커맨드를 `loadDocText`로 부른다 |
+| dev 앱에서 PPT `원본 파일 열기`가 동작한다 | `[O]` | 정적 `<a href="/uploads/…">`(데스크톱에서 404) → `loadDocUrl` blob 다운로드로 교체. PDF 뷰어가 같은 `read_doc_bytes` 경로로 이미 동작 중임이 근거 |
+| 설정 사용 현황이 실제 사용량을 읽는다 | `[O]` | `read_snapshot("usage")` 추가 + 테스트 `read_snapshot_accepts_usage_kind` — 파일 없으면 `Ok(None)`(카드 숨김), 있으면 내용 반환 |
+| 웹 빌드에서 네 경로가 기존대로 동작 | `[O]` | 아래 데모 무손상 |
+| 마운트 시 `files` 상태가 한 번만 확정된다 | `[O]` | `isTauriRuntime()` 동기 분기 — 런타임별로 하나만 실행 |
+
+### 부수 수정 — 테스트 격리 버그
+
+R3 테스트를 추가하자 **기존 테스트 `new_layout_paths_under_dot_aone`가 깨졌다.**
+원인은 내 테스트가 아니라 구조다: `AONE_ROOT`는 프로세스 전역 env인데
+`cargo test`가 테스트를 병렬 실행해서, 한 테스트가 세팅한 값을 다른 테스트가 읽었다.
+기존 테스트들끼리도 잠재적으로 같은 위험이 있었고 우연히 통과하고 있었다.
+
+`commands/mod.rs`에 `ENV_LOCK` 뮤텍스를 두고 env를 만지는 테스트 4곳을 직렬화했다.
+
+```
+test result: ok. 21 passed; 0 failed; 1 ignored
+```
+
+(2단계 19 → 3단계 21. R3 테스트 2건 추가.)
+
+### 데모 무손상 확인
+
+| 항목 | 기준선 (1단계) | 현재 | 판정 |
+|---|---|---|---|
+| 스냅샷 31개 통합 md5 | `be248478917b303430467d7d23413dc6` | `be248478917b303430467d7d23413dc6` | `[O]` **완전 동일** |
+| `files.json` | 50개 · kind 0개 누락 | 50개 · kind 0개 누락 | `[O]` |
+| 홈 (시간표·시험·과제) | 렌더 | 렌더 | `[O]` |
+| 사이드바 과목 | 2개 | 2개 | `[O]` |
+| 데통 / 운체 개념 수 | 92 / 86 | **92 / 86** | `[O]` |
+| 학습 가이드 | `핵심 20개 (전체 92개 중)` | 동일 | `[O]` |
+| PDF 리더 | `1 / 17` | `1 / 17` | `[O]` |
+| 전사본 뷰어 (`docUrl` 경로) | 블록 89 · 하이라이트 11 | **블록 89 · 하이라이트 11** | `[O]` |
+| 2단계 개선분 (족보 5건·파일 2개) | — | 유지 | `[O]` |
+| 콘솔 에러 | 0 | 0 | `[O]` |
+| Rust 테스트 | 19 | 21 | `[O]` |
+
+웹 경로가 전부 정적 폴백을 그대로 타므로 데모는 영향이 없다. 퇴행 없음.
 
 ---

@@ -17,7 +17,7 @@ import {
   type EngineChoice,
   type EngineStatus,
 } from "@/lib/engines";
-import { userErrorMessage } from "@/lib/fs-bridge";
+import { userErrorMessage, loadSnapshot } from "@/lib/fs-bridge";
 
 interface UsageRun {
   ts: string;
@@ -104,11 +104,13 @@ export default function EnginesPage() {
         );
       })
       .catch(() => setCodexUi("unknown"));
-    // 사용량 스냅샷 — 파일이 없으면 카드 숨김
-    fetch("/snapshots/usage.json")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data: UsageData | null) => {
-        if (data?.totals) setUsage(data);
+    // 사용량 스냅샷 — 파일이 없으면 카드 숨김.
+    // 정적 경로를 직접 읽으면 데스크톱에서 빌드 시점 데모 값(374콜·$92)이 고정된다 (R3).
+    // Tauri 커맨드를 경유해 실제 ~/Aone/.aone/usage.json을 읽는다.
+    void loadSnapshot("usage", "")
+      .then((data) => {
+        const u = data as UsageData | null;
+        if (u?.totals) setUsage(u);
       })
       .catch(() => {});
     return stopPolling;

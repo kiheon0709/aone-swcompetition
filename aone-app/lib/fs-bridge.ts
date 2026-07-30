@@ -191,12 +191,70 @@ export const loadDocUrl = async (
 };
 
 /**
+ * 자료 원문(텍스트)을 읽는다 — 전사본·필기·기출 JSON 등 (R3).
+ *
+ * 데스크톱에서는 `/docs/...` 정적 경로가 **빌드 시점 데모 데이터에 고정**돼 있어
+ * 사용자가 넣은 파일을 영원히 못 읽었다(빈 흰 카드). Tauri에서는 커맨드로 원본을 읽는다.
+ * 웹에서는 기존 정적 경로 그대로 — 부스 데모가 웹이다.
+ *
+ * @returns 본문. 파일이 없거나 읽기 실패면 null (호출부가 "없음"을 구분할 수 있게 throw하지 않는다).
+ */
+export const loadDocText = async (
+  folder: string,
+  name: string,
+  webUrl: string,
+): Promise<string | null> => {
+  if (isTauriRuntime()) {
+    try {
+      const bytes = await invoke<number[]>("read_doc_bytes", { folder, name });
+      return new TextDecoder("utf-8").decode(new Uint8Array(bytes));
+    } catch {
+      return null;
+    }
+  }
+  try {
+    const res = await fetch(webUrl);
+    return res.ok ? await res.text() : null;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * 자료 파일이 존재하는가 (녹음 원본 탐지용) — HEAD 요청의 Tauri 대체.
+ * Tauri에서는 매니페스트에 이미 목록이 있으므로 그것을 쓰는 편이 정확하지만,
+ * 호출부가 후보 파일명을 순회하는 구조라 존재 확인만 제공한다.
+ */
+export const docExists = async (
+  folder: string,
+  name: string,
+  webUrl: string,
+): Promise<boolean> => {
+  if (isTauriRuntime()) {
+    try {
+      await invoke<number[]>("read_doc_bytes", { folder, name });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  try {
+    const res = await fetch(webUrl, { method: "HEAD" });
+    if (!res.ok) return false;
+    const ct = res.headers.get("content-type") ?? "";
+    return !ct.includes("text/html");
+  } catch {
+    return false;
+  }
+};
+
+/**
  * 분석 산출물 스냅샷 로드 — 새 레이아웃(~/Aone/.../.aone/*.json)은 Tauri 커맨드로,
  * 브라우저(Vercel)·개발 폴백은 public 경로 fetch로. 없으면 null.
- * kind: "analysis" | "docs" | "slides" | "guide" | "docSummaries"
+ * kind: "analysis" | "docs" | "slides" | "guide" | "docSummaries" | "usage"
  */
 export const loadSnapshot = async (
-  kind: "analysis" | "docs" | "slides" | "guide" | "docSummaries",
+  kind: "analysis" | "docs" | "slides" | "guide" | "docSummaries" | "usage",
   subject: string,
   unit?: string,
   cacheBust?: string | number,
@@ -220,6 +278,8 @@ export const loadSnapshot = async (
       ? `/slides/${encodeURIComponent(slug)}.json${r}`
       : kind === "docSummaries"
         ? `/slides/${encodeURIComponent(`docsum_${slug}`)}.json${r}`
+      : kind === "usage"
+        ? `/snapshots/usage.json${r}`
       : kind === "docs"
         ? `/snapshots/${encodeURIComponent(`docs_${slug}`)}.json${r}`
         : kind === "guide"
