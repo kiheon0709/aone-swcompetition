@@ -1,311 +1,361 @@
 {
- "subjects": [
-  {
-   "name": "데이터통신",
-   "units": [
+  "subjects": [
     {
-     "name": "1주차",
-     "order": 0,
-     "files": [
-      {
-       "name": "(실습) week1_WireShark.pptx.pdf",
-       "size": 706915
-      },
-      {
-       "name": "(이론) week1_1-0-데이터통신-overview-공개.pdf",
-       "size": 1112945
-      },
-      {
-       "name": "transcript.txt",
-       "size": 40012
-      }
-     ]
+      "name": "데이터통신",
+      "units": [
+        {
+          "name": "1주차",
+          "order": 0,
+          "files": [
+            {
+              "name": "(실습) week1_WireShark.pptx.pdf",
+              "size": 706915,
+              "kind": "practice"
+            },
+            {
+              "name": "(이론) week1_1-0-데이터통신-overview-공개.pdf",
+              "size": 1112945,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 40012,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "2주차",
+          "order": 1,
+          "files": [
+            {
+              "name": "(실습) 20260310-실습2주차-파일 통신.pptx.pdf",
+              "size": 799059,
+              "kind": "practice"
+            },
+            {
+              "name": "(이론) 1-1-데이터통신-layer-packet-signal-공개.pdf",
+              "size": 1343885,
+              "kind": "theory"
+            },
+            {
+              "name": "(이론)1-2-명령어실습.pdf",
+              "size": 1986404,
+              "kind": "practice"
+            },
+            {
+              "name": "(이론)1-3-lab-introduction-docker.pdf",
+              "size": 1858241,
+              "kind": "practice"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 52355,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "3주차",
+          "order": 2,
+          "files": [
+            {
+              "name": "(실습) 20260317-실습3주차.pdf",
+              "size": 891341,
+              "kind": "practice"
+            },
+            {
+              "name": "(이론) 2-데이터통신-1비트만들기-사인함수.pdf",
+              "size": 1912170,
+              "kind": "theory"
+            },
+            {
+              "name": "(이론) 3-데이터통신-1-아날로그-소리-변환.pdf",
+              "size": 760621,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 78375,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "4주차",
+          "order": 3,
+          "files": [
+            {
+              "name": "(실습)20260324-4주차.pptx.pdf",
+              "size": 1020054,
+              "kind": "practice"
+            },
+            {
+              "name": "(이론) 3-데이터통신-2-pied-piper.pdf",
+              "size": 1437106,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 68398,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "5주차",
+          "order": 4,
+          "files": [
+            {
+              "name": "(실습) 20260331-morse code over sound.pptx .pdf",
+              "size": 593848,
+              "kind": "practice"
+            },
+            {
+              "name": "(이론) 4-new-데이터통신-1-라인코딩-블록코딩.pdf",
+              "size": 666248,
+              "kind": "theory"
+            },
+            {
+              "name": "(이론) 5-new-데이터통신-mux.pdf",
+              "size": 603523,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 78241,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "6주차",
+          "order": 5,
+          "files": [
+            {
+              "name": "(실습) 20260407-Morse code over sound with noise.pdf",
+              "size": 645465,
+              "kind": "practice"
+            },
+            {
+              "name": "(이론) 5-데이터통신-cable-공개.pdf",
+              "size": 1421921,
+              "kind": "theory"
+            },
+            {
+              "name": "(이론) 6-new-데이터통신-성능.pdf",
+              "size": 2032010,
+              "kind": "theory"
+            },
+            {
+              "name": "(이론) 6-무선 통신.pdf",
+              "size": 1703305,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 12475,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "7주차",
+          "order": 6,
+          "files": [
+            {
+              "name": "(실습) 20260414-실습7주차-Unicode over sound with noise.pptx.pdf",
+              "size": 852049,
+              "kind": "practice"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 25978,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "족보",
+          "order": 7,
+          "files": [
+            {
+              "name": "past_exam_2025_raw.txt",
+              "size": 84,
+              "kind": "past_exam"
+            },
+            {
+              "name": "past_exams.json",
+              "size": 7324,
+              "kind": "past_exam"
+            }
+          ]
+        }
+      ]
     },
     {
-     "name": "2주차",
-     "order": 1,
-     "files": [
-      {
-       "name": "(실습) 20260310-실습2주차-파일 통신.pptx.pdf",
-       "size": 799059
-      },
-      {
-       "name": "(이론) 1-1-데이터통신-layer-packet-signal-공개.pdf",
-       "size": 1343885
-      },
-      {
-       "name": "(이론)1-2-명령어실습.pdf",
-       "size": 1986404
-      },
-      {
-       "name": "(이론)1-3-lab-introduction-docker.pdf",
-       "size": 1858241
-      },
-      {
-       "name": "transcript.txt",
-       "size": 52355
-      }
-     ]
-    },
-    {
-     "name": "3주차",
-     "order": 2,
-     "files": [
-      {
-       "name": "(실습) 20260317-실습3주차.pdf",
-       "size": 891341
-      },
-      {
-       "name": "(이론) 2-데이터통신-1비트만들기-사인함수.pdf",
-       "size": 1912170
-      },
-      {
-       "name": "(이론) 3-데이터통신-1-아날로그-소리-변환.pdf",
-       "size": 760621
-      },
-      {
-       "name": "transcript.txt",
-       "size": 78375
-      }
-     ]
-    },
-    {
-     "name": "4주차",
-     "order": 3,
-     "files": [
-      {
-       "name": "(실습)20260324-4주차.pptx.pdf",
-       "size": 1020054
-      },
-      {
-       "name": "(이론) 3-데이터통신-2-pied-piper.pdf",
-       "size": 1437106
-      },
-      {
-       "name": "transcript.txt",
-       "size": 68398
-      }
-     ]
-    },
-    {
-     "name": "5주차",
-     "order": 4,
-     "files": [
-      {
-       "name": "(실습) 20260331-morse code over sound.pptx .pdf",
-       "size": 593848
-      },
-      {
-       "name": "(이론) 4-new-데이터통신-1-라인코딩-블록코딩.pdf",
-       "size": 666248
-      },
-      {
-       "name": "(이론) 5-new-데이터통신-mux.pdf",
-       "size": 603523
-      },
-      {
-       "name": "transcript.txt",
-       "size": 78241
-      }
-     ]
-    },
-    {
-     "name": "6주차",
-     "order": 5,
-     "files": [
-      {
-       "name": "(실습) 20260407-Morse code over sound with noise.pdf",
-       "size": 645465
-      },
-      {
-       "name": "(이론) 5-데이터통신-cable-공개.pdf",
-       "size": 1421921
-      },
-      {
-       "name": "(이론) 6-new-데이터통신-성능.pdf",
-       "size": 2032010
-      },
-      {
-       "name": "(이론) 6-무선 통신.pdf",
-       "size": 1703305
-      },
-      {
-       "name": "transcript.txt",
-       "size": 12475
-      }
-     ]
-    },
-    {
-     "name": "7주차",
-     "order": 6,
-     "files": [
-      {
-       "name": "(실습) 20260414-실습7주차-Unicode over sound with noise.pptx.pdf",
-       "size": 852049
-      },
-      {
-       "name": "transcript.txt",
-       "size": 25978
-      }
-     ]
-    },
-    {
-     "name": "족보",
-     "order": 7,
-     "files": [
-      {
-       "name": "past_exam_2025_raw.txt",
-       "size": 84
-      },
-      {
-       "name": "past_exams.json",
-       "size": 7324
-      }
-     ]
+      "name": "운영체제",
+      "units": [
+        {
+          "name": "1주차",
+          "order": 0,
+          "files": [
+            {
+              "name": "01_Operating_System_overview.pdf",
+              "size": 881799,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 19063,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "2주차",
+          "order": 1,
+          "files": [
+            {
+              "name": "02_Process_description_and_Control.pdf",
+              "size": 1026623,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 40690,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "3주차",
+          "order": 2,
+          "files": [
+            {
+              "name": "02_Process_description_and_Control.pdf",
+              "size": 1026623,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 32924,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "4주차",
+          "order": 3,
+          "files": [
+            {
+              "name": "03_Threads.pdf",
+              "size": 286430,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 45023,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "5주차",
+          "order": 4,
+          "files": [
+            {
+              "name": "04_Mutual_Exclusion_and_Synchronization.pdf",
+              "size": 762636,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 100317,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "6주차",
+          "order": 5,
+          "files": [
+            {
+              "name": "04_Mutual_Exclusion_and_Synchronization.pdf",
+              "size": 762636,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 112402,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "7주차",
+          "order": 6,
+          "files": [
+            {
+              "name": "05_Deadlock_and_Starvation.pdf",
+              "size": 1029713,
+              "kind": "theory"
+            },
+            {
+              "name": "06_File_Management.pdf",
+              "size": 4224012,
+              "kind": "theory"
+            },
+            {
+              "name": "transcript.txt",
+              "size": 127619,
+              "kind": "transcript"
+            }
+          ]
+        },
+        {
+          "name": "족보",
+          "order": 7,
+          "files": [
+            {
+              "name": "19중간답.pdf",
+              "size": 379728,
+              "kind": "past_exam"
+            },
+            {
+              "name": "19중간문제.pdf",
+              "size": 763520,
+              "kind": "past_exam"
+            },
+            {
+              "name": "20연계중간문제답.pdf",
+              "size": 1104737,
+              "kind": "past_exam"
+            },
+            {
+              "name": "23중간답.pdf",
+              "size": 86777,
+              "kind": "past_exam"
+            },
+            {
+              "name": "23중간문제.pdf",
+              "size": 862205,
+              "kind": "past_exam"
+            },
+            {
+              "name": "25년도1학기중간.pdf",
+              "size": 239006,
+              "kind": "past_exam"
+            },
+            {
+              "name": "past_exams.json",
+              "size": 12947,
+              "kind": "past_exam"
+            }
+          ]
+        }
+      ]
     }
-   ]
-  },
-  {
-   "name": "운영체제",
-   "units": [
-    {
-     "name": "1주차",
-     "order": 0,
-     "files": [
-      {
-       "name": "01_Operating_System_overview.pdf",
-       "size": 881799
-      },
-      {
-       "name": "transcript.txt",
-       "size": 19063
-      }
-     ]
-    },
-    {
-     "name": "2주차",
-     "order": 1,
-     "files": [
-      {
-       "name": "02_Process_description_and_Control.pdf",
-       "size": 1026623
-      },
-      {
-       "name": "transcript.txt",
-       "size": 40690
-      }
-     ]
-    },
-    {
-     "name": "3주차",
-     "order": 2,
-     "files": [
-      {
-       "name": "02_Process_description_and_Control.pdf",
-       "size": 1026623
-      },
-      {
-       "name": "transcript.txt",
-       "size": 32924
-      }
-     ]
-    },
-    {
-     "name": "4주차",
-     "order": 3,
-     "files": [
-      {
-       "name": "03_Threads.pdf",
-       "size": 286430
-      },
-      {
-       "name": "transcript.txt",
-       "size": 45023
-      }
-     ]
-    },
-    {
-     "name": "5주차",
-     "order": 4,
-     "files": [
-      {
-       "name": "04_Mutual_Exclusion_and_Synchronization.pdf",
-       "size": 762636
-      },
-      {
-       "name": "transcript.txt",
-       "size": 100317
-      }
-     ]
-    },
-    {
-     "name": "6주차",
-     "order": 5,
-     "files": [
-      {
-       "name": "04_Mutual_Exclusion_and_Synchronization.pdf",
-       "size": 762636
-      },
-      {
-       "name": "transcript.txt",
-       "size": 112402
-      }
-     ]
-    },
-    {
-     "name": "7주차",
-     "order": 6,
-     "files": [
-      {
-       "name": "05_Deadlock_and_Starvation.pdf",
-       "size": 1029713
-      },
-      {
-       "name": "06_File_Management.pdf",
-       "size": 4224012
-      },
-      {
-       "name": "transcript.txt",
-       "size": 127619
-      }
-     ]
-    },
-    {
-     "name": "족보",
-     "order": 7,
-     "files": [
-      {
-       "name": "19중간답.pdf",
-       "size": 379728
-      },
-      {
-       "name": "19중간문제.pdf",
-       "size": 763520
-      },
-      {
-       "name": "20연계중간문제답.pdf",
-       "size": 1104737
-      },
-      {
-       "name": "23중간답.pdf",
-       "size": 86777
-      },
-      {
-       "name": "23중간문제.pdf",
-       "size": 862205
-      },
-      {
-       "name": "25년도1학기중간.pdf",
-       "size": 239006
-      },
-      {
-       "name": "past_exams.json",
-       "size": 12947
-      }
-     ]
-    }
-   ]
-  }
- ],
- "rootFiles": []
+  ],
+  "rootFiles": []
 }

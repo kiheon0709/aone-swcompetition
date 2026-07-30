@@ -9,6 +9,13 @@ import TranscriptViewer, {
   type TranscriptHighlight,
 } from "@/components/TranscriptViewer";
 import { locatorToAnchor, parseConceptSource } from "@/lib/transcript";
+// 파일 kind 판정 단일 진입점 (R1) — 각 호출부에 정규식을 흩어놓지 않는다
+import {
+  kindOf,
+  isTranscript,
+  isPastExam,
+  isExamFolder as isExamFolderName,
+} from "@/lib/file-kind";
 import {
   Activity as ActivityIcon,
   AlertTriangle,
@@ -389,14 +396,17 @@ const displayFilesOf = (
 ): DisplayFile[] => {
   const out: DisplayFile[] = [];
   const exams: FileEntry[] = [];
+  // slug는 "과목__주차" — 뒤쪽이 폴더 이름이다 (kind 판정에 넘긴다, R1)
+  const folder = slug.split("__").pop() ?? "";
   for (const f of entries) {
+    const kind = kindOf(f, folder);
     // 기출은 여러 산출물을 카드 1장으로 합친다 (아래에서 push)
-    if (f.kind === "past_exam") {
+    if (kind === "past_exam") {
       exams.push(f);
       continue;
     }
     // transcript.txt → "강의 녹음" 카드
-    if (f.kind === "transcript") {
+    if (kind === "transcript") {
       out.push({
         key: `${slug}-${f.name}`,
         title: "강의 녹음 전사본",
@@ -414,8 +424,8 @@ const displayFilesOf = (
       out.push({
         key: `${slug}-${f.name}`,
         title: pdf.title,
-        subtitle: `${fileMeta(f.kind).label} · ${formatSize(pdf.size)}`,
-        icon: fileIconTypeOf(f.kind, pdf.title),
+        subtitle: `${fileMeta(kind).label} · ${formatSize(pdf.size)}`,
+        icon: fileIconTypeOf(kind, pdf.title),
         entry: f,
       });
       continue;
@@ -425,8 +435,8 @@ const displayFilesOf = (
     out.push({
       key: `${slug}-${f.name}`,
       title: f.name,
-      subtitle: `${fileMeta(f.kind).label} · ${formatSize(f.size)}`,
-      icon: fileIconTypeOf(f.kind, f.name),
+      subtitle: `${fileMeta(kind).label} · ${formatSize(f.size)}`,
+      icon: fileIconTypeOf(kind, f.name),
       entry: f,
     });
   }
@@ -641,9 +651,10 @@ const fileViewKindOf = (entry: FileEntry): FileViewKind => {
   if (isPptName(entry.name)) return "slides";
   // 업로드 PDF는 타입과 무관하게 슬라이드 리더로 연다 (기출 PDF 포함)
   if (isPdfName(entry.name)) return "pdf";
-  if (entry.kind === "theory" || entry.kind === "practice") return "pdf";
-  if (entry.kind === "transcript") return "transcript";
-  if (entry.kind === "past_exam") return "exam";
+  const kind = kindOf(entry);
+  if (kind === "theory" || kind === "practice") return "pdf";
+  if (kind === "transcript") return "transcript";
+  if (kind === "past_exam") return "exam";
   return "text";
 };
 
@@ -958,8 +969,11 @@ export default function Home() {
   const [examBannerClosed, setExamBannerClosed] = useState(false);
 
   const lectureName = lecture?.name ?? "";
-  /** 족보 폴더 — 3탭 대신 기출 뷰어로 분기 (부록 A안 §3) */
-  const isExamFolder = lecture?.unit === "족보";
+  /** 현재 수업 폴더 이름 — kind 판정에 넘긴다 (족보 폴더 규칙, R1) */
+  const lectureFolder = lecture?.unit ?? "";
+  /** 족보 폴더 — 3탭 대신 기출 뷰어로 분기 (부록 A안 §3).
+   *  사용자가 "기출"·"exam"으로 만들어도 같게 본다 (R1) */
+  const isExamFolder = isExamFolderName(lectureFolder);
 
   // 비동기 폴링 콜백이 재구독 없이 현재 수업을 읽도록 ref로 흘려둔다
   const lectureRef = useRef<Lecture | null>(null);
@@ -1373,9 +1387,7 @@ export default function Home() {
   const recordingEntries = useMemo(
     () =>
       lectureEntries.filter(
-        (f) =>
-          f.kind === "transcript" ||
-          /\.(md|txt)$/i.test(f.name)
+        (f) => isTranscript(f, lectureFolder) || /\.(md|txt)$/i.test(f.name)
       ),
     [lectureEntries]
   );
@@ -1402,11 +1414,9 @@ export default function Home() {
     // 수업 전환이 실제로 끝난 뒤에 연다 — 아니면 위의 "수업이 바뀌면 초기화"가
     // openFile을 다시 비운다 (pendingDocOpen과 같은 규칙).
     if (!lecture || lecture.folderKey !== pendingTranscript.folderKey) return;
-    // files.json에는 kind가 없어 매니페스트가 전부 "other"로 채운다 —
-    // 파일명으로 전사본을 찾는다 (recordingEntries도 확장자로 거른다).
+    // kind가 비어 있어도 파일명으로 판정된다 (lib/file-kind.ts).
     const t =
-      recordingEntries.find((f) => f.kind === "transcript") ??
-      recordingEntries.find((f) => /transcript.*\.txt$/i.test(f.name)) ??
+      recordingEntries.find((f) => isTranscript(f, lectureFolder)) ??
       recordingEntries.find((f) => /\.txt$/i.test(f.name));
     if (!t) {
       setPendingTranscript(null); // 전사본이 없는 수업 — 조용히 취소
@@ -1414,10 +1424,9 @@ export default function Home() {
     }
     // 전사본 파일을 직접 열면 단독 뷰어(fileView==="transcript")로 가므로,
     // 5탭 세부 페이지를 열어 [녹음·필기] 탭 안에서 보여준다.
-    // 이론 슬라이드를 우선 — 없으면 아무 PDF나 (kind가 비어 있을 수 있어 파일명도 본다)
+    // 이론 슬라이드를 우선 — 없으면 아무 PDF나
     const pdf =
-      lectureEntries.find((f) => f.kind === "theory") ??
-      lectureEntries.find((f) => isPdfName(f.name) && /이론/.test(f.name)) ??
+      lectureEntries.find((f) => kindOf(f, lectureFolder) === "theory") ??
       lectureEntries.find((f) => isPdfName(f.name));
     if (!pdf) {
       setPendingTranscript(null);
@@ -1487,7 +1496,7 @@ export default function Home() {
   useEffect(() => {
     setTranscriptText(null);
     if (!lecture) return;
-    const entry = lectureEntries.find((f) => f.kind === "transcript");
+    const entry = lectureEntries.find((f) => isTranscript(f, lectureFolder));
     if (!entry) return;
     let cancelled = false;
     fetch(docUrl(lecture.folderKey, entry.name))
@@ -2051,7 +2060,7 @@ export default function Home() {
 
   /** 족보 폴더 안의 past_exam 원본 파일 (연도별 카드용 raw) */
   const examFolderFile = useMemo(
-    () => lectureFiles.find((d) => d.entry.kind === "past_exam") ?? null,
+    () => lectureFiles.find((d) => isPastExam(d.entry, lectureFolder)) ?? null,
     [lectureFiles]
   );
 
@@ -2089,11 +2098,15 @@ export default function Home() {
     return plainFilesOf(activeSubject, s?.rootFiles ?? []);
   }, [plainFilesOf, files, activeSubject]);
 
+  /** 전체 파일 수 — 표시 카드 수가 아니라 실제 파일 수 (R1) */
   const totalFileCount = useMemo(() => {
-    let n = 0;
-    for (const d of displayFilesByKey.values()) n += d.length;
+    let n = (files?.rootFiles ?? []).length;
+    for (const s of files?.subjects ?? []) {
+      n += (s.rootFiles ?? []).length;
+      for (const u of s.units) n += u.files.length;
+    }
     return n;
-  }, [displayFilesByKey]);
+  }, [files]);
 
   const signalCount =
     snapshot?.concepts.filter((c) => c.examSignal > 0).length ?? 0;
@@ -2763,13 +2776,14 @@ export default function Home() {
   // ── 열린 파일(기출·텍스트) 본문 파싱 ───────────────────────
   const docBody = useMemo(() => {
     if (!openFile || docText === null) return null;
+    const fileKind = kindOf(openFile, lectureFolder);
     // 기출은 전용 뷰어가 렌더한다 (원시 JSON 노출 금지)
-    if (openFile.kind === "past_exam") return { kind: "exam" as const };
+    if (fileKind === "past_exam") return { kind: "exam" as const };
     if (openFile.name.endsWith(".json")) {
       const pretty = prettyJson(docText);
       return { kind: "code" as const, text: pretty ?? docText };
     }
-    if (openFile.kind === "transcript") {
+    if (fileKind === "transcript") {
       const t = parseTranscript(docText);
       if (t) return { kind: "transcript" as const, ...t };
     } else {
@@ -2777,11 +2791,11 @@ export default function Home() {
       if (pages) return { kind: "pages" as const, pages };
     }
     return { kind: "plain" as const, text: docText };
-  }, [openFile, docText]);
+  }, [openFile, docText, lectureFolder]);
 
   const docDetail =
     openFile && docs
-      ? docs.bySource[SOURCE_OF_FILE_TYPE[openFile.kind] ?? "slide"]
+      ? docs.bySource[SOURCE_OF_FILE_TYPE[kindOf(openFile, lectureFolder)] ?? "slide"]
       : null;
 
   const openFileDisplay = openFile
@@ -3021,20 +3035,23 @@ export default function Home() {
     subject?: string;
     /** unit 카드일 때 folderKey (능동 제안 점 표시용) */
     folderKey?: string;
+    /** 실제 파일 수 — 표시 카드 수와 다르다 (족보 폴더는 여러 파일이 카드 1장) */
+    fileCount: number;
   }
 
   /** 루트 레벨: 과목 폴더들 (매니페스트 subjects) */
   const rootFolderCards: FolderCard[] = useMemo(
     () =>
       (files?.subjects ?? []).map((s) => {
+        // "파일 N개"는 실제 파일 수다 — 표시 카드 수가 아니다 (R1).
+        // 족보처럼 여러 파일을 카드 1장으로 합치는 폴더가 있어 둘이 다르다.
         let n = s.rootFiles.length;
-        for (const u of s.units) {
-          n += displayFilesByKey.get(folderKeyOf(s.name, u.name))?.length ?? 0;
-        }
+        for (const u of s.units) n += u.files.length;
         return {
           kind: "subject" as const,
           id: `subject-${s.name}`,
           name: s.name,
+          fileCount: n,
           sub: `폴더 ${s.units.length}개 · 파일 ${n}개`,
         };
       }),
@@ -3052,7 +3069,8 @@ export default function Home() {
         subject: u.subject,
         folderKey: u.folderKey,
         name: u.unit,
-        sub: `파일 ${displayFilesByKey.get(u.folderKey)?.length ?? 0}개`,
+        fileCount: u.entries.length,
+        sub: `파일 ${u.entries.length}개`,
       }));
   }, [activeSubject, allUnits, displayFilesByKey]);
 
@@ -3112,11 +3130,11 @@ export default function Home() {
       ? `폴더 ${rootFolderCards.length}개, 파일 ${totalFileCount}개`
       : view === "subject"
         ? `폴더 ${subjectFolderCards.length}개, 파일 ${subjectFolderCards.reduce(
-            (n, c) => n + (displayFilesByKey.get(c.folderKey ?? "")?.length ?? 0),
+            (n, c) => n + c.fileCount,
             subjectLooseFiles.length
           )}개`
         : view === "lecture"
-          ? `파일 ${lectureFiles.length}개`
+          ? `파일 ${lectureEntries.length}개`
           : view === "trash"
             ? "삭제된 항목이 여기에 보관됩니다"
             : "폴더 0개, 파일 0개";

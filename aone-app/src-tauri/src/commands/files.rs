@@ -155,6 +155,34 @@ fn classify(name: &str) -> &'static str {
     }
 }
 
+/// 폴더 이름이 족보 폴더인가.
+/// 사용자가 "족보"·"기출"·"exam" 중 무엇으로 만들든 같게 본다.
+fn is_exam_folder(folder: &str) -> bool {
+    has_any(&folder.to_lowercase(), &["족보", "기출", "exam"])
+}
+
+/// 폴더를 함께 보는 분류 (R1).
+///
+/// 파일명만 보면 실사용자 파일이 전부 오분류된다 — `19중간문제.pdf`·`25년도1학기중간.pdf`에는
+/// `exam`도 `기출`도 `족보`도 없어서, **족보 폴더 안에 있는데도 `theory`로 떨어졌다**(1단계 실측).
+/// 폴더가 이미 "여기는 족보다"라고 말하고 있으므로 그것을 우선한다.
+///
+/// 전사본은 폴더 규칙을 두지 않았다 — 전사본만 모아두는 폴더 관습이 없고,
+/// 확장자+이름 규칙(`txt|md` × `transcript|전사|녹음`)이 이미 실사용자 이름을 잡는다
+/// (1단계 실측: `신호처리_1주차_전사.txt` → `transcript`).
+fn classify_in(folder: &str, name: &str) -> &'static str {
+    let by_name = classify(name);
+    if !is_exam_folder(folder) {
+        return by_name;
+    }
+    // 족보 폴더 안 — 자료 성격의 파일은 파일명과 무관하게 족보로 본다.
+    // 전사본·녹음은 족보 폴더에 있어도 전사본이다(오분류하면 발화 근거를 잃는다).
+    match by_name {
+        "transcript" | "audio" => by_name,
+        _ => "past_exam",
+    }
+}
+
 /// folder 파라미터 검증 — goldset 밖 탈출 금지, benchmark(정답지) 금지.
 /// `folder`는 goldset 기준 상대 경로 ("" = 루트, "데이터통신/3주차" 등). 비교는 NFC 정규화.
 fn validate_folder(folder: &str) -> Result<(), String> {
@@ -359,7 +387,9 @@ pub fn delete_file(folder: String, name: String) -> Result<(), String> {
 }
 
 /// 한 디렉터리의 파일 목록(숨김 제외, 이름순). 파일명은 NFC 정규화해 싣는다.
+/// 분류는 폴더 이름까지 본다 (R1 — 족보 폴더 안의 `19중간문제.pdf`를 잡기 위해).
 fn scan_dir(dir: &Path) -> Vec<FileEntry> {
+    let folder = nfc(&dir.file_name().unwrap_or_default().to_string_lossy());
     let mut entries: Vec<FileEntry> = Vec::new();
     if let Ok(read_dir) = fs::read_dir(dir) {
         for entry in read_dir.flatten() {
@@ -369,7 +399,7 @@ fn scan_dir(dir: &Path) -> Vec<FileEntry> {
             }
             let size = entry.metadata().map(|m| m.len()).unwrap_or(0);
             entries.push(FileEntry {
-                kind: classify(&name),
+                kind: classify_in(&folder, &name),
                 name,
                 size,
             });
@@ -738,6 +768,48 @@ mod tests {
         assert_eq!(classify("칠판사진.jpg"), "image");
         assert_eq!(classify("족보사진.png"), "past_exam");
         assert_eq!(classify("archive.zip"), "other");
+    }
+
+    /// R1 — 족보 폴더 안이면 파일명과 무관하게 past_exam.
+    /// 실사용자 파일명에는 exam·기출·족보가 안 들어간다(1단계 실측: 19중간문제.pdf → theory였다).
+    #[test]
+    fn exam_folder_overrides_filename() {
+        // 파일명만 보면 전부 theory로 떨어지던 것들
+        for name in ["19중간문제.pdf", "25년도1학기중간.pdf", "23중간답.pdf", "중간.pptx"] {
+            assert_eq!(classify(name), "theory", "{name}: 파일명만 보면 theory");
+            assert_eq!(
+                classify_in("족보", name),
+                "past_exam",
+                "{name}: 족보 폴더 안이면 past_exam"
+            );
+        }
+        // 폴더 이름 변형도 같게 본다
+        assert_eq!(classify_in("기출", "19중간문제.pdf"), "past_exam");
+        assert_eq!(classify_in("exam", "19중간문제.pdf"), "past_exam");
+        assert_eq!(classify_in("2024 기출모음", "19중간문제.pdf"), "past_exam");
+    }
+
+    /// 족보 폴더 안이라도 전사본·녹음은 그대로 둔다 — 오분류하면 발화 근거를 잃는다.
+    #[test]
+    fn exam_folder_keeps_transcript_and_audio() {
+        assert_eq!(classify_in("족보", "transcript.txt"), "transcript");
+        assert_eq!(classify_in("족보", "신호처리_1주차_전사.txt"), "transcript");
+        assert_eq!(classify_in("족보", "recording.m4a"), "audio");
+    }
+
+    /// 일반 폴더는 기존 판정 그대로 (회귀 방지).
+    #[test]
+    fn non_exam_folder_unchanged() {
+        for name in [
+            "week1_theory_01.txt",
+            "transcript.txt",
+            "(실습) 20260317-실습3주차.pdf",
+            "01_Operating_System_overview.pdf",
+            "past_exams.json",
+        ] {
+            assert_eq!(classify_in("1주차", name), classify(name), "{name}");
+            assert_eq!(classify_in("", name), classify(name), "{name}");
+        }
     }
 
     /// 업로드 화이트리스트 (부록 A3) — 허용/오디오/미지원 분류.
