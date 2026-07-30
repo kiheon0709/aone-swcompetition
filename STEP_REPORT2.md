@@ -1032,7 +1032,7 @@ $ node scripts/add-kind-to-files-json.mjs --check
 
 ## 8단계 — 통합 검증 + 배포
 
-**커밋** — `PENDING8`
+**커밋** — `b1957f7`
 
 ### 1. 전체 테스트
 
