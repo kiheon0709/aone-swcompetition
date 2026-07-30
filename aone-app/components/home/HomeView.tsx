@@ -10,16 +10,17 @@ import {
   RotateCcw,
   Sparkles,
 } from "lucide-react";
+import Link from "next/link";
 import TimetableGrid from "./TimetableGrid";
 import ExamsPanel from "./ExamsPanel";
 import AssignmentsPanel from "./AssignmentsPanel";
 import {
   buildLectures,
-  matchRecognizedTimetable,
   type RawLecture,
 } from "./recognizedTimetables";
 import {
   apiKeyStatus,
+  detectEngines,
   isTauriRuntime,
   pickTimetableImage,
   recognizeTimetableImage,
@@ -56,11 +57,14 @@ const KO_WEEKDAY = ["일", "월", "화", "수", "목", "금", "토"];
 export interface HomeViewHandle {
   /**
    * 시간표 인식 플로우 시작 (업로드 CTA와 동일 경로).
-   * filePath(절대 경로)가 있으면 데모 매칭 실패 시 실인식(recognize_timetable)으로 넘어간다.
+   * filePath(절대 경로)가 있어야 실인식(recognize_timetable)이 가능하다.
    */
   recognizeTimetable: (
+    /** 표시용 — 판정에는 쓰지 않는다 (R6에서 이름·크기 매칭을 제거했다) */
     fileName: string,
+    /** 표시용 — 판정에는 쓰지 않는다 (R6) */
     fileSize: number,
+    /** 절대 경로. 이게 있어야 실인식이 가능하다 */
     filePath?: string
   ) => void;
 }
@@ -84,6 +88,13 @@ export default function HomeView({ handleRef, subjects, refreshManifest }: Props
   const [recognizing, setRecognizing] = useState(false);
   /** 실인식 실패 — "인식하지 못했어요" 안내 + 수동 추가 폼 유도 */
   const [recogFailed, setRecogFailed] = useState(false);
+  /**
+   * 인식 실패 사유 (R6) — 왜 실패했는지 구분해 보여준다.
+   *   "web"    브라우저라 파일 경로를 못 준다 (데스크톱 앱 필요)
+   *   "engine" 시간표 인식은 Claude·Gemini 전용인데 둘 다 연결 안 됨
+   *   "read"   인식은 돌았는데 결과가 비었다
+   */
+  const [recogReason, setRecogReason] = useState<"web" | "engine" | "read">("read");
   /** 인식 성공 팝업 — 과목 폴더를 만든 뒤 보여줄 과목명 목록 (null이면 닫힘) */
   const [recogSubjects, setRecogSubjects] = useState<string[] | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -143,35 +154,37 @@ export default function HomeView({ handleRef, subjects, refreshManifest }: Props
     [applyTimetable, refreshManifest]
   );
 
-  // ── 시간표 인식 플로우 — 내장 데모 4장은 fast-path, 그 외는 실인식(A2) ──
+  // ── 시간표 인식 플로우 — 실인식만 (R6에서 가짜 fast-path 제거) ──
   // 업로드 CTA(파일 선택)와 창 드래그&드롭이 공유하는 단일 경로.
   const recognizeTimetable = useCallback(
-    (fileName: string, fileSize: number, filePath?: string) => {
+    (_fileName: string, _fileSize: number, filePath?: string) => {
       setRecogFailed(false);
-      const matched = matchRecognizedTimetable(fileName, fileSize);
-      if (matched) {
-        // fast-path — 내장 데모 캡처 (파일명·크기 매칭)
-        setRecognizing(true);
-        if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => {
-          finishRecognition(matched.set.lectures, matched.set.untimed);
-          setRecognizing(false);
-        }, 2500);
-        return;
-      }
-      // 실인식 — 절대 경로가 있어야 파이프라인이 이미지를 읽을 수 있다
+      // 파일명·크기 fast-path는 제거했다 (R6) — 남의 시간표가 채워지던 원인.
+      // 실인식만 남긴다.
       if (!filePath || !isTauriRuntime()) {
+        setRecogReason("web");
         setRecogFailed(true);
         return;
       }
       setRecognizing(true);
       void (async () => {
         try {
-          // Gemini 키가 있으면 gemini, 아니면 claude — codex는 백엔드가 거부
+          // 시간표 인식은 claude·gemini 전용이다 (cli.ts:547이 codex를 거부).
+          // 활성 엔진과 무관하게 claude로 폴백하면 GPT만 연결한 사용자는
+          // 영문 모를 실패를 본다 — 무엇이 필요한지 알려준다 (R6).
           const keys = await apiKeyStatus().catch(() => ({ gemini: false }));
+          const engines = await detectEngines().catch(() => null);
+          const canGemini = keys.gemini;
+          const canClaude = engines?.claudeInstalled ?? false;
+          if (!canGemini && !canClaude) {
+            setRecogReason("engine");
+            setRecogFailed(true);
+            setRecognizing(false);
+            return;
+          }
           const result = await recognizeTimetableImage(
             filePath,
-            keys.gemini ? "gemini" : "claude"
+            canGemini ? "gemini" : "claude"
           );
           const raws: RawLecture[] = [];
           const extraUntimed: string[] = [];
@@ -187,11 +200,13 @@ export default function HomeView({ handleRef, subjects, refreshManifest }: Props
             ...extraUntimed.filter((s) => !result.untimed.includes(s)),
           ];
           if (raws.length === 0 && nextUntimed.length === 0) {
+            setRecogReason("read");
             setRecogFailed(true);
           } else {
             finishRecognition(buildLectures("ai", raws), nextUntimed);
           }
         } catch {
+          setRecogReason("read");
           setRecogFailed(true);
         } finally {
           setRecognizing(false);
@@ -357,19 +372,36 @@ export default function HomeView({ handleRef, subjects, refreshManifest }: Props
                       />
                     </span>
                     <p className="text-sm font-semibold text-gray-800">
-                      인식하지 못했어요 — 직접 추가해주세요
+                      {recogReason === "engine"
+                        ? "이 기능은 Claude나 Gemini 연결이 필요합니다"
+                        : recogReason === "web"
+                          ? "시간표 인식은 데스크톱 앱에서만 됩니다"
+                          : "인식하지 못했어요 — 직접 추가해주세요"}
                     </p>
                     <p className="mt-1 text-xs leading-relaxed text-gray-400">
-                      아래에서 과목을 직접 추가하거나, 다른 캡처 이미지로 다시
-                      시도할 수 있어요.
+                      {recogReason === "engine"
+                        ? "시간표 이미지 판독은 Claude·Gemini만 지원해요. 설정에서 둘 중 하나를 연결한 뒤 다시 시도하거나, 아래에서 직접 추가하세요."
+                        : recogReason === "web"
+                          ? "브라우저에서는 이미지 파일 경로를 읽을 수 없어요. 아래에서 과목을 직접 추가할 수 있습니다."
+                          : "아래에서 과목을 직접 추가하거나, 다른 캡처 이미지로 다시 시도할 수 있어요."}
                     </p>
                     <ManualLectureForm onAdd={addManualLecture} />
-                    <button
-                      onClick={pickImage}
-                      className="press-scale mt-3 text-xs font-medium text-primary underline-offset-2 hover:underline"
-                    >
-                      다른 이미지로 다시 인식
-                    </button>
+                    {recogReason === "engine" ? (
+                      <Link
+                        href="/settings/engines"
+                        data-testid="timetable-open-settings"
+                        className="press-scale mt-3 text-xs font-medium text-primary underline-offset-2 hover:underline"
+                      >
+                        설정에서 엔진 연결하기
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={pickImage}
+                        className="press-scale mt-3 text-xs font-medium text-primary underline-offset-2 hover:underline"
+                      >
+                        다른 이미지로 다시 인식
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <div className="flex w-full max-w-sm flex-col items-center rounded-2xl border-2 border-dashed border-black/10 bg-white/80 px-8 py-8 text-center">
