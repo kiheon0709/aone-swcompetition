@@ -1003,12 +1003,23 @@ export default function Home() {
     view === "lecture" && (fileView === "pdf" || fileView === "slides");
 
   /**
-   * PDF 슬라이드 리더 — [슬라이드 설명] 탭에서만.
-   * 앱 사이드바(홈·폴더 트리)를 숨기고 그 자리에 슬라이드 목차를 놓는다.
-   * 다른 탭으로 넘어가면 일반 사이드바가 돌아온다.
+   * PDF 리더 화면인가 (FIX 10).
+   *
+   * 예전에는 `detailTab === "slides"`까지 봤다. 그래서 탭을 옮기면 리더 골격이
+   * 통째로 무너지고, 얇은 리더 헤더 → 검색 헤더로 바뀌면서 **탭 바가 30px 아래로 점프**했다
+   * (실측: 슬라이드 설명 top=114, 나머지 탭 top=144).
+   *
+   * 이제 "PDF를 열었는가"만 본다. 탭을 옮겨도 헤더·여백·목차 사이드바가 그대로 유지되고,
+   * 바뀌는 것은 우측 패널 내용뿐이다. PDF 캔버스 자체는 슬라이드 설명 탭에서만 그린다.
    */
-  const readerMode =
-    detailMode && fileView === "pdf" && detailTab === "slides";
+  const readerMode = detailMode && fileView === "pdf";
+
+  /**
+   * PDF 캔버스가 실제로 그려지는 화면 (= 슬라이드 설명 탭).
+   * 리더 골격(`readerMode`)은 탭과 무관하게 유지하되, "스크롤 없이 화면을 꽉 채운다"는
+   * 규칙은 캔버스가 있을 때만 맞다. 다른 탭 내용은 길어질 수 있어 스크롤이 있어야 한다.
+   */
+  const readerCanvas = readerMode && detailTab === "slides";
 
   // 사이드바 폭 CSS 변수 — vibrancy 배경 오프셋(globals.css)과 동기화.
   // 리더 모드에서는 앱 사이드바 자리를 목차가 이어받는다 — 목차를 접으면 아이콘 폭만 남는다.
@@ -4513,10 +4524,10 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* ── 패널 본문 — 리더 모드는 스크롤 없이 남은 공간을 꽉 채운다 ── */}
+                {/* ── 패널 본문 — PDF 캔버스가 있을 때만 스크롤 없이 꽉 채운다 ── */}
                 <div
                   className={`flex min-h-0 flex-1 flex-col ${
-                    readerMode ? "" : "overflow-y-auto"
+                    readerCanvas ? "" : "overflow-y-auto"
                   }`}
                 >
                   <div
