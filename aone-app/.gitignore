@@ -19,3 +19,6 @@ next-env.d.ts
 캡처/
 캡처_와이드/
 캡처_와이드_접힘/
+
+# 스냅샷 백업 — 배포 번들에 들어가면 안 된다
+public/snapshots.backup-*
