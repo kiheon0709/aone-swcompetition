@@ -508,7 +508,7 @@ $ md5 -q pipeline/aone.db /tmp/aone.db.step4-backup
 
 ## 5단계 — 데이터통신 6·7주차 L4 재실행 (Codex CLI) → **[멈춤]**
 
-**커밋** — `PENDING5`
+**커밋** — `af8e9b4`
 
 ### Codex CLI는 성공했다 — 엔진 멈춤 조건은 발동하지 않았다
 
@@ -636,5 +636,91 @@ $ md5 -q pipeline/aone.db /tmp/aone.db.step5-backup
 DB를 못 찾는 경우, **엔진을 claude-cli로 되돌리는 것이 문체 일치에 유리하다**
 (1~5주차가 claude-cli 산출물이고, 위 3가지 차이는 대부분 Codex의 지시 미준수에서 온다).
 다만 지시서가 "다른 엔진으로 임의로 바꾸지 말라"고 했으므로 **바꾸지 않고 멈춘다.**
+
+---
+
+## 6단계 — 스냅샷 재생성 + 재배포 → **재배포 `[O]` / 스냅샷 재생성 `[멈춤]`**
+
+**커밋** — `PENDING6`
+
+### 스냅샷 재생성은 하지 않았다 (4·5단계 멈춤에 묶임)
+
+지시서 6-1은 "3~5단계 결과를 반영해 `public/snapshots`를 다시 생성한다"다.
+반영할 것이 각 단계별로 이렇게 갈린다.
+
+| 단계 | 스냅샷에 반영할 것 | 가능? |
+|---|---|---|
+| 3단계 (가중치 단일화) | **없다** — 스냅샷은 이미 새 가중치 산출물이다(4단계 근거 1). 사본만 고쳤다 | 반영 대상 없음 |
+| 4단계 (SCORE 재계산) | 재계산 결과 | **불가** — 재계산 자체를 못 했다 |
+| 5단계 (6·7주차 노트) | Codex 노트 2건 | **불가** — 넣으려면 스냅샷 재생성이 필요하고, 그러면 아래가 깨진다 |
+
+`buildSnapshot`(`pipeline/src/snapshot.ts:74`)은 개념을 DB에서 읽는다:
+
+```ts
+const concepts = db.scoresAtUnit(key).flatMap((s) => { … })
+```
+
+즉 노트만 갈아끼울 수 없다. 지금 DB로 재생성하면 **개념 92개 → 260개, 운영체제 86개 → 0개**가 된다.
+지시서가 "화면 표기는 임의로 건드리지 말라"고 한 상황이 실제로 발생하므로 **재생성하지 않았다.**
+
+> 노트 필드만 JSON에 손으로 병합하는 방법도 있지만, 그건 **파이프라인 산출물이 아닌 값을 화면에 심는 것**이라
+> "앱과 웹이 같은 점수를 보여야 한다"는 6단계의 취지에 어긋난다. 하지 않았다.
+
+### 재배포는 했다 — 2단계 결과를 올렸다
+
+3~5단계는 스냅샷에 반영할 게 없거나 불가능했지만, **2단계(디버그 라우트 제거)는 배포해야 실효가 생긴다.**
+그것만 반영해 재배포했다.
+
+```
+$ diff .vercel/project.json out/.vercel/project.json
+projectName 일치
+$ find out -ipath "*debug*"
+(0건)
+$ ls out/snapshots | wc -l
+      31          ← 스냅샷 무변경
+```
+
+```
+Building: Build Completed in /vercel/output [411ms]
+Production: https://aone-915415a9n-ghdrlgjs11-4877s-projects.vercel.app [45s]
+Aliased: https://aone-five.vercel.app [46s]
+```
+
+### 배포 후 실측
+
+```
+$ curl -s -o /dev/null -w "%{http_code}" https://aone-five.vercel.app/debug/figures/
+404          ← 2단계 목표 달성. 배포 전에는 200이었다
+$ curl -s -o /dev/null -w "%{http_code}" https://aone-five.vercel.app/
+200
+$ curl … /snapshots/데이터통신__7주차.json
+200
+```
+
+화면 확인 (프로덕션):
+
+```json
+{"홈렌더":true,
+ "시험선택":["데이터통신중간고사 · 7/30 (목)8개 수업 분석됨 · 개념 92개D-Day",
+            "운영체제중간고사 · 8/4 (화)8개 수업 분석됨 · 개념 86개D-5"]}
+```
+
+**92/86 그대로 유지** — 재배포로 데이터가 바뀌지 않았음을 확인했다.
+
+### 완료 기준
+
+| 항목 | 판정 | 근거 |
+|---|---|---|
+| 3~5단계 반영해 스냅샷 재생성 | `[멈춤]` | 3단계는 반영 대상 없음, 4·5단계는 DB 부재로 불가. 재생성하면 92→260·86→0으로 화면이 깨진다 |
+| build → deploy | `[O]` | projectName 일치 확인 후 배포, `aone-five.vercel.app` 별칭 정상 |
+| 데통 6·7주차 학습노트 열어 확인 | `[멈춤]` | 노트를 스냅샷에 넣지 못했으므로 화면에 없다. 6·7주차 `note` 키는 여전히 없음 |
+| (추가) `/debug/figures` 프로덕션 제거 | `[O]` | HTTP 404 실측 |
+| (추가) 재배포로 92/86 불변 | `[O]` | 위 화면 확인 |
+
+### 재개 조건
+
+4·5단계와 동일 — **스냅샷을 만든 DB 확보.** 확보되면
+`npx tsx scripts/compose-note-only.ts <DB> 데이터통신 6주차 codex-cli` → 7주차 → `cli.ts export` 순서로
+한 번에 처리된다.
 
 ---
