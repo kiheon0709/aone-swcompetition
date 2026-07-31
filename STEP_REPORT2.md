@@ -1069,52 +1069,45 @@ $ node scripts/add-kind-to-files-json.mjs --check
 
 **달라진 것 9건 전부 의도된 개선이다. 퇴행 0건.**
 
-### 3. 배포 — **`[멈춤]`**
+### 3. 배포 — **`[O]`** (사용자가 `vercel login` 후 완료)
 
-`projectName` 대조는 통과했다:
+`projectName` 대조 통과:
 
 ```
-$ cat .vercel/project.json
-{"projectId":"prj_F5uHTcEzZbHhBTEyyKblmgQa8I0E","orgId":"team_jf23pYFkCedREpl3ym4l7DCW","projectName":"aone"}
-$ cat out/.vercel/project.json
-{"projectId":"prj_F5uHTcEzZbHhBTEyyKblmgQa8I0E","orgId":"team_jf23pYFkCedREpl3ym4l7DCW","projectName":"aone"}
+$ diff .vercel/project.json out/.vercel/project.json
 IDENTICAL
+{"projectId":"prj_F5uHTcEzZbHhBTEyyKblmgQa8I0E","orgId":"team_jf23pYFkCedREpl3ym4l7DCW","projectName":"aone"}
 ```
 
-빌드도 성공했다. 그런데 배포에서 막혔다:
+**처음에는 인증이 없어 막혔다** — `The specified token is not valid`, `whoami`도 자격증명 없음.
+`vercel login`이 브라우저 승인을 요구하는 대화형 절차라 대행할 수 없어 사용자에게 요청했고,
+로그인 뒤 배포를 완료했다.
 
 ```
-$ cd out && npx vercel --prod --yes --archive=tgz
-Retrieving project…
-Error: The specified token is not valid. Use `vercel login` to generate a new token.
-
 $ npx vercel whoami
-Error: No existing credentials found. Please run `vercel login` or pass "--token"
+ghdrlgjs11-4877
+
+$ cd out && npx vercel --prod --yes --archive=tgz
+Building: Build Completed in /vercel/output [378ms]
+Production: https://aone-1lvnpkfqk-ghdrlgjs11-4877s-projects.vercel.app
+Aliased: https://aone-five.vercel.app
 ```
 
-**Vercel 인증 정보가 사라졌다.** `vercel login`은 브라우저를 열어 사람이 승인해야 하는
-대화형 절차라 내가 대신 할 수 없다.
+별칭이 `aone-five.vercel.app`로 붙었다 = 올바른 프로젝트.
 
-**재개 방법** — 둘 중 하나를 한 뒤 배포 명령만 다시 돌리면 된다.
+배포 자산 검증:
 
-```bash
-# (a) 로그인 — 프롬프트에 ! 를 붙여 이 세션에서 실행하면 출력이 여기 남는다
-!npx vercel login
-
-# (b) 토큰 — vercel.com/account/tokens 에서 발급
-cd aone-app/out && npx vercel --prod --yes --archive=tgz --token <토큰>
+```
+루트:          200
+스캔 이미지:    200      ← /docs/데이터통신/족보/exam-2018-1.png (7단계 신규)
+debug 라우트:  404      ← 지난 배치 2단계 유지
+files.json:   52개, kind 없는 것 0개
+과목별:        {'데이터통신': 30, '운영체제': 22}
 ```
 
-빌드 산출물(`aone-app/out/`)은 **이미 배포 가능한 상태로 준비돼 있다.**
-`out/.vercel/project.json`도 올바른 프로젝트(`aone`)를 가리키게 복사해뒀다.
+### 4. 데모 시나리오 완주 — **배포된 URL에서 검증**
 
-현재 운영 중인 `https://aone-five.vercel.app`은 **이전 배포본 그대로 200 응답**한다 —
-부스 데모는 계속 동작한다. 이번 배치 개선분만 아직 안 올라갔다.
-
-### 4. 데모 시나리오 완주 — 로컬 프로덕션 빌드로 검증
-
-배포가 막혔으므로 **같은 `out/` 산출물을 정적 서빙**해 시나리오를 완주했다
-(`localStorage.clear()` 후 "처음 여는 사용자" 상태에서).
+`https://aone-five.vercel.app`에서 `localStorage.clear()` 후 "처음 여는 사용자" 상태로 완주했다.
 
 ```json
 {"1_홈_시간표": 10,                    ← 강의 블록 10건
@@ -1130,7 +1123,26 @@ cd aone-app/out && npx vercel --prod --yes --archive=tgz --token <토큰>
  "5_모의고사_입력칸": true, "5_제출버튼": "제출"}
 ```
 
-**홈 → 시험대비 → 개념 근거 클릭 → 전사본 이동 → 족보 → 모의고사 전 구간 통과.** 콘솔 에러 0.
+프로덕션 실측 (`https://aone-five.vercel.app`):
+
+```json
+{"1_홈_시간표": 10, "1_홈_시험": true,
+ "2_시험선택": ["개념 92개", "개념 86개"],
+ "2_학습가이드": "이번 시험 핵심 20개 (전체 92개 중)",
+ "3_근거버튼": "근거 · 1주차 03:38 →",
+ "3_전사본블록": 39, "3_포커스": "t-03:38",
+ "4_텍스트족보": "텍스트 족보 · 36문항", "4_스캔족보": "스캔 족보 · 2장",
+ "4_참고용문구": true, "4_썸네일로드": [2550, 1088],
+ "4_문항목록": 36, "4_파일수": "파일 4개",
+ "4_운체_갤러리": false, "4_운체_썸네일": 0,
+ "5_입력칸": true, "5_제출버튼": "제출", "5_입력전_정답숨김": true,
+ "5_노트카드": 230}
+```
+
+**홈 → 시험대비 → 개념 근거 클릭 → 전사본 이동 → 족보 → 모의고사 전 구간 통과.** 콘솔 에러 **0**.
+
+이번 배치 개선분이 프로덕션에서 전부 확인된다 — 족보 36문항(2단계),
+스캔 썸네일 로드 + 운체 갤러리 숨김(7단계), 형식 분리 표기(7단계).
 
 ### 5. 새 사용자 시나리오 완주 — **이번 배치의 최종 목표**
 
@@ -1190,8 +1202,8 @@ aone-app/public/docs/:  데이터통신  운영체제           (신호처리 �
 |---|---|---|
 | 전체 테스트 | `[O]` | pipeline 83 · Rust 21 · 양쪽 tsc 통과 |
 | 1단계 기준선 전 항목 대조 | `[O]` | 위 표 — 달라진 9건 전부 의도된 개선, 퇴행 0 |
-| 웹 빌드 → 배포 | `[멈춤]` | **Vercel 인증 소실.** `projectName` 대조·빌드는 통과. `vercel login`이 대화형이라 대행 불가 |
-| 배포본에서 데모 시나리오 완주 | `[O]` | 배포가 막혀 **같은 `out/` 산출물을 로컬 정적 서빙**으로 완주. 전 구간 통과, 콘솔 에러 0 |
+| 웹 빌드 → 배포 | `[O]` | `projectName` 대조 통과 후 배포. `aone-five.vercel.app` 별칭 확인. (인증 소실로 한 번 막혔고, 사용자가 `vercel login`을 실행해 해소) |
+| 배포본에서 데모 시나리오 완주 | `[O]` | **`https://aone-five.vercel.app` 실측** 전 구간 통과, 콘솔 에러 0 |
 | dev 앱 새 사용자 시나리오 완주 | `[O]` | 신호처리 1주차 분석 173초 완주 — 개념 16 · 문항 10 · 노트 3,527자 · 전사본 근거 16 |
 | 전체 요약 기록 | `[O]` | 아래 |
 
@@ -1212,9 +1224,10 @@ aone-app/public/docs/:  데이터통신  운영체제           (신호처리 �
 
 ## 못 고친 것
 
-1. **배포** (`[멈춤]`) — Vercel 인증 소실. 위 3번 재개 방법 참조. `out/`은 준비됨.
-2. **증분 노트 재설계** — 지시서가 범위 밖으로 지정. 4단계에 제안 3안을 적었다(1안 권장).
+1. **증분 노트 재설계** — 지시서가 범위 밖으로 지정. 4단계에 제안 3안을 적었다(1안 권장).
    지금 구조는 매 주차 직전 노트 전체를 재출력해 **15주차면 90K자로 완주 불가**다.
+
+> 배포는 처음에 Vercel 인증 소실로 막혔으나 사용자가 `vercel login`을 실행해 **완료했다**(위 8단계 3번).
 
 ## 새로 발견한 것
 
