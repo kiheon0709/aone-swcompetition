@@ -981,12 +981,38 @@ export default function Home() {
   const lectureRef = useRef<Lecture | null>(null);
   lectureRef.current = lecture;
 
+  /**
+   * Tauri 런타임 판정 — 한 번만 보면 안 된다.
+   *
+   * `isTauriRuntime()`은 `window.__TAURI_INTERNALS__` 주입 여부를 본다. 그런데 이 주입은
+   * 웹뷰 로드와 **경합**한다. React effect가 주입보다 먼저 돌면 `false`가 잡히고,
+   * 이 effect는 `[]` 의존성이라 **다시 확인하지 않는다.** 그러면 데스크톱 앱인데도
+   * 앱이 영구히 브라우저처럼 행동한다 — 시작 시 rescan도, 파일 watcher도,
+   * 분석 실행도 전부 죽는다(실측: 폴더를 새로 만들어도 목록에 영원히 안 뜸).
+   *
+   * 그래서 `true`가 될 때까지 잠깐 재확인한다. 웹에서는 주입이 아예 없으므로
+   * 몇 번 헛돌고 조용히 멈춘다(부작용 없음).
+   */
   useEffect(() => {
-    const isDesktop = isTauriRuntime();
-    setDesktop(isDesktop);
+    if (desktop) return;
+    if (isTauriRuntime()) {
+      setDesktop(true);
+      return;
+    }
+    let tries = 0;
+    const t = setInterval(() => {
+      if (isTauriRuntime()) {
+        setDesktop(true);
+        clearInterval(t);
+      } else if (++tries >= 20) {
+        clearInterval(t); // 약 2초 — 여기까지 없으면 브라우저다
+      }
+    }, 100);
+    return () => clearInterval(t);
+  }, [desktop]);
+
+  useEffect(() => {
     setActiveEngineState(getActiveEngine());
-    // 웹 데모에서만: 처음 열었을 때 시간표·시험·과제를 한 번 채운다 (데스크톱은 빈 상태 유지)
-    seedWebDemoIfEmpty(isDesktop);
     setExams(loadExams());
     setUserName(getUserName());
     setUserOrg(getUserOrg());
@@ -1009,6 +1035,30 @@ export default function Home() {
       if (watchBannerTimerRef.current) clearTimeout(watchBannerTimerRef.current);
     };
   }, []);
+
+  /**
+   * 웹 데모 시드 — 런타임 판정이 끝난 뒤에 한 번만.
+   *
+   * 예전에는 위 effect에서 `seedWebDemoIfEmpty(isDesktop)`를 바로 불렀다. 그런데 판정이
+   * 경합에 져서 `false`가 되면 **데스크톱 앱에 웹 데모 시간표가 심어진다**(남의 시간표가
+   * 보이는 것과 같은 증상). 판정이 확정될 시간을 준 뒤 웹일 때만 심는다.
+   */
+  const seededRef = useRef(false);
+  useEffect(() => {
+    if (seededRef.current) return;
+    if (desktop) {
+      seededRef.current = true; // 데스크톱 확정 — 시드하지 않는다
+      return;
+    }
+    // 아직 false면 판정 재시도가 끝나길 기다린다 (위 effect가 최대 2초 시도)
+    const t = setTimeout(() => {
+      if (seededRef.current || isTauriRuntime()) return;
+      seededRef.current = true;
+      seedWebDemoIfEmpty(false);
+      setExams(loadExams());
+    }, 2200);
+    return () => clearTimeout(t);
+  }, [desktop]);
 
   // 알림 변경 시 localStorage에 영속
   useEffect(() => {
