@@ -246,6 +246,11 @@ export default function EnginesPage() {
           <Check className="h-3 w-3" aria-hidden /> 연결됨
         </Badge>
       );
+    // Claude Code는 자격증명을 macOS Keychain에 넣는 경우가 많아 파일 검사가 실패한다.
+    // 그때 "연결 안 됨"이라고 단정하면, 실제로는 되는데 안 된다고 오해하게 된다.
+    // 전역 자격증명이 있으면 "확인 필요"로 두고 아래 [연결 확인] 버튼을 누르게 안내한다.
+    if (engines.claudeGlobalCredentials)
+      return <Badge tone="pending">확인 필요</Badge>;
     return <Badge tone="off">연결 안 됨</Badge>;
   };
 
@@ -337,6 +342,13 @@ export default function EnginesPage() {
               <p className="mt-0.5 text-sm text-gray-500">
                 Claude 구독 계정으로 연결 (Claude Code CLI)
               </p>
+              {/* Keychain 인증이면 파일 검사로는 알 수 없다 — 실호출로 확인하라고 안내 */}
+              {engines?.claudeInstalled && !engines.claudeLoggedIn && (
+                <p className="mt-1 text-xs text-gray-400">
+                  터미널에서 이미 로그인했다면 [연결 확인]을 눌러주세요 — Keychain에
+                  저장된 인증은 파일로 확인되지 않습니다.
+                </p>
+              )}
             </div>
             {claudeBadge()}
           </div>
